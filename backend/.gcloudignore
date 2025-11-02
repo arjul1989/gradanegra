@@ -17,9 +17,9 @@ logs/
 .gitignore
 .github/
 
-# Archivos de Cloud Build (ya incluidos en la imagen)
-cloudbuild.yaml
-Dockerfile
+# Archivos de Cloud Build
+# cloudbuild.yaml
+# Dockerfile - NECESARIO para Cloud Build
 
 # Archivos de prueba
 __tests__/

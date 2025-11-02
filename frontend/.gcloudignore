@@ -19,8 +19,8 @@ out/
 .github/
 
 # Archivos de Cloud Build
-cloudbuild.yaml
-Dockerfile
+# cloudbuild.yaml
+# Dockerfile - NECESARIO para Cloud Build
 
 # Archivos de prueba
 __tests__/
