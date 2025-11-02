@@ -8,7 +8,7 @@ WORKDIR /app
 
 # Instalar dependencias basado en el package manager
 COPY package.json package-lock.json* ./
-RUN npm ci --only=production
+RUN npm ci
 
 # Imagen de producción, copiar todos los archivos y ejecutar next
 FROM base AS runner
@@ -19,6 +19,12 @@ ENV NEXT_TELEMETRY_DISABLED=1
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
+
+# Copiar node_modules desde deps (necesarios para next runtime)
+COPY --from=deps --chown=nextjs:nodejs /app/node_modules ./node_modules
+
+# Copiar package.json para el runtime
+COPY --chown=nextjs:nodejs package.json ./
 
 # Copiar archivos públicos
 COPY --chown=nextjs:nodejs public ./public
