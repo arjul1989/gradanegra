@@ -1,8 +1,9 @@
-const { Resend } = require('resend');
 const logger = require('./logger');
 
-// Lazy-load Resend client to avoid startup errors
+// Lazy-load Resend to avoid startup errors when API key is missing
+let Resend = null;
 let resend = null;
+
 function getResendClient() {
   if (!resend) {
     const apiKey = process.env.RESEND_API_KEY;
@@ -10,6 +11,17 @@ function getResendClient() {
       logger.warn('RESEND_API_KEY not configured - email functionality will be disabled');
       return null;
     }
+    
+    // Only require Resend when we actually need it and have an API key
+    if (!Resend) {
+      try {
+        Resend = require('resend').Resend;
+      } catch (error) {
+        logger.error('Failed to load Resend module:', error);
+        return null;
+      }
+    }
+    
     resend = new Resend(apiKey);
   }
   return resend;
