@@ -71,13 +71,38 @@ if [ -z "$AUTO_DEPLOY" ]; then
     echo ""
 fi
 
-echo "🔨 Construyendo y desplegando..."
+echo "🔨 Construyendo aplicación localmente..."
 echo ""
 
 # Cambiar al directorio del frontend
 cd "$FRONTEND_DIR"
 
-# Build y deploy usando gcloud con build args
+# Limpiar build anterior
+rm -rf .next
+
+# Build local con todas las variables de entorno
+NODE_ENV=production \
+NEXT_PUBLIC_API_URL="$BACKEND_URL" \
+NEXT_PUBLIC_FIREBASE_API_KEY="$FIREBASE_API_KEY" \
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="$FIREBASE_AUTH_DOMAIN" \
+NEXT_PUBLIC_FIREBASE_PROJECT_ID="$FIREBASE_PROJECT_ID" \
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="$FIREBASE_STORAGE_BUCKET" \
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="$FIREBASE_MESSAGING_SENDER_ID" \
+NEXT_PUBLIC_FIREBASE_APP_ID="$FIREBASE_APP_ID" \
+npm run build
+
+if [ $? -ne 0 ]; then
+    echo "❌ Error en el build local"
+    exit 1
+fi
+
+echo ""
+echo "✅ Build local completado"
+echo ""
+echo "📦 Desplegando a Cloud Run..."
+echo ""
+
+# Deploy usando gcloud con build args
 gcloud run deploy "$SERVICE_NAME" \
     --source . \
     --project "$PROJECT_ID" \
