@@ -1,0 +1,57 @@
+# Archivos de Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Build output (se regenera en Cloud Build)
+.next/
+out/
+
+# Archivos de desarrollo
+.env
+.env*.local
+*.log
+
+# Archivos de Git
+.git/
+.gitignore
+.github/
+
+# Archivos de Cloud Build
+cloudbuild.yaml
+Dockerfile
+
+# Archivos de prueba
+__tests__/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+coverage/
+jest.config.js
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
+*.swp
+*.bak
+
+# Scripts locales
+scripts/
+*.sh
+
+# Archivos de configuración local
+.vscode/
+.idea/
+*.sublime-*
+.eslintcache
+
+# Archivos de documentación
+README.md
+CHANGELOG.md
+docs/
+
+# Archivos de TypeScript
+tsconfig.tsbuildinfo

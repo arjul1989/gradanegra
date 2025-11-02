@@ -1,0 +1,52 @@
+# Archivos de Node
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+
+# Archivos de desarrollo
+.env
+.env.local
+.env.development
+.env.test
+*.log
+logs/
+
+# Archivos de Git
+.git/
+.gitignore
+.github/
+
+# Archivos de Cloud Build (ya incluidos en la imagen)
+cloudbuild.yaml
+Dockerfile
+
+# Archivos de prueba
+__tests__/
+*.test.js
+*.spec.js
+coverage/
+
+# Archivos temporales
+tmp/
+temp/
+*.tmp
+*.swp
+*.bak
+
+# Scripts locales
+scripts/
+*.sh
+
+# Archivos de configuración local
+.vscode/
+.idea/
+*.sublime-*
+
+# Archivos de documentación
+README.md
+CHANGELOG.md
+docs/
+
+# Credenciales (se manejan con Secret Manager)
+*credentials*.json

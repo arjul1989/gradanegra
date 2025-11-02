@@ -1,0 +1,27 @@
+# Dockerignore - archivos a excluir del build
+node_modules
+npm-debug.log
+.env
+.env.local
+.env.*.local
+.git
+.gitignore
+README.md
+*.md
+.DS_Store
+logs/*.log
+coverage
+.nyc_output
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.eslintcache
+test
+tests
+**/*.test.js
+**/*.spec.js
+scripts/test-*.js
+scripts/test-*.sh
+.github

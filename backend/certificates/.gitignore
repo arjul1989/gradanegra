@@ -1,0 +1,8 @@
+# Ignorar todos los certificados y claves privadas
+*.pem
+*.p12
+*.cer
+*.key
+
+# Permitir solo README
+!README.md

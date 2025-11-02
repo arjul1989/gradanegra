@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Descubre tu Próxima Experiencia</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f20d33",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#181112",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/80 backdrop-blur-sm">
+<div class="container mx-auto flex items-center justify-between px-10 py-3 text-white">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-white">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-white text-xl font-bold">Grada Negra</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-white hover:text-primary transition-colors text-sm font-medium" href="#">Descubrir</a>
+<a class="text-white/70 hover:text-primary transition-colors text-sm font-medium" href="#">Mis Eventos</a>
+<a class="text-white/70 hover:text-primary transition-colors text-sm font-medium" href="#">Crear Evento</a>
+</nav>
+</div>
+<div class="flex flex-1 justify-end gap-6">
+<label class="relative hidden sm:flex flex-col min-w-40 !h-10 max-w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/50">search</span>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:border-primary focus:ring-primary h-full pl-10 pr-4 text-base font-normal" placeholder="Buscar eventos..." value=""/>
+</label>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User profile avatar image with a purple and blue gradient" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDLDeu3IMscsDkwqv6E_A46efIsEUx7fkc4Pw4iWwd3WxRRfFRFr9-xVnaFdJkREv-9xp7cmco-gw1fFU95ggSor8K0PZc34qS6ozwS-xuhgkMLGbl-D0SqaJtbRUcfqbQLnRknHxihFNGZ7YuDvFsvgIrhFNjFE54EUkad6Hvb7reH8QvTKdBDoehd0zFtH5ZQYC33vsX9RLi5Xy15ChxA-MA6JNCWjJgSLszPcdkazjiyixUTi-wtS6KF39i5wa_Gz0H9YattksMd');"></div>
+</div>
+</div>
+</header>
+<main class="container mx-auto flex flex-col px-10 py-5">
+<h1 class="text-white tracking-tight text-4xl md:text-5xl font-bold px-4 text-left pb-6 pt-8">Descubre tu Próxima Experiencia</h1>
+<div class="p-4">
+<div class="flex flex-col md:flex-row items-stretch justify-between gap-6 rounded-lg bg-white/5 p-6 border border-white/10">
+<div class="flex flex-[2_2_0px] flex-col gap-4 justify-center">
+<div class="flex flex-col gap-2">
+<p class="text-primary text-sm font-bold uppercase tracking-wider">Evento Destacado</p>
+<p class="text-white text-3xl font-bold leading-tight">Festival de Luces Cósmicas</p>
+<p class="text-white/60 text-base font-normal leading-normal">Sáb, 20 NOV, 8:00 PM - Antiguo Planetario</p>
+</div>
+<p class="text-white/80 text-base">Sumérgete en un espectáculo audiovisual inmersivo que combina arte digital, música electrónica y proyecciones astronómicas. Una noche para explorar la belleza del universo.</p>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 transition-colors bg-primary hover:bg-primary/90 text-white text-base font-bold leading-normal w-fit">
+<span>Ver detalles</span>
+</button>
+</div>
+<div class="w-full bg-center bg-no-repeat aspect-video bg-cover rounded-lg flex-1 min-h-[250px]" data-alt="Cosmic lights festival with lasers and stars projected on a ceiling" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB3YpbLj4MteghVnNtWrhtSPiA15UjSJuwxzI80FxjsjufOBmEdzyu12xmfbNYsimFz1LOWMXiDTcUdJ3QFg2jqDwFoVulmLStPJbpO3ylRXoGTdaahC1ITS4NdBhpVQkJq5mJBwI6wuu7pIy4d7wqQRW5fAudxunEQaG7hx7tH-f4n7_1KnmU3cqwkev2MPDFZf2RVNhj5jA_GXRHtmLMql0NwNgqXM3SLnkT8VchPz8sYw549G2iSoCjiOPIoTQ49WmUADozVtXVh');"></div>
+</div>
+</div>
+<h2 class="text-white text-3xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-10">Noches de Rock Underground</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-4">
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A rock band performing on stage in a dark basement with red lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAmcnZN2s5AqT7kMRwe94BHNwVrGrUXbS5KIWxxGgI8vSQEhu1GH6FuDqdsr9yEhhR00fv75myVoOFxMvA64ZvvU-f137g01Zck0l1jn3o98YgZAE2h_y3mcapeuZQqn8sJMbwBglun-3ByocsxBzqZ97wEMjFqmE_WN0BOktpy9akdrtrq4AdcsUUm-gRXSozFfR0Ti8nZgdTwKbUGUzy9sdQYmQEFB7P9MEzxcRYkqP-SG1LDufrr5Vaq4Bskw5YnPB43nvojPWGp');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Furia Metálica en el Sótano</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 12 Nov - $150</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A solo artist playing an acoustic guitar under a single spotlight" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDmzlhcELhirZElYHl0_fttPS48AC5qrGXboU_A9BTX1936OqirPqjkKfVpEjYqGMJMIjVQIWgg22sjdOger3u0R_ZtVvpbMdKggrkb3hXXQmgmN7od_1g6eY8UOasfAxafynsNMvIPY_4d0WH0kXOHkkmiuXhEC_NlXA4m-t1CgQ8k2lOSxGUu422txHXGq1Qq_uAn4MdW4bgzh3G90t5DTzRTAZy9jEv6-LTESBBK1VI7aaQC6cEfTkROLEumiNz_VJNCGugnHjIH');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Acústico Rebelde</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Sáb, 13 Nov - $100</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A tribute band playing classic rock songs with vintage instruments" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAB6DgVEsnmp9etcujNgHuwAQlWcp-aDR8G5-EPSTCuCrtLi3opw_yK69P28d9Lh5ShxiWsY3hIGN2KcSZH7fJVcx0yk5Jm90jyE4KkUXDTv2W7kfGZlqojdhab7Q7EKiE-YG5UN5PPopYSlGYR92gSjXah_35O8O76fZvle8AUuF7l2lyTh_b0sg6_uG3jbxRVdedbhKNFdXZeNTNYhY9H6vjcwRtCvxX9MccY-IzC6hEJvspGPP8uiFkn53UO7bsqi_Rb2U5tm7fS');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Tributo a Leyendas del Rock</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 19 Nov - $200</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A punk rock band with mohawks and leather jackets playing energetically to a crowd" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCceeocM47-CqeuiDf9-C8mpsJNbHks_qTjQH4puQeSL1MnLNStM2IvMVcqXm4Mvoz_4JhQN4bcZFV-LMDHCTBwLavAX6NCts1OpZTN31vRYM8TPzCCoXOSPwCmedykAJ8i1ya0cLghFD3YDf7Tfm7H-Ku2CbW6U_gOwVmyiwgJ9Vwd3ASnJRoOyt-5-z5D29BhLz1zK2BtbgQylT-XCGAsl5VGihL6e4x280JdKps9eiA11hqY6SpJUV2GgnE4Rz_V7jtc3PvXLPuK');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Noche de Punk y Furia</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Sáb, 20 Nov - $120</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="An indie rock band playing in a small, crowded bar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBA9EVGgv76Md8vd0NMAF62GSbQpXUuRDq_1foRjV406quGMozS2QaWDiv9HBtx7l9YBdylAKH3MjwpWVHcbsqTLLRKlaZ_JM-88WyB6Bbr3PT5e8JoBkDeUHtf-453wykeBKLT1uErcazUcqAdwRyIIghRVnw1kauohXxrJjtvhcY9OWED4JJZCPt8RU0wKWZysmZufEZwj4x4VC43emMM5r-KcB3LtoSVW3mYRcqsh2_0ztHtOOQHDgwW4u6oApDB496oU-9NYYrt');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Indie Fest: Sonidos Nuevos</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Dom, 21 Nov - $180</p>
+</div>
+</div>
+</div>
+<h2 class="text-white text-3xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-10">Electrónica en la Oscuridad</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-4">
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A DJ performing in a club with blue and purple neon lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD3xYFT2lpOp3r0mt4S7JJtqpY0w2izdM3NoCsic2Sxlsp7hm6K358bI2_619wSHmY0f7fCunfB7QIhPK7WqyrpT9q2y2JhLJWT5HW0m06kJYPaF6_7ixvrtmPBmN5b90W1F7WySLe6ZHUcpUgL9Owd_zeHqvDIxwatQ0xDi-ZK6AtFkssDfpTtCluTkIBqssSgE3XMBtekOXTRuYVNSg5lAD-d1Np7lE__pGp-BnZqgv4wFk90fcV6_0O1fxURCAa2y9fLI-iOK9Lt');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Abismo Techno</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 26 Nov - $250</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A crowd dancing at a house music event with warm, orange lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuApXmk0MYpqb475jlxvStFUCxL4xtW4E_9usZJJi_QZPkfydKQ667RKCa2IVwew-TjUz4YCooNxpLZysZKe37URbZm_Fo1bXy_o8XRbAJYxa1htmhj63QqoAAjyso3fAK3gmOGyzJZUMQVMFUenkglwN0WcLkKAlimqGsYPIGOlFpdn-485OJ-2DeDWT2R-VEzn3osX-iwX1rKilmOff_98YjZrLGHRC3Yvx5qv3hBHsY6fhDO98y2PQFG2xxnvlDeui-RD8IZr3DZh');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Ritmos House &amp; Soul</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Sáb, 27 Nov - $150</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="Psychedelic visuals projected behind a DJ at a psytrance party" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBsQHjFthhNkIfHylX_UGsYmMWiRVleqX7bDGvoKOIYACUaQLYVjuv2WqytX7FzOlhbWolC62KGfbNNyncNRLoB5r1hQja2Tq8fF4dWFY9NUig9knOrYtcFhRKN6EAd4v9n0wdN8GJt7Y4yTN0DTOORCo0n_QbaPRRsZf_8EV_Wg5JfUnbdiupX47CMIf9hvp6-SvPdXSiQ5mZVh2xZF4U6rf8kE6Ezf7qD58-wd6d4_10ICM0zhijY0f5krkx90zI9S1wOxRaj7wA2');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Trance Cósmico</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 03 Dic - $200</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A chillout music session on a rooftop with people relaxing on beanbags" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAxoZvpO7d666iMOBEy224ZB0flFWdHFFVqg0aS2gISJmIQ3Zgx8bpO64SNhJI64Qm3wOhxaUaP-umE-nCwQBdirU3PypDFJwa105VYXj73eX9FDGc1OJ7n1QoFv856BmV3PmlNNIp1Y0MdNZZ1Mrgkb4M8LQTRVxlANamX_TICkzmNGzkLY55TK95ElHVyrcgLCb6rsXI3AAJ1SyckfSYbstMtF99M0-kU2wm3qa49VMdgOFhHQIodrvk4iThIAZMPangH2vXoWkE_');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Sunset Downtempo</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Sáb, 04 Dic - $100</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="An industrial warehouse party with strobe lights and a large crowd" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD5bwFa16wejq6aiqyUQnQU5Tn9RugTOJ0YqtmZlI3mzenrGztWc24lkPPg4zMB5qFW8U31c0YUoda3ly7bUf6C909XzGmv1Kky58s5uRc2PP7jidjCiuySG1lCkaNGYFw4W08atblqUDUbCdRbinPpWGrpSg4X238Wki39-KjMXFubrSNppoYD64AsGROIhBX2-yxzM1QeVXdryrLGTzgxt6EFgG5sH799MD1lydc5j1K2sgazs-MTI82II6tl5TPhTCkRMgZGRDPQ');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Rave Industrial</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 10 Dic - $300</p>
+</div>
+</div>
+</div>
+<h2 class="text-white text-3xl font-bold leading-tight tracking-[-0.015em] px-4 pb-3 pt-10">Arte y Cultura Nocturna</h2>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 p-4">
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="An art gallery opening at night with people looking at paintings" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBLCHo6SG3YrdvYWoeu1HJyKmpml6-4iMmLYfzYu7fj2P-H2_5_2ZXMEyRXVLMqy6GR6VMSealnyZvIeY-YC-oQvFS59wpcmbhW9kJS2ZzRBMlocdML4BSFY5MGBlR8actYXweKZ_rxt86YoHvzUF9FshbA4fx4-tceHUZFStNuWQv6jbGo4Pa_23TdYZTN5j83aA51fe2bXpka-MIYzQsTT1bUUoZJmPu09nslgEUfFfw1sFLmqC6qlOJa13LPi3P1hasjZKwSayKF');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Noche de Galerías</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Jue, 11 Nov - Gratis</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A person performing slam poetry on a small stage in a cafe" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBuKBuqM2p2t_IsyuTo04p8E_Ml1o8DEUnZ6n1WctCq7OG1cK9Eb36lfLKrfwcN0clxQKt0ZfMAolVyfQGQcCn6I2KBda8ERjGJZQHziJ_LuWZlYUNNH5sEibMPdV4Mv2TQToNOCcSph7qUtygowas0KHWN4F0iXFaPbIKgn4OgJjxSOLd2E0e_SYwdyr3grD5UO6ODbdSpMzkWJAgw_JcUxvwrIt3PSmzt823gGEQkSQuuRkxU4xBKiB_lCleblrGJfjanAudMFH0r');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Poesía Subterránea</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Mié, 17 Nov - $50</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="An outdoor cinema screening a classic black and white film in a park at night" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBEdOx4czEGnuJtgfkBsL-2pu4cbO0RJh_ANdfk7yBJw_mcghd_jB5lAS5aW6pYbnPsD4qG4EPczHvcVPpx8CznP2Sgi2CebdMr7f76RrF-_2A-JcTtG5qHomMMOZOe1zSfQ6-W4A1pdsSOkZZfUbik3u30KPhlHfWSizqu7QRZv6lV8RaPMZe-HGvdCuePDFcB49zEXKxkfoIFvwTG0_COtupmI2ycaPTns8pG2D4zmCgSepLbTV7VHn3tjJMinHloGfpXOZC3tcCt');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Cine de Culto al Aire Libre</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Mar, 23 Nov - $120</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A modern dance performance with dramatic lighting on a dark stage" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAFzj2CUWeY7TXXshdqG9RVwpuEXtYZwGYdB5PDPvBKQ-ZuWB0q2uXi8gf34E623g1CEjcK-LF84YrKgv4aqDAiBYBifN8_WmIQMazBkxMeeDD21upl8oNoeaCSn6r5f97jp9Y1fAJ5v5RwEebI3h_gdZ0LSbsKYBQDHmNr7lJ8beC18ywqU_TJkRzfleMQvhk2sAQKcHkzybao1pytFX9PrZ-BWc0ZSGrm8ofog-i0TgIMEFWc7kv_qyaelVyE7zTPAZNhUZXlzi7K');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Danza Contemporánea</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Vie, 26 Nov - $250</p>
+</div>
+</div>
+<div class="flex flex-col gap-3 group">
+<div class="w-full bg-center bg-no-repeat aspect-[3/4] bg-cover rounded-lg overflow-hidden transition-transform duration-300 group-hover:scale-105" data-alt="A street art festival at night with graffiti artists painting large murals" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAkpH9ieO36MZpltdtFHGcIc6YhH1qTSOgfLC_se0Gq396n2-mVUDS2xQ3qj_9jxGvSI6sag1WFsUSSWLtL8HOanjYPkpn738vZHsQkmg9sDQvrm4oUNN-ws1xMj9R6xlCD82e8EYH6T6MqTNUg7YBgsclerpO4NP9JoIDylT64YJJluTg6O89IGGhqvjeeRd-T2Dzp6WaYLQ-cZjZ6DaebxS3yKCZfIZQdDH3w26CrbDHlgXOhyt56tDV8PrnMj4s9egRDblGiRkst');"></div>
+<div>
+<p class="text-white text-lg font-medium leading-normal">Murales Nocturnos</p>
+<p class="text-white/60 text-sm font-normal leading-normal">Sáb, 27 Nov - Gratis</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

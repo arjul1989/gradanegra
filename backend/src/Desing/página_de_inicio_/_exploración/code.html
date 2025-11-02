@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Inicio</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#f20d33",
+            "background-light": "#f8f5f6",
+            "background-dark": "#181112",
+          },
+          fontFamily: {
+            "display": ["Space Grotesk", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.5rem",
+            "lg": "0.75rem",
+            "xl": "1rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col">
+<!-- Sticky Header -->
+<header class="sticky top-0 z-50 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex items-center p-4">
+<div class="flex size-12 shrink-0 items-center justify-start">
+</div>
+<h1 class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-zinc-900 dark:text-white">Grada Negra</h1>
+<div class="flex w-12 items-center justify-end">
+<button class="flex h-12 w-12 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-zinc-900 dark:text-white">
+<span class="material-symbols-outlined text-2xl">
+              person
+            </span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 pb-24">
+<!-- Headline Text -->
+<h2 class="px-4 pb-3 pt-6 text-left text-[32px] font-bold leading-tight tracking-tight text-zinc-900 dark:text-white">Descubre tu Próxima Experiencia</h2>
+<!-- Featured Event Card -->
+<div class="p-4">
+<div class="flex flex-col items-stretch justify-end rounded-xl bg-cover bg-center pt-32" data-alt="Dynamic shot of a rock festival stage with vibrant lights and a large crowd." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBX35YP8ar7exsJRVnzlPQfSaCFDqUgsrarNYy3GETTWlwUlYpa4uiFNjU9jvay8Sag7GaLEaajex8iXLYhU6QN5Vdb0RPJ9AySIDfv4rwWY04N234J891xdOFd6xFE_3QQWginWaK87rluz3Tqm5R4isJNLIOsBiRA0YdCBSoZCm595qhqGL2ECLcWfqWLM4cSYFaGIKKatqN2Ru7RRLtuJLd2ZfvxKfCUSr5DCXWUG7a0A79hLiJJliNGXhxoe_CZJxaoep7Ed8me");'>
+<div class="flex w-full flex-col items-start gap-4 p-4 md:flex-row md:items-end md:justify-between">
+<div class="flex max-w-[440px] flex-1 flex-col gap-1">
+<p class="text-2xl font-bold leading-tight tracking-tight text-white">Evento Destacado: Festival de Leyenda</p>
+<p class="text-base font-medium leading-normal text-white">Los íconos que definieron generaciones reunidos.</p>
+</div>
+<button class="flex h-10 min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg bg-primary px-4 text-sm font-bold leading-normal tracking-[0.015em] text-white transition-transform hover:scale-105">
+<span class="truncate">Ver detalles</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Image Grid -->
+<div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+<div class="relative flex aspect-[3/4] flex-col justify-end gap-3 overflow-hidden rounded-xl bg-cover bg-center p-4 transition-transform hover:scale-105" data-alt="Silhouetted crowd at an underground rock concert with red and blue stage lights." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuAuOP-br6SqYjmGpzFcxbKzWC6_zBNtJ6lleNpZlLsxgaNg-jDmV8SDeoMQBwRE0uej-Ws9sS0CrB_NHN0MtD0lL84geRRDqvOv_EnT2J9ESOCs0Bm6nwuUt9tMhLHPMXNq8NATacQiSXAqxmBhu-nMnw9tfWpHD6WKebDbU_gxOII63s6ueW0JwzrpMCcnD6A8j404WXuhiKEpPM7Uz33XNH7QzFgnikTFZSZIVMT_nzmRTyJLpRk9P_Xf4YU88vzsz8bpQbcGFo9n");'>
+<p class="w-full text-base font-bold leading-tight text-white line-clamp-3">Noches de Rock Underground</p>
+</div>
+<div class="relative flex aspect-[3/4] flex-col justify-end gap-3 overflow-hidden rounded-xl bg-cover bg-center p-4 transition-transform hover:scale-105" data-alt="Close-up of a basketball player mid-air, about to dunk in a dramatically lit stadium." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuB0-EU0UGfuEsi1KivZ8ViavwhdkI1lg2DOfNPgIOfxIEA3f7WgplnC_zWaZqZMD52lEpo8fGJB1VVAFL8pUUgkrzcGtBWq39cF0vtVEJstZ_0quJRS0bIu6AiH4M0MC4jIRbWVehSAqwjgM4ZjXFw-I8O5nXY7YTuImCQ9zbu97AKrSwUe7sgnamy1ZHVCXqTM6-AqzObq-Mlv7QwdNUxOyZ_boZ_XAhlunfD-v5qNjVazFPkjXF80OoLAhri7OyG323Z8vJSEggXg");'>
+<p class="w-full text-base font-bold leading-tight text-white line-clamp-3">Desafíos Deportivos Épicos</p>
+</div>
+<div class="relative flex aspect-[3/4] flex-col justify-end gap-3 overflow-hidden rounded-xl bg-cover bg-center p-4 transition-transform hover:scale-105" data-alt="DJ console illuminated by neon purple and blue lights in a dark club." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmq66_N1oI29Nl8o8idnR4jAHfW-RkTibbriH4lWGbUY9bKIiNMAD7b0JrvqZXRFD_CvfRz5TSyfetMYkO7fHTimHTc1kPKK0vU4iUFel4FLqwaSsgj2sN4YJlKX9lMJU0b0zGIFR-ZRbf6zPoY8mXJOPhqbM9JcZOv9CBOQhLAkiD-LeoiwTtAUg8GWXUiKP5DJwlQ8fEuQWhuPSr-0wmmTnk1RnwmaFwaUtGcZpY8AVBrDmC6Q16ixHMtal16PEHCoCInYQQyVIa");'>
+<p class="w-full text-base font-bold leading-tight text-white line-clamp-3">Electrónica en la Oscuridad</p>
+</div>
+<div class="relative flex aspect-[3/4] flex-col justify-end gap-3 overflow-hidden rounded-xl bg-cover bg-center p-4 transition-transform hover:scale-105" data-alt="An abstract art installation with glowing neon lines in a dark gallery." style='background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%), url("https://lh3.googleusercontent.com/aida-public/AB6AXuANwyNDnbgeaFUd5C3mkcEXwCk87RxJeKcU46co6kwNTeKVPELaawXkFJg0cT-n8Za90Jt9D24sqzu3U74GNYA95vS7-nJWOrWF-2kaB2fkkytdVtrGkllGwmdos38kAWBh6WpBE2ttc9nkld0cEV5ZXRWX1FxgBTjCHronVaSGzMXlEWF0yAg18G5ZTUujnY30EDfqHS7FY3yKaobuMOqRfJXRkUi7QcMF-5iXnzFQAVia6PgSKmVFlIwrd2j_lG73ltR4I7iRUfKk");'>
+<p class="w-full text-base font-bold leading-tight text-white line-clamp-3">Arte y Cultura Nocturna</p>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-200/50 bg-background-light/80 dark:border-zinc-800/50 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="flex justify-around px-2 pb-3 pt-2">
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-primary" href="#">
+<span class="material-symbols-outlined h-8 text-2xl" style="font-variation-settings: 'FILL' 1;">home</span>
+<p class="text-xs font-bold leading-normal tracking-[0.015em]">Inicio</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined h-8 text-2xl">calendar_month</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Eventos</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined h-8 text-2xl">confirmation_number</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Mis Boletos</p>
+</a>
+<a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400" href="#">
+<span class="material-symbols-outlined h-8 text-2xl">person</span>
+<p class="text-xs font-medium leading-normal tracking-[0.015em]">Perfil</p>
+</a>
+</div>
+</nav>
+</div>
+</body></html>
