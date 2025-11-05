@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { getBlurDataURL, getOptimizedSizes } from '@/lib/imageUtils';
 
 interface EventCardProps {
   id: string;
@@ -20,8 +21,10 @@ export default function EventCard({ id, title, date, price, image, compact = fal
               src={image} 
               alt={title} 
               fill 
-              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
-              className="object-cover group-hover:scale-110 transition-transform duration-500" 
+              sizes={getOptimizedSizes('compact')}
+              className="object-cover group-hover:scale-110 transition-transform duration-500"
+              placeholder="blur"
+              blurDataURL={getBlurDataURL(400, 533)}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           </div>
@@ -45,8 +48,10 @@ export default function EventCard({ id, title, date, price, image, compact = fal
             src={image} 
             alt={title} 
             fill 
-            sizes="(max-width: 768px) 100vw, 33vw"
-            className="object-cover group-hover:scale-105 transition-transform duration-500" 
+            sizes={getOptimizedSizes('card')}
+            className="object-cover group-hover:scale-105 transition-transform duration-500"
+            placeholder="blur"
+            blurDataURL={getBlurDataURL(600, 338)}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
           <div className="absolute bottom-2 left-2 right-2">

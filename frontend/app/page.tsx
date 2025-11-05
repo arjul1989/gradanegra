@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { eventService, Event } from "@/lib/eventService";
 import Navbar from "@/components/Navbar";
+import { SkeletonFeaturedEvent, SkeletonEventGrid } from "@/components/SkeletonCard";
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
@@ -54,11 +55,28 @@ export default function Home() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background-dark">
-        <div className="text-center">
-          <div className="mb-4 inline-block size-12 animate-spin rounded-full border-4 border-primary border-t-transparent"></div>
-          <p className="text-white">Cargando eventos...</p>
-        </div>
+      <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
+        <Navbar />
+        <main className="flex-1 pb-20 md:pb-8">
+          <div className="container mx-auto px-4 md:px-6 py-4 md:py-6 max-w-7xl">
+            {/* Featured Event Skeleton */}
+            <section className="mb-6 md:mb-8">
+              <div className="h-6 bg-white/10 rounded w-48 mb-3 md:mb-4 animate-pulse"></div>
+              <SkeletonFeaturedEvent />
+            </section>
+
+            {/* Categories Skeletons */}
+            <section className="mb-6 md:mb-8">
+              <div className="h-6 bg-white/10 rounded w-40 mb-3 md:mb-4 animate-pulse"></div>
+              <SkeletonEventGrid count={6} compact={true} />
+            </section>
+
+            <section className="mb-6 md:mb-8">
+              <div className="h-6 bg-white/10 rounded w-40 mb-3 md:mb-4 animate-pulse"></div>
+              <SkeletonEventGrid count={6} compact={true} />
+            </section>
+          </div>
+        </main>
       </div>
     );
   }
