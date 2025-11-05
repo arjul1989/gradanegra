@@ -156,65 +156,64 @@ function MisBoletosContent() {
       <Navbar />
 
       {/* Main Content */}
-      <main className="flex flex-1 justify-center px-4 py-8 sm:px-6 lg:px-8 pb-24 md:pb-8">
-        <div className="flex w-full max-w-7xl flex-col gap-8">
+      <main className="flex flex-1 justify-center px-4 py-6 sm:px-6 lg:px-8 pb-20 md:pb-8">
+        <div className="flex w-full max-w-7xl flex-col gap-6">
           {/* Error Message */}
           {error && (
-            <div className="rounded-xl bg-red-900/20 border border-red-900 p-4">
+            <div className="rounded-lg bg-red-900/20 border border-red-900/50 p-3">
               <p className="text-red-400 text-sm">
-                <span className="font-bold">Error:</span> {error}
-              </p>
-              <p className="text-red-400/70 text-xs mt-2">
-                Intenta cerrar sesión y volver a iniciar sesión.
+                <span className="font-semibold">Error:</span> {error}
               </p>
             </div>
           )}
 
           {/* Stats Section */}
-          <section className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-            <div className="flex flex-1 flex-col gap-2 rounded-xl bg-white/5 p-6 border border-white/10">
-              <p className="text-white/60 text-base font-medium leading-normal">Eventos Asistidos</p>
-              <p className="text-white tracking-tight text-4xl font-bold leading-tight">{stats.eventsAttended}</p>
+          <section className="grid grid-cols-2 gap-3">
+            <div className="flex flex-col gap-1 rounded-xl bg-card-dark p-4 border border-white/5">
+              <p className="text-white/50 text-sm font-medium">Eventos Asistidos</p>
+              <p className="text-white text-3xl font-bold">{stats.eventsAttended}</p>
             </div>
-            <div className="flex flex-1 flex-col gap-2 rounded-xl bg-white/5 p-6 border border-white/10">
-              <p className="text-white/60 text-base font-medium leading-normal">Insignias Ganadas</p>
-              <p className="text-white tracking-tight text-4xl font-bold leading-tight">{stats.badgesEarned}</p>
+            <div className="flex flex-col gap-1 rounded-xl bg-card-dark p-4 border border-white/5">
+              <p className="text-white/50 text-sm font-medium">Insignias Ganadas</p>
+              <p className="text-white text-3xl font-bold">{stats.badgesEarned}</p>
             </div>
           </section>
 
           {/* Achievements Section */}
           <section>
-            <h2 className="text-white text-[22px] font-bold leading-tight tracking-tight px-4 pb-4 font-display">
+            <h2 className="text-white text-lg font-bold mb-3">
               Logros Recientes
             </h2>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
               {achievements.map((achievement) => (
-                <div key={achievement.id} className="flex flex-col items-center gap-2">
-                  <div className="relative size-28 rounded-full overflow-hidden">
+                <div key={achievement.id} className="flex flex-col items-center gap-1.5">
+                  <div className="relative size-20 rounded-full overflow-hidden border-2 border-white/10">
                     <Image
                       src={achievement.image}
                       alt={achievement.name}
                       fill
                       className="object-cover"
                     />
-                    <div className="absolute inset-0 bg-black/40"></div>
+                    <div className="absolute inset-0 bg-black/30"></div>
                   </div>
-                  <p className="text-white text-sm font-medium leading-tight text-center">{achievement.name}</p>
+                  <p className="text-white/70 text-xs font-medium text-center line-clamp-2">{achievement.name}</p>
                 </div>
               ))}
             </div>
           </section>
 
           {/* Tickets Section */}
-          <section className="flex flex-col gap-6">
+          <section className="flex flex-col gap-4">
+            <h2 className="text-white text-lg font-bold">Mis Boletos</h2>
+            
             {/* Filter Tabs */}
-            <div className="flex px-4 py-3">
-              <div className="mx-auto flex h-10 w-full max-w-xs items-center justify-center rounded-lg bg-white/5 p-1">
+            <div className="flex justify-start">
+              <div className="flex h-9 items-center rounded-lg bg-card-dark p-1 border border-white/5">
                 <button
                   onClick={() => setFilter("upcoming")}
-                  className={`flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-medium leading-normal transition-colors ${
+                  className={`flex h-full items-center justify-center rounded-md px-4 text-sm font-semibold transition-all ${
                     filter === "upcoming"
-                      ? "bg-background-dark text-white"
+                      ? "bg-primary text-white shadow-lg shadow-primary/30"
                       : "text-white/60 hover:text-white"
                   }`}
                 >
@@ -222,8 +221,10 @@ function MisBoletosContent() {
                 </button>
                 <button
                   onClick={() => setFilter("past")}
-                  className={`flex h-full grow items-center justify-center rounded-lg px-2 text-sm font-medium leading-normal transition-colors ${
-                    filter === "past" ? "bg-background-dark text-white" : "text-white/60 hover:text-white"
+                  className={`flex h-full items-center justify-center rounded-md px-4 text-sm font-semibold transition-all ${
+                    filter === "past" 
+                      ? "bg-primary text-white shadow-lg shadow-primary/30" 
+                      : "text-white/60 hover:text-white"
                   }`}
                 >
                   Pasados
@@ -232,78 +233,85 @@ function MisBoletosContent() {
             </div>
 
             {/* Tickets Grid */}
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {filteredTickets.map((ticket) => (
-                <div
-                  key={ticket.id}
-                  className="flex flex-col overflow-hidden rounded-xl bg-white/5 border border-white/10 transition-transform hover:scale-[1.02] cursor-pointer"
-                >
-                  {/* Ticket Image */}
-                  <div className="relative aspect-[16/9] w-full">
-                    <Image 
-                      src={ticket.eventImage} 
-                      alt={ticket.eventName} 
-                      fill 
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-cover" 
-                    />
-                  </div>
-
-                  {/* Ticket Info */}
-                  <div className="flex flex-col gap-4 p-5">
-                    <div className="flex flex-col gap-2">
-                      <h3 className="text-lg font-bold text-white">{ticket.eventName}</h3>
-                      <div className="flex items-center gap-2 text-white/60">
-                        <span className="material-symbols-outlined text-base">calendar_today</span>
-                        <p className="text-sm font-medium">{ticket.date}</p>
-                      </div>
-                      <div className="flex items-center gap-2 text-white/60">
-                        <span className="material-symbols-outlined text-base">location_on</span>
-                        <p className="text-sm font-medium">{ticket.location}</p>
-                      </div>
+            {filteredTickets.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <span className="material-symbols-outlined text-6xl text-white/20 mb-3">confirmation_number</span>
+                <p className="text-white/60 text-sm">No tienes boletos {filter === 'upcoming' ? 'próximos' : 'pasados'}</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {filteredTickets.map((ticket) => (
+                  <div
+                    key={ticket.id}
+                    className="flex flex-col overflow-hidden rounded-lg bg-card-dark border border-white/5 hover:border-primary/30 transition-all cursor-pointer group"
+                  >
+                    {/* Ticket Image */}
+                    <div className="relative aspect-[16/9] w-full overflow-hidden">
+                      <Image 
+                        src={ticket.eventImage} 
+                        alt={ticket.eventName} 
+                        fill 
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                     </div>
-                    <Link href={`/ticket/${ticket.id}`}>
-                      <button className="flex h-10 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary/90">
-                        Ver Ticket
-                      </button>
-                    </Link>
+
+                    {/* Ticket Info */}
+                    <div className="flex flex-col gap-3 p-4">
+                      <div className="flex flex-col gap-1.5">
+                        <h3 className="text-base font-bold text-white line-clamp-2 group-hover:text-primary transition-colors">{ticket.eventName}</h3>
+                        <div className="flex items-center gap-1.5 text-white/50">
+                          <span className="material-symbols-outlined text-sm">calendar_today</span>
+                          <p className="text-xs font-medium">{new Date(ticket.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</p>
+                        </div>
+                        <div className="flex items-center gap-1.5 text-white/50">
+                          <span className="material-symbols-outlined text-sm">location_on</span>
+                          <p className="text-xs font-medium line-clamp-1">{ticket.location}</p>
+                        </div>
+                      </div>
+                      <Link href={`/ticket/${ticket.id}`} className="w-full">
+                        <button className="flex h-9 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-white transition-all hover:bg-primary/90 shadow-lg shadow-primary/20">
+                          Ver Ticket
+                        </button>
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </section>
         </div>
       </main>
 
       {/* Bottom Navigation - Mobile only */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-20 items-center justify-around border-t border-white/10 bg-background-dark/80 backdrop-blur-md">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-16 items-center justify-around border-t border-white/5 bg-card-dark/95 backdrop-blur-md shadow-2xl">
         <Link
           href="/"
-          className="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400 hover:text-primary transition-colors"
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors"
         >
-          <span className="material-symbols-outlined h-8 text-2xl">home</span>
-          <p className="text-xs font-medium leading-normal tracking-[0.015em]">Inicio</p>
+          <span className="material-symbols-outlined text-xl">home</span>
+          <p className="text-xs font-medium">Inicio</p>
         </Link>
 
         <Link
           href="/mis-boletos"
-          className="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-primary"
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-primary"
         >
           <span
-            className="material-symbols-outlined h-8 text-2xl"
-            style={{ fontVariationSettings: "'FILL' 1, 'wght' 500" }}
+            className="material-symbols-outlined text-xl"
+            style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}
           >
             confirmation_number
           </span>
-          <p className="text-xs font-bold leading-normal tracking-[0.015em]">Mis Boletos</p>
+          <p className="text-xs font-semibold">Boletos</p>
         </Link>
 
         <Link
           href="/perfil"
-          className="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400 hover:text-primary transition-colors"
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors"
         >
-          <span className="material-symbols-outlined h-8 text-2xl">person</span>
-          <p className="text-xs font-medium leading-normal tracking-[0.015em]">Perfil</p>
+          <span className="material-symbols-outlined text-xl">person</span>
+          <p className="text-xs font-medium">Perfil</p>
         </Link>
       </nav>
     </div>
