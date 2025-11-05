@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎨 Grada Negra - Frontend
 
-## Getting Started
+Sistema de ticketing con diseño profesional y experiencia de usuario optimizada.
 
-First, run the development server:
+## ✨ Características Principales
 
-```bash
+### 🎨 Diseño
+- **Tipografía:** Poppins (300-800 weights)
+- **Color Scheme:** 
+  - Primary: `#f20d33` (Rojo característico)
+  - Background: `#0d0d0d` (Negro profundo)
+  - Cards: `#1a1a1a` (Gris oscuro)
+- **Componentes:** Cards condensadas, hover effects suaves, micro-animaciones
+- **Responsive:** 100% móvil-first con breakpoints optimizados
+
+### 🚀 Performance
+- **Next.js 16.0.1** con Turbopack
+- **Image Optimization:** Blur placeholders, lazy loading
+- **Code Splitting:** Rutas dinámicas optimizadas
+- **Skeleton Loading:** Feedback visual durante carga
+
+## 🏃 Ejecutar Localmente
+
+\`\`\`bash
+# Instalar dependencias
+npm install
+
+# Development
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Build
+npm run build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Start producción
+npm start
+\`\`\`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🎯 Páginas Implementadas
 
-## Learn More
+1. **Home** - Grid de eventos con categorías
+2. **Detalle** - Información completa del evento
+3. **Mis Boletos** - Historial personal
+4. **Categorías** - Filtrado por categoría
+5. **Login/Registro** - Firebase Auth
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Componentes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `EventCard` - Card de evento (compact/full)
+- `SkeletonCard` - Loading states
+- `Navbar` - Navegación responsive
+- `ProtectedRoute` - Auth guard
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🚀 Deploy
 
-## Deploy on Vercel
+- **URL:** https://gradanegra-frontend-350907539319.us-central1.run.app
+- **Región:** us-central1
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Última actualización:** 5 de Noviembre, 2025
