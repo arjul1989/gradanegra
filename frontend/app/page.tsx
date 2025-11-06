@@ -411,47 +411,50 @@ export default function Home() {
           <div className="w-full max-w-[1600px] mx-auto px-6 py-12 space-y-12">
             {/* Featured Events - Hero Carousel */}
             {featuredEvents.length > 0 && (
-              <section className="w-full">
-                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-6 px-6 snap-x snap-mandatory">
+              <section className="w-full overflow-hidden">
+                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide snap-x snap-mandatory">
                   {featuredEvents.map((event) => (
                     <div 
                       key={event.id} 
-                      className="flex-shrink-0 w-full snap-start"
+                      className="flex-shrink-0 snap-start"
+                      style={{ width: 'calc(100vw - 48px)', maxWidth: '1552px' }}
                     >
-                      <div className="relative rounded-lg overflow-hidden group w-full h-[400px] md:h-[500px]">
+                      <div className="relative rounded-lg overflow-hidden group w-full aspect-[16/9] md:aspect-[21/9]">
                         <Image
                           src={event.image}
                           alt={event.name}
                           fill
-                          sizes="100vw"
+                          sizes="(max-width: 768px) 100vw, 1552px"
                           className="object-cover"
                           priority
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-                        <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white max-w-4xl">
-                          <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
-                            Destacado
-                          </span>
-                          <h2 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
-                          <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
-                            {event.description}
-                          </p>
-                          <div className="flex items-center space-x-4 text-sm mt-4">
-                            <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                              <span className="material-symbols-outlined text-lg">calendar_month</span>
-                              <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 text-white">
+                          <div className="max-w-4xl">
+                            <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
+                              Destacado
+                            </span>
+                            <h2 className="text-2xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
+                            <p className="max-w-2xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
+                              {event.description}
+                            </p>
+                            <div className="flex items-center space-x-4 text-sm mt-4">
+                              <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                <span className="material-symbols-outlined text-lg">calendar_month</span>
+                                <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                              </div>
+                              <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                <span className="material-symbols-outlined text-lg">location_on</span>
+                                <span className="truncate max-w-[200px]">{event.location}</span>
+                              </div>
                             </div>
-                            <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                              <span className="material-symbols-outlined text-lg">location_on</span>
-                              <span className="truncate max-w-[200px]">{event.location}</span>
-                            </div>
+                            <Link
+                              href={`/eventos/${event.id}`}
+                              className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
+                            >
+                              Ver Detalles
+                            </Link>
                           </div>
-                          <Link
-                            href={`/eventos/${event.id}`}
-                            className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
-                          >
-                            Ver Detalles
-                          </Link>
                         </div>
                       </div>
                     </div>
