@@ -344,15 +344,23 @@
 | imagen | String | URL de imagen principal |
 | ciudad | String | Ciudad donde se realiza |
 | ubicacion | String | Dirección o nombre del venue |
+| destacado | Boolean | Si aparece en carrusel principal (default: false) |
 | status | Enum | activo, pausado, finalizado, cancelado |
 | createdAt | DateTime | Fecha de creación |
 | updatedAt | DateTime | Última actualización |
 | deletedAt | DateTime? | Soft delete (nullable) |
 
+**Reglas de Eventos Destacados:**
+- Solo eventos con `destacado = true` aparecen en el carrusel principal
+- Máximo 10 eventos destacados activos simultáneamente
+- Solo comercios con plan PRO o ENTERPRISE pueden destacar eventos
+- Eventos destacados aparecen ordenados por `createdAt DESC`
+
 **Índices:**
 - `idx_eventos_comercio` en `comercioId`
 - `idx_eventos_ciudad` en `ciudad`
 - `idx_eventos_status` en `status`
+- `idx_eventos_destacado` en `destacado`
 - `idx_eventos_deleted` en `deletedAt`
 
 ---
@@ -633,6 +641,14 @@ USUARIO (1) ←─ COMPRAS (N)
 - `finalizado`: Evento ya ocurrió
 - `cancelado`: Evento cancelado
 
+**Eventos Destacados:**
+- Solo comercios con plan **PRO** o **ENTERPRISE** pueden destacar eventos
+- Máximo 10 eventos destacados simultáneamente en la plataforma
+- Aparecen en el carrusel principal del home
+- Se ordenan por fecha de creación (más recientes primero)
+- Deben tener al menos una fecha futura activa para aparecer
+- Se valida al momento de marcar como destacado
+
 **FECHAS_EVENTO:**
 - `activa`: Vendiendo boletos
 - `agotada`: Sin boletos disponibles
@@ -659,7 +675,36 @@ USUARIO (1) ←─ COMPRAS (N)
 
 ## Consultas Frecuentes (Queries)
 
-### 1. Obtener eventos de un comercio
+### 1. Obtener eventos destacados para el carrusel
+```sql
+SELECT e.*, 
+       co.nombre as nombreComercio,
+       co.logo as logoComercio,
+       array_agg(DISTINCT c.nombre) as categorias,
+       min(t.precio) as precioDesde,
+       min(fe.fecha) as proximaFecha
+FROM eventos e
+JOIN comercios co ON co.id = e.comercioId 
+  AND co.status = 'activo'
+  AND co.tipoPlan IN ('pro', 'enterprise')
+JOIN fechas_evento fe ON fe.eventoId = e.id 
+  AND fe.fecha >= CURRENT_DATE
+  AND fe.status = 'activa'
+  AND fe.deletedAt IS NULL
+LEFT JOIN tiers t ON t.fechaEventoId = fe.id 
+  AND t.status = 'activo'
+  AND t.deletedAt IS NULL
+LEFT JOIN eventos_categorias ec ON ec.eventoId = e.id
+LEFT JOIN categorias c ON c.id = ec.categoriaId
+WHERE e.destacado = true
+  AND e.status = 'activo'
+  AND e.deletedAt IS NULL
+GROUP BY e.id, co.nombre, co.logo
+ORDER BY e.createdAt DESC
+LIMIT 10
+```
+
+### 2. Obtener eventos de un comercio
 ```sql
 SELECT e.*, 
        array_agg(DISTINCT c.nombre) as categorias,
@@ -677,7 +722,7 @@ GROUP BY e.id
 ORDER BY e.createdAt DESC
 ```
 
-### 2. Listar eventos por ciudad y fecha (búsqueda pública)
+### 3. Listar eventos por ciudad y fecha (búsqueda pública)
 ```sql
 SELECT e.*, 
        co.nombre as nombreComercio,
@@ -700,7 +745,7 @@ GROUP BY e.id, fe.id, co.nombre, co.logo
 ORDER BY fe.fecha ASC
 ```
 
-### 3. Dashboard de comercio (estadísticas)
+### 4. Dashboard de comercio (estadísticas)
 ```sql
 SELECT 
   count(DISTINCT e.id) as totalEventos,
@@ -719,7 +764,7 @@ WHERE com.id = ?
 GROUP BY com.id
 ```
 
-### 4. Verificar límite de eventos según plan
+### 5. Verificar límite de eventos según plan
 ```sql
 SELECT 
   com.tipoPlan,
@@ -734,7 +779,24 @@ GROUP BY com.id
 HAVING count(e.id) < com.limiteEventos
 ```
 
-### 5. Obtener disponibilidad de un evento
+### 6. Verificar si comercio puede destacar eventos
+```sql
+SELECT 
+  com.tipoPlan,
+  CASE 
+    WHEN com.tipoPlan IN ('pro', 'enterprise') THEN true
+    ELSE false
+  END as puedeDestacar,
+  count(CASE WHEN e.destacado = true THEN 1 END) as eventosDestacados
+FROM comercios com
+LEFT JOIN eventos e ON e.comercioId = com.id 
+  AND e.status = 'activo' 
+  AND e.deletedAt IS NULL
+WHERE com.id = ?
+GROUP BY com.id
+```
+
+### 7. Obtener disponibilidad de un evento
 ```sql
 SELECT 
   fe.fecha,
@@ -751,7 +813,7 @@ WHERE fe.eventoId = ?
 ORDER BY fe.fecha, t.orden
 ```
 
-### 6. Historial de compras de usuario
+### 8. Historial de compras de usuario
 ```sql
 SELECT 
   c.id,
@@ -770,7 +832,7 @@ GROUP BY c.id, e.nombre, fe.fecha
 ORDER BY c.createdAt DESC
 ```
 
-### 7. Usuarios de un comercio con sus roles
+### 9. Usuarios de un comercio con sus roles
 ```sql
 SELECT 
   u.id,
@@ -815,10 +877,34 @@ ORDER BY
 ### Límites por Plan
 ```javascript
 const PLANES = {
-  free: { eventos: 2, usuarios: 1, comision: 10.0 },
-  basic: { eventos: 10, usuarios: 2, comision: 7.0 },
-  pro: { eventos: 50, usuarios: 3, comision: 5.0 },
-  enterprise: { eventos: -1, usuarios: 10, comision: 3.0 } // -1 = ilimitado
+  free: { 
+    eventos: 2, 
+    usuarios: 1, 
+    comision: 10.0,
+    eventosDestacados: 0,
+    puedeDestacar: false
+  },
+  basic: { 
+    eventos: 10, 
+    usuarios: 2, 
+    comision: 7.0,
+    eventosDestacados: 0,
+    puedeDestacar: false
+  },
+  pro: { 
+    eventos: 50, 
+    usuarios: 3, 
+    comision: 5.0,
+    eventosDestacados: 2,
+    puedeDestacar: true
+  },
+  enterprise: { 
+    eventos: -1, // -1 = ilimitado
+    usuarios: 10, 
+    comision: 3.0,
+    eventosDestacados: 5,
+    puedeDestacar: true
+  }
 }
 ```
 
@@ -845,6 +931,7 @@ const PLANES = {
 - **Eventos activos:** 2
 - **Usuarios:** 1 (solo admin)
 - **Comisión:** 10%
+- **Eventos destacados:** ❌ No disponible
 - **Características:**
   - ✅ Creación de eventos básicos
   - ✅ Múltiples fechas y tiers
@@ -852,12 +939,14 @@ const PLANES = {
   - ✅ Validación básica
   - ❌ Sin personalización de marca
   - ❌ Sin reportes avanzados
+  - ❌ Sin eventos destacados
 
 ### Plan BASIC
 - **Costo:** $50,000 COP/mes
 - **Eventos activos:** 10
 - **Usuarios:** 2 (admin + finanzas/operaciones)
 - **Comisión:** 7%
+- **Eventos destacados:** ❌ No disponible
 - **Características:**
   - ✅ Todo lo de FREE
   - ✅ Logo personalizado
@@ -865,14 +954,17 @@ const PLANES = {
   - ✅ Reportes básicos
   - ✅ Exportar ventas CSV
   - ❌ Sin API
+  - ❌ Sin eventos destacados
 
 ### Plan PRO
 - **Costo:** $150,000 COP/mes
 - **Eventos activos:** 50
 - **Usuarios:** 3 (admin + finanzas + operaciones)
 - **Comisión:** 5%
+- **Eventos destacados:** ✅ Hasta 2 eventos simultáneos
 - **Características:**
   - ✅ Todo lo de BASIC
+  - ✅ **Eventos destacados en carrusel principal**
   - ✅ Dashboard avanzado
   - ✅ Analytics en tiempo real
   - ✅ Integración email marketing
@@ -884,8 +976,10 @@ const PLANES = {
 - **Eventos activos:** Ilimitados
 - **Usuarios:** Hasta 10
 - **Comisión:** 3% (negociable)
+- **Eventos destacados:** ✅ Hasta 5 eventos simultáneos
 - **Características:**
   - ✅ Todo lo de PRO
+  - ✅ **Más slots para eventos destacados**
   - ✅ API privada
   - ✅ Webhooks
   - ✅ Dominio personalizado
@@ -948,6 +1042,24 @@ const PLANES = {
   },
   "status": "activo",
   "createdAt": "2025-01-15T10:05:00Z"
+}
+```
+
+### EVENTO (con destacado)
+```json
+{
+  "id": "880e8400-e29b-41d4-a716-446655440003",
+  "comercioId": "550e8400-e29b-41d4-a716-446655440000",
+  "nombre": "Festival Rock al Parque 2025",
+  "descripcion": "El festival de rock más grande de Colombia regresa con bandas internacionales y locales. Tres días de música en vivo, arte y cultura.",
+  "imagen": "https://storage.googleapis.com/gradanegra/eventos/rock-al-parque-2025.jpg",
+  "ciudad": "Bogotá",
+  "ubicacion": "Parque Simón Bolívar",
+  "destacado": true,
+  "status": "activo",
+  "createdAt": "2025-10-15T10:00:00Z",
+  "updatedAt": "2025-11-06T16:00:00Z",
+  "deletedAt": null
 }
 ```
 
