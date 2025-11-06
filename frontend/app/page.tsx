@@ -1,19 +1,23 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { eventService, Event } from "@/lib/eventService";
-import Navbar from "@/components/Navbar";
-import { SkeletonFeaturedEvent, SkeletonEventGrid } from "@/components/SkeletonCard";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
   const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
+  const { user } = useAuth();
+  
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
 
   useEffect(() => {
-    async function loadEvents() {
+    async function loadInitialContent() {
       try {
         const featured = await eventService.getFeaturedEvents();
         if (featured.length > 0) {
@@ -21,38 +25,14 @@ export default function Home() {
         }
 
         const categoriesData = eventService.getCategories();
-        const categoriesWithEvents = await Promise.all(
-          categoriesData.map(async (cat) => {
-            const events = await eventService.getEventsByCategory(cat.slug);
-            // Triplicar eventos para efecto de carrusel
-            const eventsMapped = events.slice(0, 5).map(event => ({
-              id: event.id,
-              title: event.name,
-              date: new Date(event.date).toLocaleDateString('es-MX', { 
-                weekday: 'short', 
-                day: 'numeric',
-                month: 'short'
-              }),
-              price: event.price,
-              image: event.image,
-            }));
-            
-            // Duplicar para crear más eventos
-            const tripleEvents = [
-              ...eventsMapped,
-              ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup1-${i}` })),
-              ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup2-${i}` })),
-            ];
-            
-            return {
-              slug: cat.slug,
-              name: cat.name,
-              events: tripleEvents
-            };
-          })
-        );
+        const categoriesWithPlaceholders = categoriesData.map((cat) => ({
+          slug: cat.slug,
+          name: cat.name,
+          events: [],
+          loaded: false,
+        }));
 
-        setCategories(categoriesWithEvents);
+        setCategories(categoriesWithPlaceholders);
       } catch (error) {
         console.error('Error loading events:', error);
       } finally {
@@ -60,134 +40,282 @@ export default function Home() {
       }
     }
 
-    loadEvents();
+    loadInitialContent();
   }, []);
+
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = Number(entry.target.getAttribute('data-index'));
+            if (!loadedSections.has(index)) {
+              setLoadedSections((prev) => new Set([...prev, index]));
+              loadCategoryEvents(index);
+            }
+          }
+        });
+      },
+      { rootMargin: '200px' }
+    );
+
+    sectionRefs.current.forEach((ref) => {
+      if (ref) observerRef.current?.observe(ref);
+    });
+
+    return () => observerRef.current?.disconnect();
+  }, [categories.length]);
+
+  const loadCategoryEvents = async (index: number) => {
+    const category = categories[index];
+    if (!category || category.loaded) return;
+
+    try {
+      const events = await eventService.getEventsByCategory(category.slug);
+      const eventsMapped = events.slice(0, 5).map(event => ({
+        id: event.id,
+        title: event.name,
+        date: new Date(event.date).toLocaleDateString('es-MX', { 
+          day: 'numeric',
+          month: 'short'
+        }),
+        price: event.price,
+        image: event.image,
+        location: event.location,
+      }));
+
+      // Triplicar para carrusel
+      const tripleEvents = [
+        ...eventsMapped,
+        ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup1-${i}` })),
+        ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup2-${i}` })),
+      ];
+
+      setCategories((prev) =>
+        prev.map((cat, i) =>
+          i === index ? { ...cat, events: tripleEvents, loaded: true } : cat
+        )
+      );
+    } catch (error) {
+      console.error(`Error loading category ${category.slug}:`, error);
+    }
+  };
 
   if (loading) {
     return (
-      <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
-        <Navbar />
-        <main className="flex-1 pb-20 md:pb-8">
-          <div className="container mx-auto px-4 md:px-6 py-4 md:py-6 max-w-7xl">
-            {/* Featured Event Skeleton */}
-            <section className="mb-6 md:mb-8">
-              <div className="h-6 bg-white/10 rounded w-48 mb-3 md:mb-4 animate-pulse"></div>
-              <SkeletonFeaturedEvent />
-            </section>
-
-            {/* Categories Skeletons */}
-            <section className="mb-6 md:mb-8">
-              <div className="h-6 bg-white/10 rounded w-40 mb-3 md:mb-4 animate-pulse"></div>
-              <SkeletonEventGrid count={6} compact={true} />
-            </section>
-
-            <section className="mb-6 md:mb-8">
-              <div className="h-6 bg-white/10 rounded w-40 mb-3 md:mb-4 animate-pulse"></div>
-              <SkeletonEventGrid count={6} compact={true} />
-            </section>
-          </div>
-        </main>
+      <div className="flex min-h-screen bg-background-light">
+        <div className="flex-1 flex items-center justify-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-text-light"></div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
-      <Navbar />
+    <div className="flex min-h-screen bg-background-light">
+      {/* Sidebar - Desktop only */}
+      <aside className="w-64 flex-shrink-0 bg-background-light border-r border-gray-200/50 p-6 hidden md:flex flex-col">
+        <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light">
+          <span className="material-symbols-outlined text-3xl">confirmation_number</span>
+          <span>GRADA NEGRA</span>
+        </Link>
+        
+        <nav className="flex flex-col space-y-1 text-text-muted-light">
+          <Link href="/" className="flex items-center space-x-3 px-4 py-2 rounded-lg bg-gray-200 text-text-light font-semibold">
+            <span className="material-symbols-outlined">home</span>
+            <span>Inicio</span>
+          </Link>
+          <Link href="/categoria/musica" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+            <span className="material-symbols-outlined">music_note</span>
+            <span>Música</span>
+          </Link>
+          <Link href="/categoria/fiestas" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+            <span className="material-symbols-outlined">celebration</span>
+            <span>Fiestas</span>
+          </Link>
+          <Link href="/categoria/deportes" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+            <span className="material-symbols-outlined">sports_soccer</span>
+            <span>Deportes</span>
+          </Link>
+          <Link href="/categoria/arte-y-cultura" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+            <span className="material-symbols-outlined">palette</span>
+            <span>Arte y Cultura</span>
+          </Link>
+          <Link href="/mis-boletos" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+            <span className="material-symbols-outlined">confirmation_number</span>
+            <span>Mis Boletos</span>
+          </Link>
+        </nav>
 
-      <main className="flex-1 pb-20 md:pb-6">
-        <div className="container mx-auto px-4 md:px-6 py-4 md:py-6 max-w-7xl">
-          {featuredEvent && (
-            <section className="mb-6 md:mb-8">
-              <h2 className="text-white text-lg md:text-xl font-bold mb-2 md:mb-3">Evento Destacado</h2>
-              <Link href={`/eventos/${featuredEvent.id}`}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 bg-card-dark rounded-lg overflow-hidden border border-white/5 hover:border-primary/30 transition-all group cursor-pointer">
-                  <div className="relative aspect-[16/9] md:aspect-[4/3] md:col-span-1">
-                    <Image 
-                      src={featuredEvent.image} 
-                      alt={featuredEvent.name} 
-                      fill 
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500" 
-                      priority
-                    />
-                    <div className="absolute top-2 left-2 bg-primary px-2 py-0.5 rounded text-white text-xs font-bold uppercase tracking-wide">
+        <div className="mt-auto">
+          {user ? (
+            <>
+              <Link href="/perfil" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 text-text-muted-light transition-colors">
+                <span className="material-symbols-outlined">account_circle</span>
+                <span className="truncate">{user.email?.split('@')[0]}</span>
+              </Link>
+              <Link
+                href="/login"
+                className="flex items-center space-x-3 px-4 py-2 text-text-muted-light rounded-lg hover:bg-gray-200 transition-colors text-sm"
+              >
+                <span className="material-symbols-outlined">logout</span>
+                <span>Salir</span>
+              </Link>
+            </>
+          ) : (
+            <Link href="/login" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 text-text-muted-light transition-colors">
+              <span className="material-symbols-outlined">login</span>
+              <span>Iniciar Sesión</span>
+            </Link>
+          )}
+        </div>
+      </aside>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        {/* Header */}
+        <header className="sticky top-0 z-50 bg-background-light/80 backdrop-blur-sm border-b border-gray-200/50">
+          <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="relative w-full max-w-xs">
+              <input
+                className="w-full bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900"
+                placeholder="Buscar eventos, artistas..."
+                type="search"
+              />
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
+            </div>
+            
+            <div className="md:hidden">
+              <Link href="/" className="flex items-center space-x-2 text-xl font-bold">
+                <span className="material-symbols-outlined text-3xl">confirmation_number</span>
+              </Link>
+            </div>
+            
+            <div className="hidden md:flex items-center space-x-4">
+              <Link href="#" className="hover:text-text-muted-light transition-colors">Ayuda</Link>
+            </div>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="container mx-auto px-6 py-12 space-y-12">
+            {/* Featured Event - Hero */}
+            {featuredEvent && (
+              <section>
+                <div className="relative rounded-lg overflow-hidden group aspect-video md:aspect-[2.4/1]">
+                  <Image
+                    src={featuredEvent.image}
+                    alt={featuredEvent.name}
+                    fill
+                    sizes="100vw"
+                    className="object-cover"
+                    priority
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white">
+                    <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
                       Destacado
-                    </div>
-                  </div>
-                  <div className="flex flex-col justify-center p-3 md:p-4 md:col-span-2">
-                    <h3 className="text-white text-base md:text-lg font-bold mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">{featuredEvent.name}</h3>
-                    <p className="text-white/60 text-xs md:text-sm mb-2 line-clamp-2">{featuredEvent.description}</p>
-                    <div className="flex flex-wrap gap-2 mb-2">
-                      <div className="flex items-center gap-1.5 text-white/70 text-xs">
-                        <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
-                        {new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}
+                    </span>
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2">{featuredEvent.name}</h2>
+                    <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block">
+                      {featuredEvent.description}
+                    </p>
+                    <div className="flex items-center space-x-4 text-sm mt-4">
+                      <div className="flex items-center space-x-1.5">
+                        <span className="material-symbols-outlined text-lg">calendar_month</span>
+                        <span>{new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
                       </div>
-                      <div className="flex items-center gap-1.5 text-white/70 text-xs">
-                        <span className="material-symbols-outlined text-primary text-sm">location_on</span>
-                        <span className="line-clamp-1">{featuredEvent.location}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center justify-between mt-auto">
-                      <span className="text-white text-base md:text-lg font-bold">${featuredEvent.price}</span>
-                      <div className="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors">
-                        Ver Detalles
+                      <div className="flex items-center space-x-1.5">
+                        <span className="material-symbols-outlined text-lg">location_on</span>
+                        <span>{featuredEvent.location}</span>
                       </div>
                     </div>
+                    <Link
+                      href={`/eventos/${featuredEvent.id}`}
+                      className="bg-primary text-black font-bold py-2 px-6 rounded-full text-sm hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block"
+                    >
+                      Ver Detalles
+                    </Link>
                   </div>
                 </div>
-              </Link>
-            </section>
-          )}
+              </section>
+            )}
 
-          {categories.slice(0, 2).map((category) => (
-            <section key={category.slug} className="mb-6 md:mb-8">
-              <Link href={`/categoria/${category.slug}`} className="inline-flex items-center gap-2 mb-3 md:mb-4 hover:text-primary transition-colors cursor-pointer group">
-                <h2 className="text-white text-lg md:text-xl font-bold">{category.name}</h2>
-                <span className="material-symbols-outlined text-white/40 group-hover:text-primary group-hover:translate-x-1 transition-all text-lg">
-                  arrow_forward
-                </span>
-              </Link>
-              <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
-                {category.events.map((event: any) => (
-                  <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`}>
-                    <div className="group cursor-pointer flex-shrink-0 w-36 sm:w-40 md:w-44">
-                      <div className="relative aspect-[3/4] mb-2 rounded-lg overflow-hidden bg-card-dark border border-white/5 group-hover:border-primary/30 transition-all shadow-lg">
-                        <Image 
-                          src={event.image} 
-                          alt={event.title} 
-                          fill 
-                          sizes="180px"
-                          className="object-cover group-hover:scale-110 transition-transform duration-500" 
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            {/* Categories Sections - Lazy Loaded */}
+            {categories.map((category, index) => (
+              <section
+                key={category.slug}
+                ref={(el) => {
+                  sectionRefs.current[index] = el;
+                }}
+                data-index={index}
+              >
+                <Link
+                  href={`/categoria/${category.slug}`}
+                  className="flex items-center space-x-2 text-2xl font-bold mb-4 group hover:text-text-muted-light transition-colors"
+                >
+                  <span>{category.name}</span>
+                  <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">
+                    arrow_forward
+                  </span>
+                </Link>
+                
+                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-6 px-6">
+                  {category.loaded && category.events.length > 0 ? (
+                    category.events.map((event: any) => (
+                      <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`} className="flex-shrink-0 w-80 group">
+                        <div className="bg-card-light rounded-lg shadow-lg overflow-hidden">
+                          <div className="overflow-hidden">
+                            <div className="relative w-full h-48">
+                              <Image
+                                src={event.image}
+                                alt={event.title}
+                                fill
+                                sizes="320px"
+                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                              />
+                            </div>
+                          </div>
+                          <div className="p-4">
+                            <h3 className="text-lg font-bold mb-2 truncate text-text-light">{event.title}</h3>
+                            <div className="space-y-1 text-sm text-text-muted-light">
+                              <div className="flex items-start">
+                                <span className="material-symbols-outlined text-base mr-2 mt-0.5">calendar_month</span>
+                                <span>{event.date}</span>
+                              </div>
+                              <div className="flex items-start">
+                                <span className="material-symbols-outlined text-base mr-2 mt-0.5">location_on</span>
+                                <span>{event.location}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    ))
+                  ) : (
+                    // Skeleton loading
+                    Array.from({ length: 3 }).map((_, i) => (
+                      <div key={i} className="flex-shrink-0 w-80">
+                        <div className="bg-card-light rounded-lg shadow-lg overflow-hidden animate-pulse">
+                          <div className="w-full h-48 bg-gray-200"></div>
+                          <div className="p-4">
+                            <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                            <div className="space-y-1">
+                              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <h3 className="text-white text-sm font-semibold mb-0.5 line-clamp-2 group-hover:text-primary transition-colors leading-tight">{event.title}</h3>
-                      <p className="text-white/50 text-xs mb-1">{event.date}</p>
-                      <p className="text-primary text-sm font-bold">${event.price}</p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      </main>
-
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-16 items-center justify-around border-t border-white/5 bg-card-dark/95 backdrop-blur-md shadow-2xl">
-        <Link href="/" className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-primary">
-          <span className="material-symbols-outlined text-xl" style={{ fontVariationSettings: "'FILL' 1, 'wght' 600" }}>home</span>
-          <p className="text-xs font-semibold">Inicio</p>
-        </Link>
-        <Link href="/mis-boletos" className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined text-xl">confirmation_number</span>
-          <p className="text-xs font-medium">Boletos</p>
-        </Link>
-        <Link href="/perfil" className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors">
-          <span className="material-symbols-outlined text-xl">person</span>
-          <p className="text-xs font-medium">Perfil</p>
-        </Link>
-      </nav>
+                    ))
+                  )}
+                </div>
+              </section>
+            ))}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

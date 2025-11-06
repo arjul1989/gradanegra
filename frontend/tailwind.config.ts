@@ -10,19 +10,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "#f20d33",
-        "background-light": "#f5f5f5",
-        "background-dark": "#0d0d0d",
-        "card-dark": "#1a1a1a",
-        "primary-accent": "#FF4500",
-        "gamification-accent": "#39FF14",
+        primary: "#ffffff",
+        "primary-dark": "#f20d33",
+        "background-light": "#f3f4f6",
+        "background-dark": "#111111",
+        "card-light": "#ffffff",
+        "card-dark": "#1f1f1f",
+        "text-light": "#1f2937",
+        "text-dark": "#f9fafb",
+        "text-muted-light": "#6b7280",
+        "text-muted-dark": "#9ca3b0",
       },
       fontFamily: {
-        sans: ["var(--font-poppins)", "system-ui", "sans-serif"],
-        display: ["var(--font-poppins)", "system-ui", "sans-serif"],
+        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       borderRadius: {
-        DEFAULT: "0.5rem",
+        DEFAULT: "0.75rem",
         lg: "0.75rem",
         xl: "1rem",
         "2xl": "1.25rem",

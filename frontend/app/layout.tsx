@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Poppins } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 
-const poppins = Poppins({
-  variable: "--font-poppins",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+  weight: ["400", "500", "700", "800"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Grada Negra - Tu próxima experiencia",
+  title: "Grada Negra - Tu Próximo Evento Inolvidable",
   description: "Descubre eventos únicos y compra tus tickets de forma segura",
 };
 
@@ -29,7 +29,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${poppins.variable} font-sans bg-background-dark antialiased`}
+        className={`${inter.variable} font-sans bg-background-light text-text-light antialiased`}
       >
         <AuthProvider>
           {children}
