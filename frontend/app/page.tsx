@@ -12,12 +12,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
   const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
-  const [isCityMenuOpen, setIsCityMenuOpen] = useState(false);
+  const [showAllCities, setShowAllCities] = useState(false);
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const cityMenuRef = useRef<HTMLDivElement>(null);
+  const cityScrollRef = useRef<HTMLDivElement>(null);
 
   const cities = [
     "Todas las ciudades",
@@ -59,20 +59,6 @@ export default function Home() {
 
     loadInitialContent();
   }, []);
-
-  // Close city menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (cityMenuRef.current && !cityMenuRef.current.contains(event.target as Node)) {
-        setIsCityMenuOpen(false);
-      }
-    };
-    
-    if (isCityMenuOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, [isCityMenuOpen]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -217,27 +203,58 @@ export default function Home() {
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
               </div>
               
-              {/* City Filter - Custom Menu */}
-              <div className="relative hidden sm:block" ref={cityMenuRef}>
+              {/* City Filter - Innovative Pills Design */}
+              <div className="relative hidden lg:flex items-center gap-2">
+                <span className="material-symbols-outlined text-text-muted-light text-lg">location_on</span>
+                <div 
+                  ref={cityScrollRef}
+                  className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-md"
+                >
+                  {cities.slice(0, showAllCities ? cities.length : 4).map((city) => (
+                    <button
+                      key={city}
+                      onClick={() => setSelectedCity(city)}
+                      className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
+                        selectedCity === city
+                          ? 'bg-text-light text-white shadow-md scale-105'
+                          : 'bg-gray-100 text-text-muted-light hover:bg-gray-200 hover:scale-105'
+                      }`}
+                    >
+                      {city === "Todas las ciudades" ? "Todas" : city}
+                    </button>
+                  ))}
+                  {cities.length > 4 && (
+                    <button
+                      onClick={() => setShowAllCities(!showAllCities)}
+                      className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-200 text-text-light hover:bg-gray-300 transition-all"
+                    >
+                      {showAllCities ? '−' : `+${cities.length - 4}`}
+                    </button>
+                  )}
+                </div>
+              </div>
+              
+              {/* Mobile City Selector */}
+              <div className="relative lg:hidden">
                 <button
-                  onClick={() => setIsCityMenuOpen(!isCityMenuOpen)}
-                  className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-4 py-2 text-sm text-text-light transition-colors"
+                  onClick={() => setShowAllCities(!showAllCities)}
+                  className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-3 py-2 text-sm text-text-light transition-colors"
                 >
                   <span className="material-symbols-outlined text-lg">location_on</span>
-                  <span className="font-medium">{selectedCity}</span>
-                  <span className={`material-symbols-outlined text-lg transition-transform ${isCityMenuOpen ? 'rotate-180' : ''}`}>
+                  <span className="font-medium">{selectedCity === "Todas las ciudades" ? "Todas" : selectedCity}</span>
+                  <span className={`material-symbols-outlined text-lg transition-transform ${showAllCities ? 'rotate-180' : ''}`}>
                     expand_more
                   </span>
                 </button>
                 
-                {isCityMenuOpen && (
-                  <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[220px] z-50 max-h-[320px] overflow-y-auto">
+                {showAllCities && (
+                  <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 max-h-[320px] overflow-y-auto">
                     {cities.map((city) => (
                       <button
                         key={city}
                         onClick={() => {
                           setSelectedCity(city);
-                          setIsCityMenuOpen(false);
+                          setShowAllCities(false);
                         }}
                         className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                           selectedCity === city 
