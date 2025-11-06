@@ -12,10 +12,12 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
   const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
+  const [isCityMenuOpen, setIsCityMenuOpen] = useState(false);
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const cityMenuRef = useRef<HTMLDivElement>(null);
 
   const cities = [
     "Todas las ciudades",
@@ -57,6 +59,20 @@ export default function Home() {
 
     loadInitialContent();
   }, []);
+
+  // Close city menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (cityMenuRef.current && !cityMenuRef.current.contains(event.target as Node)) {
+        setIsCityMenuOpen(false);
+      }
+    };
+    
+    if (isCityMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isCityMenuOpen]);
 
   useEffect(() => {
     observerRef.current = new IntersectionObserver(
@@ -201,22 +217,39 @@ export default function Home() {
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
               </div>
               
-              {/* City Filter - New Simple Design */}
-              <div className="relative hidden sm:block">
-                <select
-                  value={selectedCity}
-                  onChange={(e) => setSelectedCity(e.target.value)}
-                  className="appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm text-text-light focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors shadow-sm"
+              {/* City Filter - Custom Menu */}
+              <div className="relative hidden sm:block" ref={cityMenuRef}>
+                <button
+                  onClick={() => setIsCityMenuOpen(!isCityMenuOpen)}
+                  className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-4 py-2 text-sm text-text-light transition-colors"
                 >
-                  {cities.map((city) => (
-                    <option key={city} value={city}>
-                      {city}
-                    </option>
-                  ))}
-                </select>
-                <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none text-sm">
-                  expand_more
-                </span>
+                  <span className="material-symbols-outlined text-lg">location_on</span>
+                  <span className="font-medium">{selectedCity}</span>
+                  <span className={`material-symbols-outlined text-lg transition-transform ${isCityMenuOpen ? 'rotate-180' : ''}`}>
+                    expand_more
+                  </span>
+                </button>
+                
+                {isCityMenuOpen && (
+                  <div className="absolute top-full mt-2 left-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 min-w-[220px] z-50 max-h-[320px] overflow-y-auto">
+                    {cities.map((city) => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedCity(city);
+                          setIsCityMenuOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
+                          selectedCity === city 
+                            ? 'bg-gray-100 text-text-light font-semibold' 
+                            : 'text-text-muted-light hover:bg-gray-50'
+                        }`}
+                      >
+                        {city}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             
