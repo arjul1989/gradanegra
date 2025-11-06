@@ -11,10 +11,27 @@ export default function Home() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
+  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
+  const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
+  const cityDropdownRef = useRef<HTMLDivElement>(null);
+
+  const cities = [
+    "Todas las ciudades",
+    "Bogotá",
+    "Medellín",
+    "Cali",
+    "Barranquilla",
+    "Cartagena",
+    "Cúcuta",
+    "Bucaramanga",
+    "Pereira",
+    "Santa Marta",
+    "Ibagué",
+  ];
 
   useEffect(() => {
     async function loadInitialContent() {
@@ -41,6 +58,17 @@ export default function Home() {
     }
 
     loadInitialContent();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
+        setCityDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -186,22 +214,36 @@ export default function Home() {
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
               </div>
               
-              <div className="relative hidden sm:block">
-                <select className="appearance-none bg-gray-200 border-none rounded-full py-2 pl-10 pr-10 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 cursor-pointer">
-                  <option value="">Todas las ciudades</option>
-                  <option value="bogota">Bogotá</option>
-                  <option value="medellin">Medellín</option>
-                  <option value="cali">Cali</option>
-                  <option value="barranquilla">Barranquilla</option>
-                  <option value="cartagena">Cartagena</option>
-                  <option value="cucuta">Cúcuta</option>
-                  <option value="bucaramanga">Bucaramanga</option>
-                  <option value="pereira">Pereira</option>
-                  <option value="santa-marta">Santa Marta</option>
-                  <option value="ibague">Ibagué</option>
-                </select>
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">location_on</span>
-                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">expand_more</span>
+              <div className="relative hidden sm:block" ref={cityDropdownRef}>
+                <button
+                  onClick={() => setCityDropdownOpen(!cityDropdownOpen)}
+                  className="flex items-center gap-2 bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 cursor-pointer hover:bg-gray-300 transition-colors"
+                >
+                  <span className="material-symbols-outlined absolute left-3 text-text-muted-light">location_on</span>
+                  <span className="whitespace-nowrap">{selectedCity}</span>
+                  <span className={`material-symbols-outlined text-text-muted-light transition-transform ${cityDropdownOpen ? 'rotate-180' : ''}`}>
+                    expand_more
+                  </span>
+                </button>
+                
+                {cityDropdownOpen && (
+                  <div className="absolute top-full mt-2 left-0 bg-card-light rounded-lg shadow-xl border border-gray-200/50 py-2 min-w-[200px] z-50 max-h-[300px] overflow-y-auto">
+                    {cities.map((city) => (
+                      <button
+                        key={city}
+                        onClick={() => {
+                          setSelectedCity(city);
+                          setCityDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                          selectedCity === city ? 'bg-gray-100 font-semibold text-text-light' : 'text-text-muted-light'
+                        }`}
+                      >
+                        {city}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
             
