@@ -1,4 +1,4 @@
-#!/bin/bash
+Si#!/bin/bash
 
 # Script para configurar credenciales de Firebase Admin SDK
 
