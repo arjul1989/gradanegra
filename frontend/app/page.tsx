@@ -24,20 +24,30 @@ export default function Home() {
         const categoriesWithEvents = await Promise.all(
           categoriesData.map(async (cat) => {
             const events = await eventService.getEventsByCategory(cat.slug);
+            // Triplicar eventos para efecto de carrusel
+            const eventsMapped = events.slice(0, 5).map(event => ({
+              id: event.id,
+              title: event.name,
+              date: new Date(event.date).toLocaleDateString('es-MX', { 
+                weekday: 'short', 
+                day: 'numeric',
+                month: 'short'
+              }),
+              price: event.price,
+              image: event.image,
+            }));
+            
+            // Duplicar para crear más eventos
+            const tripleEvents = [
+              ...eventsMapped,
+              ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup1-${i}` })),
+              ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup2-${i}` })),
+            ];
+            
             return {
               slug: cat.slug,
               name: cat.name,
-              events: events.slice(0, 5).map(event => ({
-                id: event.id,
-                title: event.name,
-                date: new Date(event.date).toLocaleDateString('es-MX', { 
-                  weekday: 'short', 
-                  day: 'numeric',
-                  month: 'short'
-                }),
-                price: event.price,
-                image: event.image,
-              }))
+              events: tripleEvents
             };
           })
         );
@@ -85,19 +95,19 @@ export default function Home() {
     <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
       <Navbar />
 
-      <main className="flex-1 pb-20 md:pb-8">
+      <main className="flex-1 pb-20 md:pb-6">
         <div className="container mx-auto px-4 md:px-6 py-4 md:py-6 max-w-7xl">
           {featuredEvent && (
             <section className="mb-6 md:mb-8">
-              <h2 className="text-white text-xl md:text-2xl font-bold mb-3 md:mb-4">Evento Destacado</h2>
+              <h2 className="text-white text-lg md:text-xl font-bold mb-2 md:mb-3">Evento Destacado</h2>
               <Link href={`/eventos/${featuredEvent.id}`}>
-                <div className="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 bg-card-dark rounded-xl overflow-hidden border border-white/5 hover:border-primary/30 transition-all group cursor-pointer shadow-xl">
-                  <div className="relative aspect-[16/9] md:aspect-square md:col-span-2">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 md:gap-3 bg-card-dark rounded-lg overflow-hidden border border-white/5 hover:border-primary/30 transition-all group cursor-pointer">
+                  <div className="relative aspect-[16/9] md:aspect-[4/3] md:col-span-1">
                     <Image 
                       src={featuredEvent.image} 
                       alt={featuredEvent.name} 
                       fill 
-                      sizes="(max-width: 768px) 100vw, 40vw"
+                      sizes="(max-width: 768px) 100vw, 33vw"
                       className="object-cover group-hover:scale-105 transition-transform duration-500" 
                       priority
                     />
@@ -105,22 +115,22 @@ export default function Home() {
                       Destacado
                     </div>
                   </div>
-                  <div className="flex flex-col justify-center p-4 md:p-5 md:col-span-3">
-                    <h3 className="text-white text-xl md:text-2xl font-bold mb-2 line-clamp-2 group-hover:text-primary transition-colors">{featuredEvent.name}</h3>
-                    <p className="text-white/60 text-sm mb-3 line-clamp-2">{featuredEvent.description}</p>
-                    <div className="flex flex-col gap-1.5 mb-3">
-                      <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <span className="material-symbols-outlined text-primary text-base">calendar_today</span>
-                        {new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' })}
+                  <div className="flex flex-col justify-center p-3 md:p-4 md:col-span-2">
+                    <h3 className="text-white text-base md:text-lg font-bold mb-1.5 line-clamp-2 group-hover:text-primary transition-colors">{featuredEvent.name}</h3>
+                    <p className="text-white/60 text-xs md:text-sm mb-2 line-clamp-2">{featuredEvent.description}</p>
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <div className="flex items-center gap-1.5 text-white/70 text-xs">
+                        <span className="material-symbols-outlined text-primary text-sm">calendar_today</span>
+                        {new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}
                       </div>
-                      <div className="flex items-center gap-2 text-white/70 text-sm">
-                        <span className="material-symbols-outlined text-primary text-base">location_on</span>
-                        {featuredEvent.location}
+                      <div className="flex items-center gap-1.5 text-white/70 text-xs">
+                        <span className="material-symbols-outlined text-primary text-sm">location_on</span>
+                        <span className="line-clamp-1">{featuredEvent.location}</span>
                       </div>
                     </div>
                     <div className="flex items-center justify-between mt-auto">
-                      <span className="text-white text-lg md:text-xl font-bold">${featuredEvent.price} MXN</span>
-                      <div className="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg font-semibold text-sm transition-colors shadow-lg shadow-primary/30">
+                      <span className="text-white text-base md:text-lg font-bold">${featuredEvent.price}</span>
+                      <div className="bg-primary hover:bg-primary/90 text-white px-3 py-1.5 rounded-lg font-semibold text-xs transition-colors">
                         Ver Detalles
                       </div>
                     </div>
@@ -138,16 +148,16 @@ export default function Home() {
                   arrow_forward
                 </span>
               </Link>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 md:gap-4">
+              <div className="flex gap-3 md:gap-4 overflow-x-auto pb-2 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
                 {category.events.map((event: any) => (
-                  <Link key={event.id} href={`/eventos/${event.id}`}>
-                    <div className="group cursor-pointer">
+                  <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`}>
+                    <div className="group cursor-pointer flex-shrink-0 w-36 sm:w-40 md:w-44">
                       <div className="relative aspect-[3/4] mb-2 rounded-lg overflow-hidden bg-card-dark border border-white/5 group-hover:border-primary/30 transition-all shadow-lg">
                         <Image 
                           src={event.image} 
                           alt={event.title} 
                           fill 
-                          sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                          sizes="180px"
                           className="object-cover group-hover:scale-110 transition-transform duration-500" 
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
