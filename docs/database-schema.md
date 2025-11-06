@@ -372,12 +372,27 @@
 |-------|------|-------------|
 | id | UUID | Identificador único |
 | slug | String | URL-friendly (rock-underground) |
-| nombre | String | Nombre visible |
+| nombre | String | Nombre visible (Rock Underground) |
+| nameAction | String | Llamado a la acción atractivo |
 | descripcion | Text | Descripción de la categoría |
 | imagen | String | URL imagen de categoría |
 | icono | String | Nombre del ícono Material |
 | status | Enum | activa, inactiva |
 | createdAt | DateTime | Fecha de creación |
+
+**Ejemplos de nameAction:**
+- **Rock Underground** → "¡Rockea con nosotros!"
+- **Electrónica Oscuridad** → "Baila hasta el amanecer"
+- **Reggaeton Urbano** → "Perreo hasta abajo 🔥"
+- **Salsa y Tropical** → "¡Sácale brillo a tus zapatos!"
+- **Comedia Stand-Up** → "Ríete sin parar"
+- **Deportes Extremos** → "Vive la adrenalina"
+- **Gastronomía** → "Reservemos y vamos a cenar"
+- **Festivales** → "Vive la experiencia completa"
+- **Arte y Cultura** → "Inspírate con el arte"
+- **Conciertos** → "Canta a todo pulmón"
+- **Teatro** → "Disfruta del espectáculo"
+- **Cine** → "Pantalla grande, grandes emociones"
 
 **Índices:**
 - `idx_categorias_slug` en `slug` (UNIQUE)
@@ -1061,6 +1076,99 @@ const PLANES = {
   "updatedAt": "2025-11-06T16:00:00Z",
   "deletedAt": null
 }
+```
+
+### CATEGORIA (con nameAction)
+```json
+{
+  "id": "990e8400-e29b-41d4-a716-446655440004",
+  "slug": "gastronomia",
+  "nombre": "Gastronomía",
+  "nameAction": "Reservemos y vamos a cenar",
+  "descripcion": "Experiencias culinarias, festivales gastronómicos, cenas especiales y eventos de alta cocina",
+  "imagen": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0",
+  "icono": "restaurant",
+  "status": "activa",
+  "createdAt": "2025-01-10T08:00:00Z"
+}
+```
+
+### Ejemplos de nameAction por Categoría
+```json
+[
+  {
+    "slug": "rock-underground",
+    "nombre": "Rock Underground",
+    "nameAction": "¡Rockea con nosotros!",
+    "icono": "music_note"
+  },
+  {
+    "slug": "electronica-oscuridad",
+    "nombre": "Electrónica Oscuridad",
+    "nameAction": "Baila hasta el amanecer",
+    "icono": "nightlife"
+  },
+  {
+    "slug": "reggaeton-urbano",
+    "nombre": "Reggaeton y Urbano",
+    "nameAction": "Perreo hasta abajo 🔥",
+    "icono": "album"
+  },
+  {
+    "slug": "salsa-tropical",
+    "nombre": "Salsa y Tropical",
+    "nameAction": "¡Sácale brillo a tus zapatos!",
+    "icono": "music_note"
+  },
+  {
+    "slug": "comedia-stand-up",
+    "nombre": "Comedia y Stand-Up",
+    "nameAction": "Ríete sin parar",
+    "icono": "sentiment_very_satisfied"
+  },
+  {
+    "slug": "deportes-extremos",
+    "nombre": "Deportes Extremos",
+    "nameAction": "Vive la adrenalina",
+    "icono": "sports_soccer"
+  },
+  {
+    "slug": "gastronomia",
+    "nombre": "Gastronomía",
+    "nameAction": "Reservemos y vamos a cenar",
+    "icono": "restaurant"
+  },
+  {
+    "slug": "festivales",
+    "nombre": "Festivales",
+    "nameAction": "Vive la experiencia completa",
+    "icono": "celebration"
+  },
+  {
+    "slug": "arte-cultura",
+    "nombre": "Arte y Cultura",
+    "nameAction": "Inspírate con el arte",
+    "icono": "palette"
+  },
+  {
+    "slug": "conciertos",
+    "nombre": "Conciertos",
+    "nameAction": "Canta a todo pulmón",
+    "icono": "mic"
+  },
+  {
+    "slug": "teatro",
+    "nombre": "Teatro",
+    "nameAction": "Disfruta del espectáculo",
+    "icono": "theaters"
+  },
+  {
+    "slug": "cine",
+    "nombre": "Cine",
+    "nameAction": "Pantalla grande, grandes emociones",
+    "icono": "movie"
+  }
+]
 ```
 
 ---
