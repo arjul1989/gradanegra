@@ -133,56 +133,56 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-background-light">
       {/* Sidebar - Desktop only - Fixed */}
-      <aside className="w-64 flex-shrink-0 bg-background-light border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40">
+      <aside className="w-64 flex-shrink-0 bg-gradient-to-b from-white via-gray-50 to-white border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 shadow-sm">
         <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light">
           <span className="material-symbols-outlined text-3xl">confirmation_number</span>
           <span>GRADA NEGRA</span>
         </Link>
         
         <nav className="flex flex-col space-y-1 text-text-muted-light">
-          <Link href="/" className="flex items-center space-x-3 px-4 py-2 rounded-lg bg-gray-200 text-text-light font-semibold">
+          <Link href="/" className="flex items-center space-x-3 px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 text-white font-semibold shadow-md">
             <span className="material-symbols-outlined">home</span>
             <span>Inicio</span>
           </Link>
-          <Link href="/categoria/musica" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <Link href="/categoria/musica" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">music_note</span>
             <span>Música</span>
           </Link>
-          <Link href="/categoria/fiestas" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <Link href="/categoria/fiestas" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">celebration</span>
             <span>Fiestas</span>
           </Link>
-          <Link href="/categoria/deportes" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <Link href="/categoria/deportes" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">sports_soccer</span>
             <span>Deportes</span>
           </Link>
-          <Link href="/categoria/arte-y-cultura" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <Link href="/categoria/arte-y-cultura" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">palette</span>
             <span>Arte y Cultura</span>
           </Link>
-          <Link href="/mis-boletos" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors">
+          <Link href="/mis-boletos" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">confirmation_number</span>
             <span>Mis Boletos</span>
           </Link>
         </nav>
 
-        <div className="mt-auto">
+        <div className="mt-auto space-y-1">
           {user ? (
             <>
-              <Link href="/perfil" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 text-text-muted-light transition-colors">
+              <Link href="/perfil" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-text-muted-light transition-all">
                 <span className="material-symbols-outlined">account_circle</span>
                 <span className="truncate">{user.email?.split('@')[0]}</span>
               </Link>
               <Link
                 href="/login"
-                className="flex items-center space-x-3 px-4 py-2 text-text-muted-light rounded-lg hover:bg-gray-200 transition-colors text-sm"
+                className="flex items-center space-x-3 px-4 py-2 text-text-muted-light rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all text-sm"
               >
                 <span className="material-symbols-outlined">logout</span>
                 <span>Salir</span>
               </Link>
             </>
           ) : (
-            <Link href="/login" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gray-200 text-text-muted-light transition-colors">
+            <Link href="/login" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-text-muted-light transition-all">
               <span className="material-symbols-outlined">login</span>
               <span>Iniciar Sesión</span>
             </Link>
@@ -193,12 +193,12 @@ export default function Home() {
       {/* Main Content - With left margin to account for fixed sidebar */}
       <div className="flex-1 flex flex-col md:ml-64">
         {/* Header */}
-        <header className="fixed top-0 right-0 left-0 md:left-64 z-50 bg-background-light/95 backdrop-blur-md border-b border-gray-200/50">
+        <header className="fixed top-0 right-0 left-0 md:left-64 z-50 bg-gradient-to-r from-white via-gray-50 to-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
           <div className="w-full px-6 py-4 flex justify-between items-center gap-4">
             <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <div className="relative flex-1 max-w-xs">
                 <input
-                  className="w-full bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900"
+                  className="w-full bg-gradient-to-r from-gray-100 to-gray-50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 focus:from-white focus:to-gray-100 transition-all"
                   placeholder="Buscar eventos, artistas..."
                   type="search"
                 />
@@ -211,15 +211,15 @@ export default function Home() {
                 
                 {/* Compact View - Segmented Control */}
                 {isCompactView && (
-                  <div className="flex items-center bg-gray-100 rounded-full p-1 gap-1">
+                  <div className="flex items-center bg-gradient-to-r from-gray-100 to-gray-50 rounded-full p-1 gap-1 shadow-sm">
                     {popularCities.map((city) => (
                       <button
                         key={city}
                         onClick={() => setSelectedCity(city)}
                         className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ${
                           selectedCity === city
-                            ? 'bg-text-light text-white shadow-md'
-                            : 'text-text-muted-light hover:text-text-light'
+                            ? 'bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg'
+                            : 'text-text-muted-light hover:text-text-light hover:bg-white/50'
                         }`}
                       >
                         {city === "Todas las ciudades" ? (
@@ -257,12 +257,12 @@ export default function Home() {
                 
                 {/* Extended View - All Cities Grid */}
                 {!isCompactView && (
-                  <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 min-w-[500px]">
+                  <div className="absolute top-full left-0 mt-2 bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-2xl border border-gray-200/50 p-4 z-50 min-w-[500px]">
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="text-sm font-semibold text-text-light">Selecciona una ciudad</h3>
                       <button
                         onClick={() => setIsCompactView(true)}
-                        className="text-text-muted-light hover:text-text-light"
+                        className="text-text-muted-light hover:text-text-light transition-colors"
                       >
                         <span className="material-symbols-outlined text-lg">close</span>
                       </button>
@@ -278,8 +278,8 @@ export default function Home() {
                           }}
                           className={`px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                             selectedCity === city
-                              ? 'bg-text-light text-white shadow-md'
-                              : 'bg-gray-50 text-text-muted-light hover:bg-gray-100 hover:text-text-light'
+                              ? 'bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg'
+                              : 'bg-gradient-to-br from-gray-50 to-gray-100 text-text-muted-light hover:from-gray-100 hover:to-gray-200 hover:text-text-light'
                           }`}
                         >
                           {city === "Todas las ciudades" ? (
@@ -390,28 +390,28 @@ export default function Home() {
                     className="object-cover"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
                   <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white">
-                    <span className="bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block">
+                    <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
                       Destacado
                     </span>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-2">{featuredEvent.name}</h2>
-                    <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{featuredEvent.name}</h2>
+                    <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md">
                       {featuredEvent.description}
                     </p>
                     <div className="flex items-center space-x-4 text-sm mt-4">
-                      <div className="flex items-center space-x-1.5">
+                      <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                         <span className="material-symbols-outlined text-lg">calendar_month</span>
                         <span>{new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
                       </div>
-                      <div className="flex items-center space-x-1.5">
+                      <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                         <span className="material-symbols-outlined text-lg">location_on</span>
                         <span>{featuredEvent.location}</span>
                       </div>
                     </div>
                     <Link
                       href={`/eventos/${featuredEvent.id}`}
-                      className="bg-primary text-black font-bold py-2 px-6 rounded-full text-sm hover:bg-opacity-90 transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block"
+                      className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
                     >
                       Ver Detalles
                     </Link>
@@ -443,26 +443,27 @@ export default function Home() {
                   {category.loaded && category.events.length > 0 ? (
                     category.events.map((event: any) => (
                       <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`} className="flex-shrink-0 w-80 group">
-                        <div className="bg-card-light rounded-lg shadow-lg overflow-hidden">
-                          <div className="overflow-hidden">
+                        <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg hover:shadow-xl overflow-hidden transition-all duration-300 border border-gray-100/50">
+                          <div className="overflow-hidden relative">
                             <div className="relative w-full h-48">
                               <Image
                                 src={event.image}
                                 alt={event.title}
                                 fill
                                 sizes="320px"
-                                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                                className="object-cover group-hover:scale-110 transition-transform duration-500"
                               />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                             </div>
                           </div>
-                          <div className="p-4">
-                            <h3 className="text-lg font-bold mb-2 truncate text-text-light">{event.title}</h3>
+                          <div className="p-4 bg-gradient-to-br from-white via-white to-gray-50/50">
+                            <h3 className="text-lg font-bold mb-2 truncate text-text-light group-hover:text-gray-900 transition-colors">{event.title}</h3>
                             <div className="space-y-1 text-sm text-text-muted-light">
-                              <div className="flex items-start">
+                              <div className="flex items-start bg-gradient-to-r from-gray-50 to-transparent px-2 py-1 rounded">
                                 <span className="material-symbols-outlined text-base mr-2 mt-0.5">calendar_month</span>
                                 <span>{event.date}</span>
                               </div>
-                              <div className="flex items-start">
+                              <div className="flex items-start bg-gradient-to-r from-gray-50 to-transparent px-2 py-1 rounded">
                                 <span className="material-symbols-outlined text-base mr-2 mt-0.5">location_on</span>
                                 <span>{event.location}</span>
                               </div>
@@ -475,13 +476,13 @@ export default function Home() {
                     // Skeleton loading
                     Array.from({ length: 3 }).map((_, i) => (
                       <div key={i} className="flex-shrink-0 w-80">
-                        <div className="bg-card-light rounded-lg shadow-lg overflow-hidden animate-pulse">
-                          <div className="w-full h-48 bg-gray-200"></div>
+                        <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg shadow-lg overflow-hidden animate-pulse">
+                          <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300"></div>
                           <div className="p-4">
-                            <div className="h-6 bg-gray-200 rounded mb-2"></div>
+                            <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-2"></div>
                             <div className="space-y-1">
-                              <div className="h-4 bg-gray-200 rounded w-3/4"></div>
-                              <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+                              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-3/4"></div>
+                              <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-2/3"></div>
                             </div>
                           </div>
                         </div>
