@@ -113,8 +113,8 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen bg-background-light">
-      {/* Sidebar - Desktop only */}
-      <aside className="w-64 flex-shrink-0 bg-background-light border-r border-gray-200/50 p-6 hidden md:flex flex-col">
+      {/* Sidebar - Desktop only - Fixed */}
+      <aside className="w-64 flex-shrink-0 bg-background-light border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40">
         <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light">
           <span className="material-symbols-outlined text-3xl">confirmation_number</span>
           <span>GRADA NEGRA</span>
@@ -171,8 +171,8 @@ export default function Home() {
         </div>
       </aside>
 
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+      {/* Main Content - With left margin to account for fixed sidebar */}
+      <div className="flex-1 flex flex-col md:ml-64">
         {/* Header */}
         <header className="sticky top-0 z-50 bg-background-light/80 backdrop-blur-sm border-b border-gray-200/50">
           <div className="container mx-auto px-6 py-4 flex justify-between items-center">
