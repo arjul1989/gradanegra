@@ -53,6 +53,10 @@ app.use('/api/public', require('./routes/public.routes'));
 app.use('/api/jobs', require('./routes/job.routes'));
 app.use('/api/buyers', require('./routes/buyer.routes'));
 
+// New API Routes for Firestore Data Model
+app.use('/api/categorias', require('./routes/categoria.routes'));
+app.use('/api/eventos', require('./routes/eventos.routes'));
+
 // 404 handler
 app.use((req, res) => {
   res.status(404).json({
