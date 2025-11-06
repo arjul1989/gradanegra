@@ -411,13 +411,12 @@ export default function Home() {
           <div className="w-full max-w-[1600px] mx-auto px-6 py-12 space-y-12">
             {/* Featured Events - Hero Carousel */}
             {featuredEvents.length > 0 && (
-              <section className="w-full overflow-hidden">
-                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide snap-x snap-mandatory">
+              <section className="w-full -mx-6">
+                <div className="flex overflow-x-auto gap-6 px-6 pb-4 scrollbar-hide snap-x snap-mandatory">
                   {featuredEvents.map((event) => (
                     <div 
                       key={event.id} 
-                      className="flex-shrink-0 snap-start"
-                      style={{ width: 'calc(100vw - 48px)', maxWidth: '1552px' }}
+                      className="flex-shrink-0 w-[calc(100vw-48px)] md:w-[calc(100vw-320px)] max-w-[1552px] snap-center"
                     >
                       <div className="relative rounded-lg overflow-hidden group w-full aspect-[16/9] md:aspect-[21/9]">
                         <Image
@@ -438,7 +437,7 @@ export default function Home() {
                             <p className="max-w-2xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
                               {event.description}
                             </p>
-                            <div className="flex items-center space-x-4 text-sm mt-4">
+                            <div className="flex items-center flex-wrap gap-3 text-sm mt-4">
                               <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                                 <span className="material-symbols-outlined text-lg">calendar_month</span>
                                 <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
@@ -463,7 +462,7 @@ export default function Home() {
                 
                 {/* Scroll Indicators */}
                 {featuredEvents.length > 1 && (
-                  <div className="flex justify-center gap-2 mt-4">
+                  <div className="flex justify-center gap-2 mt-6 px-6">
                     {featuredEvents.map((_, index) => (
                       <div 
                         key={index} 
