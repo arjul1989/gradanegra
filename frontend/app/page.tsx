@@ -175,14 +175,32 @@ export default function Home() {
       <div className="flex-1 flex flex-col md:ml-64">
         {/* Header */}
         <header className="sticky top-0 z-50 bg-background-light/80 backdrop-blur-sm border-b border-gray-200/50">
-          <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-            <div className="relative w-full max-w-xs">
-              <input
-                className="w-full bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900"
-                placeholder="Buscar eventos, artistas..."
-                type="search"
-              />
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
+          <div className="container mx-auto px-6 py-4 flex justify-between items-center gap-4">
+            <div className="flex items-center gap-3 flex-1 max-w-2xl">
+              <div className="relative flex-1 max-w-xs">
+                <input
+                  className="w-full bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900"
+                  placeholder="Buscar eventos, artistas..."
+                  type="search"
+                />
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
+              </div>
+              
+              <div className="relative hidden sm:block">
+                <select className="appearance-none bg-gray-200 border-none rounded-full py-2 pl-10 pr-10 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 cursor-pointer">
+                  <option value="">Todas las ciudades</option>
+                  <option value="cdmx">Ciudad de México</option>
+                  <option value="guadalajara">Guadalajara</option>
+                  <option value="monterrey">Monterrey</option>
+                  <option value="puebla">Puebla</option>
+                  <option value="queretaro">Querétaro</option>
+                  <option value="tijuana">Tijuana</option>
+                  <option value="merida">Mérida</option>
+                  <option value="cancun">Cancún</option>
+                </select>
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">location_on</span>
+                <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">expand_more</span>
+              </div>
             </div>
             
             <div className="md:hidden">
