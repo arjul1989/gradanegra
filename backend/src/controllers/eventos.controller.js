@@ -479,30 +479,42 @@ const getEventosByCategoria = async (req, res) => {
 
       const evento = { id: eventoDoc.id, ...eventoDoc.data() };
 
-      // Obtener próxima fecha
-      const fechaSnapshot = await db.collection('fechas_evento')
+      // Obtener próxima fecha (sin filtros complejos)
+      const fechasSnapshot = await db.collection('fechas_evento')
         .where('eventoId', '==', evento.id)
-        .where('status', '==', 'activa')
-        .where('deletedAt', '==', null)
-        .orderBy('fecha', 'asc')
-        .limit(1)
         .get();
 
-      const proximaFecha = !fechaSnapshot.empty ? fechaSnapshot.docs[0].data() : null;
+      // Filtrar en memoria
+      const ahora = new Date();
+      const fechasActivas = fechasSnapshot.docs
+        .map(d => ({ id: d.id, ...d.data() }))
+        .filter(f => {
+          if (f.status !== 'activa' || f.deletedAt) return false;
+          const fechaDate = f.fecha?.toDate ? f.fecha.toDate() : new Date(f.fecha);
+          return fechaDate >= ahora;
+        })
+        .sort((a, b) => {
+          const fechaA = a.fecha?.toDate ? a.fecha.toDate() : new Date(a.fecha);
+          const fechaB = b.fecha?.toDate ? b.fecha.toDate() : new Date(b.fecha);
+          return fechaA - fechaB;
+        });
+
+      const proximaFecha = fechasActivas.length > 0 ? fechasActivas[0] : null;
 
       // Obtener precio mínimo
       let precioDesde = null;
       if (proximaFecha) {
         const tiersSnapshot = await db.collection('tiers')
           .where('fechaEventoId', '==', proximaFecha.id)
-          .where('status', '==', 'activo')
-          .where('deletedAt', '==', null)
-          .orderBy('precio', 'asc')
-          .limit(1)
           .get();
 
-        if (!tiersSnapshot.empty) {
-          precioDesde = tiersSnapshot.docs[0].data().precio;
+        const tiersActivos = tiersSnapshot.docs
+          .map(d => d.data())
+          .filter(t => t.status === 'activo' && !t.deletedAt)
+          .sort((a, b) => a.precio - b.precio);
+
+        if (tiersActivos.length > 0) {
+          precioDesde = tiersActivos[0].precio;
         }
       }
 

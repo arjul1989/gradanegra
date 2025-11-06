@@ -56,10 +56,10 @@ export default function Home() {
           setFeaturedEvents(featured);
         }
 
-        const categoriesData = eventService.getCategories();
+        const categoriesData = await eventService.getCategories();
         const categoriesWithPlaceholders = categoriesData.map((cat) => ({
           slug: cat.slug,
-          name: cat.name,
+          name: cat.name || cat.nombre,
           events: [],
           loaded: false,
         }));
@@ -129,14 +129,14 @@ export default function Home() {
       const events = await eventService.getEventsByCategory(category.slug);
       const eventsMapped = events.slice(0, 5).map(event => ({
         id: event.id,
-        title: event.name,
-        date: new Date(event.date).toLocaleDateString('es-MX', { 
+        title: event.name || event.nombre,
+        date: new Date(event.date || event.proximaFecha || Date.now()).toLocaleDateString('es-MX', { 
           day: 'numeric',
           month: 'short'
         }),
-        price: event.price,
-        image: event.image || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=600&fit=crop', // Imagen por defecto
-        location: event.location,
+        price: event.price || event.precioDesde || 0,
+        image: event.image || event.imagen || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=600&fit=crop',
+        location: event.location || event.ubicacion || event.city || event.ciudad,
       }));
 
       // Triplicar para carrusel
@@ -464,8 +464,8 @@ export default function Home() {
                         >
                           <div className="relative rounded-lg overflow-hidden group w-full h-full shadow-2xl">
                             <Image
-                              src={event.image}
-                              alt={event.name}
+                              src={event.image || event.imagen || '/placeholder-event.jpg'}
+                              alt={event.name || event.nombre || 'Evento'}
                               fill
                               sizes="(max-width: 768px) 100vw, 1552px"
                               className="object-cover transition-transform duration-700"
@@ -481,18 +481,18 @@ export default function Home() {
                                 <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
                                   Destacado
                                 </span>
-                                <h2 className="text-xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
+                                <h2 className="text-xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name || event.nombre}</h2>
                                 <p className="max-w-2xl text-xs md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
-                                  {event.description}
+                                  {event.description || event.descripcion}
                                 </p>
                                 <div className="flex items-center flex-wrap gap-3 text-xs md:text-sm mt-4">
                                   <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                                     <span className="material-symbols-outlined text-base md:text-lg">calendar_month</span>
-                                    <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                                    <span>{new Date(event.date || event.proximaFecha || Date.now()).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
                                   </div>
                                   <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
                                     <span className="material-symbols-outlined text-base md:text-lg">location_on</span>
-                                    <span className="truncate max-w-[200px]">{event.location}</span>
+                                    <span className="truncate max-w-[200px]">{event.location || event.ubicacion || event.city || event.ciudad}</span>
                                   </div>
                                 </div>
                                 <Link
