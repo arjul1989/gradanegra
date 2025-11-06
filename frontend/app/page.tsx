@@ -216,13 +216,30 @@ export default function Home() {
                       <button
                         key={city}
                         onClick={() => setSelectedCity(city)}
-                        className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+                        className={`relative px-4 py-1.5 rounded-full text-xs font-semibold transition-all duration-300 ${
                           selectedCity === city
-                            ? 'bg-white text-text-light shadow-md'
+                            ? 'bg-text-light text-white shadow-md'
                             : 'text-text-muted-light hover:text-text-light'
                         }`}
                       >
-                        {city === "Todas las ciudades" ? "🌎 Todas" : city}
+                        {city === "Todas las ciudades" ? (
+                          <span className="flex items-center gap-1.5">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
+                              <rect x="3" y="10" width="4" height="11" fill="currentColor" opacity="0.7"/>
+                              <rect x="10" y="6" width="4" height="15" fill="currentColor"/>
+                              <rect x="17" y="8" width="4" height="13" fill="currentColor" opacity="0.7"/>
+                              <rect x="4" y="12" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="4" y="15" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="11" y="8" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="11" y="11" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="11" y="14" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="18" y="10" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="18" y="13" width="2" height="2" fill="white" opacity="0.5"/>
+                              <rect x="18" y="16" width="2" height="2" fill="white" opacity="0.5"/>
+                            </svg>
+                            Todas
+                          </span>
+                        ) : city}
                       </button>
                     ))}
                     
@@ -259,13 +276,30 @@ export default function Home() {
                             setSelectedCity(city);
                             setIsCompactView(true);
                           }}
-                          className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                          className={`px-4 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                             selectedCity === city
                               ? 'bg-text-light text-white shadow-md'
                               : 'bg-gray-50 text-text-muted-light hover:bg-gray-100 hover:text-text-light'
                           }`}
                         >
-                          {city === "Todas las ciudades" ? "🌎 Todas" : city}
+                          {city === "Todas las ciudades" ? (
+                            <span className="flex items-center gap-2">
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
+                                <rect x="3" y="10" width="4" height="11" fill="currentColor" opacity="0.7"/>
+                                <rect x="10" y="6" width="4" height="15" fill="currentColor"/>
+                                <rect x="17" y="8" width="4" height="13" fill="currentColor" opacity="0.7"/>
+                                <rect x="4" y="12" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="4" y="15" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="11" y="8" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="11" y="11" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="11" y="14" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="18" y="10" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="18" y="13" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                                <rect x="18" y="16" width="2" height="2" fill={selectedCity === city ? "white" : "currentColor"} opacity="0.5"/>
+                              </svg>
+                              Todas
+                            </span>
+                          ) : city}
                         </button>
                       ))}
                     </div>
@@ -280,7 +314,18 @@ export default function Home() {
                   className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-3 py-2 text-sm text-text-light transition-colors"
                 >
                   <span className="material-symbols-outlined text-lg">location_on</span>
-                  <span className="font-medium">{selectedCity === "Todas las ciudades" ? "🌎 Todas" : selectedCity}</span>
+                  <span className="font-medium">
+                    {selectedCity === "Todas las ciudades" ? (
+                      <span className="flex items-center gap-1.5">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                          <rect x="3" y="10" width="4" height="11" fill="currentColor" opacity="0.7"/>
+                          <rect x="10" y="6" width="4" height="15" fill="currentColor"/>
+                          <rect x="17" y="8" width="4" height="13" fill="currentColor" opacity="0.7"/>
+                        </svg>
+                        Todas
+                      </span>
+                    ) : selectedCity}
+                  </span>
                   <span className={`material-symbols-outlined text-lg transition-transform ${!isCompactView ? 'rotate-180' : ''}`}>
                     expand_more
                   </span>
@@ -301,7 +346,16 @@ export default function Home() {
                             : 'text-text-muted-light hover:bg-gray-50'
                         }`}
                       >
-                        {city === "Todas las ciudades" ? "🌎 Todas" : city}
+                        {city === "Todas las ciudades" ? (
+                          <span className="flex items-center gap-2">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <rect x="3" y="10" width="4" height="11" fill="currentColor" opacity="0.7"/>
+                              <rect x="10" y="6" width="4" height="15" fill="currentColor"/>
+                              <rect x="17" y="8" width="4" height="13" fill="currentColor" opacity="0.7"/>
+                            </svg>
+                            Todas
+                          </span>
+                        ) : city}
                       </button>
                     ))}
                   </div>
