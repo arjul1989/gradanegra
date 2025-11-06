@@ -12,12 +12,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
   const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
-  const [showAllCities, setShowAllCities] = useState(false);
+  const [isCompactView, setIsCompactView] = useState(true);
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const cityScrollRef = useRef<HTMLDivElement>(null);
+  
+  // Get popular cities (first 5)
+  const popularCities = ["Todas las ciudades", "Bogotá", "Medellín", "Cali", "Barranquilla"];
 
   const cities = [
     "Todas las ciudades",
@@ -203,58 +205,95 @@ export default function Home() {
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
               </div>
               
-              {/* City Filter - Innovative Pills Design */}
-              <div className="relative hidden lg:flex items-center gap-2">
+              {/* City Filter - Segmented Control (iOS Style) */}
+              <div className="relative hidden lg:flex items-center gap-3">
                 <span className="material-symbols-outlined text-text-muted-light text-lg">location_on</span>
-                <div 
-                  ref={cityScrollRef}
-                  className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-md"
-                >
-                  {cities.slice(0, showAllCities ? cities.length : 4).map((city) => (
-                    <button
-                      key={city}
-                      onClick={() => setSelectedCity(city)}
-                      className={`flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-200 ${
-                        selectedCity === city
-                          ? 'bg-text-light text-white shadow-md scale-105'
-                          : 'bg-gray-100 text-text-muted-light hover:bg-gray-200 hover:scale-105'
-                      }`}
-                    >
-                      {city === "Todas las ciudades" ? "Todas" : city}
-                    </button>
-                  ))}
-                  {cities.length > 4 && (
-                    <button
-                      onClick={() => setShowAllCities(!showAllCities)}
-                      className="flex-shrink-0 px-3 py-1.5 rounded-full text-xs font-medium bg-gray-200 text-text-light hover:bg-gray-300 transition-all"
-                    >
-                      {showAllCities ? '−' : `+${cities.length - 4}`}
-                    </button>
-                  )}
-                </div>
+                
+                {/* Compact View - Segmented Control */}
+                {isCompactView && (
+                  <div className="flex items-center bg-gray-100 rounded-full p-1 gap-1">
+                    {popularCities.map((city) => (
+                      <button
+                        key={city}
+                        onClick={() => setSelectedCity(city)}
+                        className={`relative px-4 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+                          selectedCity === city
+                            ? 'bg-white text-text-light shadow-md'
+                            : 'text-text-muted-light hover:text-text-light'
+                        }`}
+                      >
+                        {city === "Todas las ciudades" ? "🌎 Todas" : city}
+                      </button>
+                    ))}
+                    
+                    {cities.length > 5 && (
+                      <button
+                        onClick={() => setIsCompactView(false)}
+                        className="px-3 py-1.5 rounded-full text-xs font-medium text-text-muted-light hover:text-text-light hover:bg-gray-200 transition-all"
+                        title="Ver todas las ciudades"
+                      >
+                        <span className="material-symbols-outlined text-sm">more_horiz</span>
+                      </button>
+                    )}
+                  </div>
+                )}
+                
+                {/* Extended View - All Cities Grid */}
+                {!isCompactView && (
+                  <div className="absolute top-full left-0 mt-2 bg-white rounded-xl shadow-2xl border border-gray-200 p-4 z-50 min-w-[500px]">
+                    <div className="flex items-center justify-between mb-3">
+                      <h3 className="text-sm font-semibold text-text-light">Selecciona una ciudad</h3>
+                      <button
+                        onClick={() => setIsCompactView(true)}
+                        className="text-text-muted-light hover:text-text-light"
+                      >
+                        <span className="material-symbols-outlined text-lg">close</span>
+                      </button>
+                    </div>
+                    
+                    <div className="grid grid-cols-3 gap-2">
+                      {cities.map((city) => (
+                        <button
+                          key={city}
+                          onClick={() => {
+                            setSelectedCity(city);
+                            setIsCompactView(true);
+                          }}
+                          className={`px-4 py-2.5 rounded-lg text-sm font-medium transition-all ${
+                            selectedCity === city
+                              ? 'bg-text-light text-white shadow-md'
+                              : 'bg-gray-50 text-text-muted-light hover:bg-gray-100 hover:text-text-light'
+                          }`}
+                        >
+                          {city === "Todas las ciudades" ? "🌎 Todas" : city}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
               
               {/* Mobile City Selector */}
               <div className="relative lg:hidden">
                 <button
-                  onClick={() => setShowAllCities(!showAllCities)}
+                  onClick={() => setIsCompactView(!isCompactView)}
                   className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 rounded-lg px-3 py-2 text-sm text-text-light transition-colors"
                 >
                   <span className="material-symbols-outlined text-lg">location_on</span>
-                  <span className="font-medium">{selectedCity === "Todas las ciudades" ? "Todas" : selectedCity}</span>
-                  <span className={`material-symbols-outlined text-lg transition-transform ${showAllCities ? 'rotate-180' : ''}`}>
+                  <span className="font-medium">{selectedCity === "Todas las ciudades" ? "🌎 Todas" : selectedCity}</span>
+                  <span className={`material-symbols-outlined text-lg transition-transform ${!isCompactView ? 'rotate-180' : ''}`}>
                     expand_more
                   </span>
                 </button>
                 
-                {showAllCities && (
+                {!isCompactView && (
                   <div className="absolute top-full mt-2 left-0 right-0 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50 max-h-[320px] overflow-y-auto">
                     {cities.map((city) => (
                       <button
                         key={city}
                         onClick={() => {
                           setSelectedCity(city);
-                          setShowAllCities(false);
+                          setIsCompactView(true);
                         }}
                         className={`w-full text-left px-4 py-2.5 text-sm transition-colors ${
                           selectedCity === city 
@@ -262,7 +301,7 @@ export default function Home() {
                             : 'text-text-muted-light hover:bg-gray-50'
                         }`}
                       >
-                        {city}
+                        {city === "Todas las ciudades" ? "🌎 Todas" : city}
                       </button>
                     ))}
                   </div>
