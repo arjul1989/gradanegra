@@ -20,6 +20,17 @@ export default function Home() {
   
   // Get popular cities (first 5)
   const popularCities = ["Todas las ciudades", "Bogotá", "Medellín", "Cali", "Barranquilla"];
+  
+  // Función para hacer scroll a una categoría específica
+  const scrollToCategory = (index: number) => {
+    const section = sectionRefs.current[index];
+    if (section) {
+      // Scroll suave a la sección, considerando el header fijo (80px)
+      const yOffset = -100; 
+      const y = section.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
 
   const cities = [
     "Todas las ciudades",
@@ -99,7 +110,7 @@ export default function Home() {
           month: 'short'
         }),
         price: event.price,
-        image: event.image,
+        image: event.image || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=800&h=600&fit=crop', // Imagen por defecto
         location: event.location,
       }));
 
@@ -119,6 +130,22 @@ export default function Home() {
       console.error(`Error loading category ${category.slug}:`, error);
     }
   };
+  
+  // Helper function para obtener el icono según la categoría
+  const getCategoryIcon = (slug: string): string => {
+    const iconMap: Record<string, string> = {
+      'rock-underground': 'music_note',
+      'electronica-oscuridad': 'nightlife',
+      'reggaeton-urbano': 'album',
+      'salsa-tropical': 'music_note',
+      'comedia-stand-up': 'sentiment_very_satisfied',
+      'deportes-extremos': 'sports_soccer',
+      'arte-cultura': 'palette',
+      'gastronomia': 'restaurant',
+      'festivales': 'celebration'
+    };
+    return iconMap[slug] || 'category';
+  };
 
   if (loading) {
     return (
@@ -133,40 +160,44 @@ export default function Home() {
   return (
     <div className="flex min-h-screen bg-background-light">
       {/* Sidebar - Desktop only - Fixed */}
-      <aside className="w-64 flex-shrink-0 bg-gradient-to-b from-white via-gray-50 to-white border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 shadow-sm">
-        <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light">
+      <aside className="w-64 flex-shrink-0 bg-gradient-to-b from-white via-gray-50 to-white border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 shadow-sm overflow-y-auto">
+        <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light flex-shrink-0">
           <span className="material-symbols-outlined text-3xl">confirmation_number</span>
           <span>GRADA NEGRA</span>
         </Link>
         
-        <nav className="flex flex-col space-y-1 text-text-muted-light">
-          <Link href="/" className="flex items-center space-x-3 px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 text-white font-semibold shadow-md">
+        <nav className="flex flex-col space-y-1 text-text-muted-light flex-1">
+          <Link href="/" className="flex items-center space-x-3 px-4 py-2 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 text-white font-semibold shadow-md mb-2">
             <span className="material-symbols-outlined">home</span>
             <span>Inicio</span>
           </Link>
-          <Link href="/categoria/musica" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
-            <span className="material-symbols-outlined">music_note</span>
-            <span>Música</span>
-          </Link>
-          <Link href="/categoria/fiestas" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
-            <span className="material-symbols-outlined">celebration</span>
-            <span>Fiestas</span>
-          </Link>
-          <Link href="/categoria/deportes" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
-            <span className="material-symbols-outlined">sports_soccer</span>
-            <span>Deportes</span>
-          </Link>
-          <Link href="/categoria/arte-y-cultura" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
-            <span className="material-symbols-outlined">palette</span>
-            <span>Arte y Cultura</span>
-          </Link>
+          
+          <div className="border-t border-gray-200 my-2"></div>
+          
+          <h3 className="text-xs font-bold uppercase tracking-wider text-text-muted-light px-4 py-2">Categorías</h3>
+          
+          {categories.map((category, index) => (
+            <button
+              key={category.slug}
+              onClick={() => scrollToCategory(index)}
+              className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all text-left w-full"
+            >
+              <span className="material-symbols-outlined">
+                {getCategoryIcon(category.slug)}
+              </span>
+              <span className="truncate">{category.name}</span>
+            </button>
+          ))}
+          
+          <div className="border-t border-gray-200 my-2"></div>
+          
           <Link href="/mis-boletos" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 transition-all">
             <span className="material-symbols-outlined">confirmation_number</span>
             <span>Mis Boletos</span>
           </Link>
         </nav>
 
-        <div className="mt-auto space-y-1">
+        <div className="mt-auto space-y-1 flex-shrink-0">
           {user ? (
             <>
               <Link href="/perfil" className="flex items-center space-x-3 px-4 py-2 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-text-muted-light transition-all">
