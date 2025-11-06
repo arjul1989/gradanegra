@@ -202,8 +202,8 @@ export default function Home() {
       {/* Main Content - With left margin to account for fixed sidebar */}
       <div className="flex-1 flex flex-col md:ml-64">
         {/* Header */}
-        <header className="sticky top-0 z-50 bg-background-light/80 backdrop-blur-sm border-b border-gray-200/50">
-          <div className="container mx-auto px-6 py-4 flex justify-between items-center gap-4">
+        <header className="fixed top-0 right-0 left-0 md:left-64 z-50 bg-background-light/95 backdrop-blur-md border-b border-gray-200/50">
+          <div className="w-full px-6 py-4 flex justify-between items-center gap-4">
             <div className="flex items-center gap-3 flex-1 max-w-2xl">
               <div className="relative flex-1 max-w-xs">
                 <input
@@ -227,7 +227,7 @@ export default function Home() {
                 </button>
                 
                 {cityDropdownOpen && (
-                  <div className="absolute top-full mt-2 left-0 bg-card-light rounded-lg shadow-xl border border-gray-200/50 py-2 min-w-[200px] z-50 max-h-[300px] overflow-y-auto">
+                  <div className="absolute top-full mt-2 left-0 bg-card-light/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200/50 py-2 min-w-[200px] z-50 max-h-[300px] overflow-y-auto">
                     {cities.map((city) => (
                       <button
                         key={city}
@@ -235,8 +235,8 @@ export default function Home() {
                           setSelectedCity(city);
                           setCityDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                          selectedCity === city ? 'bg-gray-100 font-semibold text-text-light' : 'text-text-muted-light'
+                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100/80 transition-colors ${
+                          selectedCity === city ? 'bg-gray-100/90 font-semibold text-text-light' : 'text-text-muted-light'
                         }`}
                       >
                         {city}
@@ -260,8 +260,8 @@ export default function Home() {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
-          <div className="container mx-auto px-6 py-12 space-y-12">
+        <main className="flex-1 overflow-y-auto pt-20">
+          <div className="w-full px-6 py-12 space-y-12">
             {/* Featured Event - Hero */}
             {featuredEvent && (
               <section>
