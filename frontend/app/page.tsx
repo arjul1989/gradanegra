@@ -210,7 +210,7 @@ export default function Home() {
                 >
                   {cities.map((city) => (
                     <option key={city} value={city}>
-                      📍 {city}
+                      {city}
                     </option>
                   ))}
                 </select>
