@@ -438,8 +438,8 @@ export default function Home() {
             {featuredEvents.length > 0 && (
               <section className="w-full -mx-6">
                 {/* Contenedor con altura fija para evitar saltos */}
-                <div className="h-[300px] md:h-[450px] flex items-center">
-                  <div className="flex overflow-x-auto gap-8 px-6 pb-4 scrollbar-hide snap-x snap-mandatory w-full">
+                <div className="h-[300px] md:h-[450px]">
+                  <div className="flex overflow-x-auto gap-8 px-6 pb-4 scrollbar-hide snap-x snap-mandatory w-full h-full items-center">
                     {featuredEvents.map((event, index) => {
                       const isActive = activeHeroIndex === index;
                       const isFirst = index === 0;
@@ -453,7 +453,7 @@ export default function Home() {
                               heroObserverRef.current.observe(el);
                             }
                           }}
-                          className={`flex-shrink-0 snap-center transition-all duration-700 ease-out ${
+                          className={`flex-shrink-0 snap-center transition-all duration-700 ease-out h-full ${
                             isActive 
                               ? 'w-[calc(100vw-48px)] md:w-[calc(100vw-320px)] scale-100 opacity-100' 
                               : isFirst 
