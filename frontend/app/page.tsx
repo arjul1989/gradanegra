@@ -7,7 +7,7 @@ import { eventService, Event } from "@/lib/eventService";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function Home() {
-  const [featuredEvent, setFeaturedEvent] = useState<Event | null>(null);
+  const [featuredEvents, setFeaturedEvents] = useState<Event[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
@@ -51,7 +51,7 @@ export default function Home() {
       try {
         const featured = await eventService.getFeaturedEvents();
         if (featured.length > 0) {
-          setFeaturedEvent(featured[0]);
+          setFeaturedEvents(featured);
         }
 
         const categoriesData = eventService.getCategories();
@@ -409,45 +409,66 @@ export default function Home() {
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto pt-20">
           <div className="w-full max-w-[1600px] mx-auto px-6 py-12 space-y-12">
-            {/* Featured Event - Hero */}
-            {featuredEvent && (
+            {/* Featured Events - Hero Carousel */}
+            {featuredEvents.length > 0 && (
               <section className="w-full">
-                <div className="relative rounded-lg overflow-hidden group aspect-video md:aspect-[2.4/1] w-full">
-                  <Image
-                    src={featuredEvent.image}
-                    alt={featuredEvent.name}
-                    fill
-                    sizes="100vw"
-                    className="object-cover"
-                    priority
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white">
-                    <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
-                      Destacado
-                    </span>
-                    <h2 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg">{featuredEvent.name}</h2>
-                    <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md">
-                      {featuredEvent.description}
-                    </p>
-                    <div className="flex items-center space-x-4 text-sm mt-4">
-                      <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                        <span className="material-symbols-outlined text-lg">calendar_month</span>
-                        <span>{new Date(featuredEvent.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
-                      </div>
-                      <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                        <span className="material-symbols-outlined text-lg">location_on</span>
-                        <span>{featuredEvent.location}</span>
+                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-6 px-6 snap-x snap-mandatory">
+                  {featuredEvents.map((event) => (
+                    <div 
+                      key={event.id} 
+                      className="flex-shrink-0 w-full snap-start"
+                    >
+                      <div className="relative rounded-lg overflow-hidden group w-full h-[400px] md:h-[500px]">
+                        <Image
+                          src={event.image}
+                          alt={event.name}
+                          fill
+                          sizes="100vw"
+                          className="object-cover"
+                          priority
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+                        <div className="absolute bottom-0 left-0 p-6 md:p-8 text-white max-w-4xl">
+                          <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
+                            Destacado
+                          </span>
+                          <h2 className="text-3xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
+                          <p className="max-w-xl text-sm md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
+                            {event.description}
+                          </p>
+                          <div className="flex items-center space-x-4 text-sm mt-4">
+                            <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                              <span className="material-symbols-outlined text-lg">calendar_month</span>
+                              <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                            </div>
+                            <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                              <span className="material-symbols-outlined text-lg">location_on</span>
+                              <span className="truncate max-w-[200px]">{event.location}</span>
+                            </div>
+                          </div>
+                          <Link
+                            href={`/eventos/${event.id}`}
+                            className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
+                          >
+                            Ver Detalles
+                          </Link>
+                        </div>
                       </div>
                     </div>
-                    <Link
-                      href={`/eventos/${featuredEvent.id}`}
-                      className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
-                    >
-                      Ver Detalles
-                    </Link>
-                  </div>
+                  ))}
                 </div>
+                
+                {/* Scroll Indicators */}
+                {featuredEvents.length > 1 && (
+                  <div className="flex justify-center gap-2 mt-4">
+                    {featuredEvents.map((_, index) => (
+                      <div 
+                        key={index} 
+                        className="w-2 h-2 rounded-full bg-gray-300 hover:bg-gray-900 transition-colors cursor-pointer"
+                      ></div>
+                    ))}
+                  </div>
+                )}
               </section>
             )}
 
