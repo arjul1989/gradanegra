@@ -189,14 +189,16 @@ export default function Home() {
               <div className="relative hidden sm:block">
                 <select className="appearance-none bg-gray-200 border-none rounded-full py-2 pl-10 pr-10 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 cursor-pointer">
                   <option value="">Todas las ciudades</option>
-                  <option value="cdmx">Ciudad de México</option>
-                  <option value="guadalajara">Guadalajara</option>
-                  <option value="monterrey">Monterrey</option>
-                  <option value="puebla">Puebla</option>
-                  <option value="queretaro">Querétaro</option>
-                  <option value="tijuana">Tijuana</option>
-                  <option value="merida">Mérida</option>
-                  <option value="cancun">Cancún</option>
+                  <option value="bogota">Bogotá</option>
+                  <option value="medellin">Medellín</option>
+                  <option value="cali">Cali</option>
+                  <option value="barranquilla">Barranquilla</option>
+                  <option value="cartagena">Cartagena</option>
+                  <option value="cucuta">Cúcuta</option>
+                  <option value="bucaramanga">Bucaramanga</option>
+                  <option value="pereira">Pereira</option>
+                  <option value="santa-marta">Santa Marta</option>
+                  <option value="ibague">Ibagué</option>
                 </select>
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">location_on</span>
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none">expand_more</span>
