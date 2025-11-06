@@ -437,74 +437,77 @@ export default function Home() {
             {/* Featured Events - Hero Carousel with Dynamic Scaling */}
             {featuredEvents.length > 0 && (
               <section className="w-full -mx-6">
-                <div className="flex overflow-x-auto gap-8 px-6 pb-4 scrollbar-hide snap-x snap-mandatory">
-                  {featuredEvents.map((event, index) => {
-                    const isActive = activeHeroIndex === index;
-                    const isFirst = index === 0;
-                    
-                    return (
-                      <div 
-                        key={event.id}
-                        data-hero-index={index}
-                        ref={(el) => {
-                          if (el && heroObserverRef.current) {
-                            heroObserverRef.current.observe(el);
-                          }
-                        }}
-                        className={`flex-shrink-0 snap-center transition-all duration-700 ease-out ${
-                          isActive 
-                            ? 'w-[calc(100vw-48px)] md:w-[calc(100vw-320px)] scale-100 opacity-100' 
-                            : isFirst 
-                              ? 'w-[calc((100vw-48px)*0.5)] md:w-[calc((100vw-320px)*0.5)] scale-90 opacity-70'
-                              : 'w-[calc((100vw-48px)*0.3)] md:w-[calc((100vw-320px)*0.3)] scale-75 opacity-50'
-                        }`}
-                        style={{ maxWidth: isActive ? '1552px' : isFirst ? '776px' : '465px' }}
-                      >
-                        <div className="relative rounded-lg overflow-hidden group w-full aspect-[16/9] md:aspect-[21/9] shadow-2xl">
-                          <Image
-                            src={event.image}
-                            alt={event.name}
-                            fill
-                            sizes="(max-width: 768px) 100vw, 1552px"
-                            className="object-cover transition-transform duration-700"
-                            priority={index === 0}
-                          />
-                          <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent transition-opacity duration-500 ${
-                            isActive ? 'opacity-100' : 'opacity-40'
-                          }`}></div>
-                          <div className={`absolute bottom-0 left-0 right-0 p-4 md:p-8 text-white transition-all duration-500 ${
-                            isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                          }`}>
-                            <div className="max-w-4xl">
-                              <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
-                                Destacado
-                              </span>
-                              <h2 className="text-xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
-                              <p className="max-w-2xl text-xs md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
-                                {event.description}
-                              </p>
-                              <div className="flex items-center flex-wrap gap-3 text-xs md:text-sm mt-4">
-                                <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                  <span className="material-symbols-outlined text-base md:text-lg">calendar_month</span>
-                                  <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                {/* Contenedor con altura fija para evitar saltos */}
+                <div className="h-[300px] md:h-[450px] flex items-center">
+                  <div className="flex overflow-x-auto gap-8 px-6 pb-4 scrollbar-hide snap-x snap-mandatory w-full">
+                    {featuredEvents.map((event, index) => {
+                      const isActive = activeHeroIndex === index;
+                      const isFirst = index === 0;
+                      
+                      return (
+                        <div 
+                          key={event.id}
+                          data-hero-index={index}
+                          ref={(el) => {
+                            if (el && heroObserverRef.current) {
+                              heroObserverRef.current.observe(el);
+                            }
+                          }}
+                          className={`flex-shrink-0 snap-center transition-all duration-700 ease-out ${
+                            isActive 
+                              ? 'w-[calc(100vw-48px)] md:w-[calc(100vw-320px)] scale-100 opacity-100' 
+                              : isFirst 
+                                ? 'w-[calc((100vw-48px)*0.5)] md:w-[calc((100vw-320px)*0.5)] scale-90 opacity-70'
+                                : 'w-[calc((100vw-48px)*0.3)] md:w-[calc((100vw-320px)*0.3)] scale-75 opacity-50'
+                          }`}
+                          style={{ maxWidth: isActive ? '1552px' : isFirst ? '776px' : '465px' }}
+                        >
+                          <div className="relative rounded-lg overflow-hidden group w-full h-full shadow-2xl">
+                            <Image
+                              src={event.image}
+                              alt={event.name}
+                              fill
+                              sizes="(max-width: 768px) 100vw, 1552px"
+                              className="object-cover transition-transform duration-700"
+                              priority={index === 0}
+                            />
+                            <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent transition-opacity duration-500 ${
+                              isActive ? 'opacity-100' : 'opacity-40'
+                            }`}></div>
+                            <div className={`absolute bottom-0 left-0 right-0 p-4 md:p-8 text-white transition-all duration-500 ${
+                              isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+                            }`}>
+                              <div className="max-w-4xl">
+                                <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
+                                  Destacado
+                                </span>
+                                <h2 className="text-xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name}</h2>
+                                <p className="max-w-2xl text-xs md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
+                                  {event.description}
+                                </p>
+                                <div className="flex items-center flex-wrap gap-3 text-xs md:text-sm mt-4">
+                                  <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                    <span className="material-symbols-outlined text-base md:text-lg">calendar_month</span>
+                                    <span>{new Date(event.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                                  </div>
+                                  <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                                    <span className="material-symbols-outlined text-base md:text-lg">location_on</span>
+                                    <span className="truncate max-w-[200px]">{event.location}</span>
+                                  </div>
                                 </div>
-                                <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                  <span className="material-symbols-outlined text-base md:text-lg">location_on</span>
-                                  <span className="truncate max-w-[200px]">{event.location}</span>
-                                </div>
+                                <Link
+                                  href={`/eventos/${event.id}`}
+                                  className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-xs md:text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
+                                >
+                                  Ver Detalles
+                                </Link>
                               </div>
-                              <Link
-                                href={`/eventos/${event.id}`}
-                                className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-xs md:text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
-                              >
-                                Ver Detalles
-                              </Link>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
+                  </div>
                 </div>
                 
                 {/* Scroll Indicators */}
