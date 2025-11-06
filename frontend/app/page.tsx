@@ -11,13 +11,11 @@ export default function Home() {
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
-  const [cityDropdownOpen, setCityDropdownOpen] = useState(false);
   const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const cityDropdownRef = useRef<HTMLDivElement>(null);
 
   const cities = [
     "Todas las ciudades",
@@ -58,17 +56,6 @@ export default function Home() {
     }
 
     loadInitialContent();
-  }, []);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (cityDropdownRef.current && !cityDropdownRef.current.contains(event.target as Node)) {
-        setCityDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -214,36 +201,22 @@ export default function Home() {
                 <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
               </div>
               
-              <div className="relative hidden sm:block" ref={cityDropdownRef}>
-                <button
-                  onClick={() => setCityDropdownOpen(!cityDropdownOpen)}
-                  className="flex items-center gap-2 bg-gray-200 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 cursor-pointer hover:bg-gray-300 transition-colors"
+              {/* City Filter - New Simple Design */}
+              <div className="relative hidden sm:block">
+                <select
+                  value={selectedCity}
+                  onChange={(e) => setSelectedCity(e.target.value)}
+                  className="appearance-none bg-white border border-gray-300 rounded-lg py-2 pl-3 pr-8 text-sm text-text-light focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent cursor-pointer hover:border-gray-400 transition-colors shadow-sm"
                 >
-                  <span className="material-symbols-outlined absolute left-3 text-text-muted-light">location_on</span>
-                  <span className="whitespace-nowrap">{selectedCity}</span>
-                  <span className={`material-symbols-outlined text-text-muted-light transition-transform ${cityDropdownOpen ? 'rotate-180' : ''}`}>
-                    expand_more
-                  </span>
-                </button>
-                
-                {cityDropdownOpen && (
-                  <div className="absolute top-full mt-2 left-0 bg-card-light/95 backdrop-blur-sm rounded-lg shadow-xl border border-gray-200/50 py-2 min-w-[200px] z-50 max-h-[300px] overflow-y-auto">
-                    {cities.map((city) => (
-                      <button
-                        key={city}
-                        onClick={() => {
-                          setSelectedCity(city);
-                          setCityDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-4 py-2 text-sm hover:bg-gray-100/80 transition-colors ${
-                          selectedCity === city ? 'bg-gray-100/90 font-semibold text-text-light' : 'text-text-muted-light'
-                        }`}
-                      >
-                        {city}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                  {cities.map((city) => (
+                    <option key={city} value={city}>
+                      📍 {city}
+                    </option>
+                  ))}
+                </select>
+                <span className="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-text-muted-light pointer-events-none text-sm">
+                  expand_more
+                </span>
               </div>
             </div>
             
@@ -261,11 +234,11 @@ export default function Home() {
 
         {/* Main Content */}
         <main className="flex-1 overflow-y-auto pt-20">
-          <div className="w-full px-6 py-12 space-y-12">
+          <div className="w-full max-w-[1600px] mx-auto px-6 py-12 space-y-12">
             {/* Featured Event - Hero */}
             {featuredEvent && (
-              <section>
-                <div className="relative rounded-lg overflow-hidden group aspect-video md:aspect-[2.4/1]">
+              <section className="w-full">
+                <div className="relative rounded-lg overflow-hidden group aspect-video md:aspect-[2.4/1] w-full">
                   <Image
                     src={featuredEvent.image}
                     alt={featuredEvent.name}
