@@ -21,6 +21,11 @@ const config: Config = {
         "text-muted-light": "#6b7280",
         "text-muted-dark": "#9ca3b0",
       },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(ellipse at center, var(--tw-gradient-stops))',
+        'gradient-radial-at-t': 'radial-gradient(ellipse at top, var(--tw-gradient-stops))',
+        'gradient-radial-at-b': 'radial-gradient(ellipse at bottom, var(--tw-gradient-stops))',
+      },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
         display: ["var(--font-inter)", "system-ui", "sans-serif"],

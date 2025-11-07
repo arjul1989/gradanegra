@@ -10,15 +10,20 @@ export default function Home() {
   const [featuredEvents, setFeaturedEvents] = useState<Event[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set([0]));
+  const [loadedSections, setLoadedSections] = useState<Set<number>>(new Set());
   const [selectedCity, setSelectedCity] = useState("Todas las ciudades");
   const [isCompactView, setIsCompactView] = useState(true);
   const [activeHeroIndex, setActiveHeroIndex] = useState(0);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { user } = useAuth();
   
   const observerRef = useRef<IntersectionObserver | null>(null);
   const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-  const heroObserverRef = useRef<IntersectionObserver | null>(null);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const carouselRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const currentXRef = useRef(0);
   
   // Get popular cities (first 5)
   const popularCities = ["Todas las ciudades", "Bogotá", "Medellín", "Cali", "Barranquilla"];
@@ -34,6 +39,114 @@ export default function Home() {
     }
   };
 
+  // Navegación del carousel
+  const goToSlide = (index: number) => {
+    setCurrentSlide(index);
+  };
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % featuredEvents.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + featuredEvents.length) % featuredEvents.length);
+  };
+
+  // Touch/Drag handlers para móviles (NO para mouse drag)
+  const handleDragStart = (e: React.TouchEvent) => {
+    isDraggingRef.current = true;
+    startXRef.current = e.touches[0].clientX;
+    currentXRef.current = startXRef.current;
+  };
+
+  const handleDragMove = (e: React.TouchEvent) => {
+    if (!isDraggingRef.current) return;
+    currentXRef.current = e.touches[0].clientX;
+  };
+
+  const handleDragEnd = () => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+
+    const diff = startXRef.current - currentXRef.current;
+    const threshold = 75; // Mayor threshold para evitar cambios accidentales
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swipe left → next
+        nextSlide();
+      } else {
+        // Swipe right → prev
+        prevSlide();
+      }
+    }
+  };
+
+  // Wheel handler para Magic Mouse (React) - Suave y controlado
+  const handleWheelReact = (e: React.WheelEvent) => {
+    // Permitir que el evento se procese
+    e.stopPropagation();
+  };
+
+  // useEffect con wheel listener nativo - Acumulación controlada
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel || featuredEvents.length === 0) return;
+
+    let accumulatedDelta = 0;
+    let isProcessing = false;
+    let lastEventTime = 0;
+
+    const handleWheelNative = (e: WheelEvent) => {
+      const now = Date.now();
+      const timeSinceLastEvent = now - lastEventTime;
+      
+      const deltaX = e.deltaX;
+      const deltaY = e.deltaY;
+      const isHorizontal = Math.abs(deltaX) > Math.abs(deltaY);
+      const delta = isHorizontal ? deltaX : deltaY;
+      
+      if (Math.abs(delta) > 2) {
+        e.preventDefault();
+      }
+      
+      if (isProcessing) return;
+      if (Math.abs(delta) < 1) return;
+      
+      // Resetear acumulado si pasó mucho tiempo
+      if (timeSinceLastEvent > 150) {
+        accumulatedDelta = 0;
+      }
+      
+      lastEventTime = now;
+      accumulatedDelta += delta;
+      
+      const threshold = 100;
+      
+      if (Math.abs(accumulatedDelta) >= threshold) {
+        isProcessing = true;
+        
+        if (accumulatedDelta > 0) {
+          setCurrentSlide((prev) => (prev + 1) % featuredEvents.length);
+        } else {
+          setCurrentSlide((prev) => (prev - 1 + featuredEvents.length) % featuredEvents.length);
+        }
+        
+        accumulatedDelta = 0;
+        
+        setTimeout(() => {
+          isProcessing = false;
+        }, 550);
+      }
+    };
+
+    carousel.addEventListener('wheel', handleWheelNative, { passive: false });
+    
+    return () => {
+      carousel.removeEventListener('wheel', handleWheelNative);
+    };
+  }, [featuredEvents.length, currentSlide, carouselRef.current]);
+
   const cities = [
     "Todas las ciudades",
     "Bogotá",
@@ -48,6 +161,7 @@ export default function Home() {
     "Ibagué",
   ];
 
+  // Log de montaje del componente
   useEffect(() => {
     async function loadInitialContent() {
       try {
@@ -56,15 +170,24 @@ export default function Home() {
           setFeaturedEvents(featured);
         }
 
+        // Cargar categorías y verificar cuáles tienen eventos
         const categoriesData = await eventService.getCategories();
-        const categoriesWithPlaceholders = categoriesData.map((cat) => ({
-          slug: cat.slug,
-          name: cat.name || cat.nombre,
-          events: [],
-          loaded: false,
-        }));
+        const categoriesWithEvents = [];
+        
+        for (const cat of categoriesData) {
+          const events = await eventService.getEventsByCategory(cat.slug);
+          if (events && events.length > 0) {
+            categoriesWithEvents.push({
+              slug: cat.slug,
+              name: cat.name || cat.nombre,
+              events: [],
+              loaded: false,
+              eventCount: events.length
+            });
+          }
+        }
 
-        setCategories(categoriesWithPlaceholders);
+        setCategories(categoriesWithEvents);
       } catch (error) {
         console.error('Error loading events:', error);
       } finally {
@@ -97,36 +220,34 @@ export default function Home() {
 
     return () => observerRef.current?.disconnect();
   }, [categories.length]);
-
-  // Intersection Observer para detectar el evento hero activo
+  
+  // Cargar las primeras 3 categorías automáticamente
   useEffect(() => {
-    if (featuredEvents.length === 0) return;
-
-    heroObserverRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = Number(entry.target.getAttribute('data-hero-index'));
-            setActiveHeroIndex(index);
-          }
-        });
-      },
-      { 
-        root: null,
-        threshold: 0.6, // 60% visible para considerarlo activo
-        rootMargin: '0px'
-      }
-    );
-
-    return () => heroObserverRef.current?.disconnect();
-  }, [featuredEvents.length]);
+    if (categories.length > 0 && loadedSections.size === 0) {
+      console.log('🚀 Auto-loading first 3 categories...', categories.slice(0, 3).map(c => c.slug));
+      // Cargar las primeras 3 categorías
+      [0, 1, 2].forEach((index) => {
+        if (index < categories.length) {
+          setTimeout(() => {
+            console.log(`⏰ Triggering load for category ${index}`);
+            setLoadedSections((prev) => new Set([...prev, index]));
+            loadCategoryEvents(index);
+          }, index * 200); // Escalonar la carga
+        }
+      });
+    }
+  }, [categories.length]);
 
   const loadCategoryEvents = async (index: number) => {
     const category = categories[index];
     if (!category || category.loaded) return;
 
+    console.log(`🔄 Loading category ${index}: ${category.slug}`);
+    
     try {
       const events = await eventService.getEventsByCategory(category.slug);
+      console.log(`✅ Loaded ${events.length} events for ${category.slug}:`, events.map(e => e.nombre));
+      
       const eventsMapped = events.slice(0, 5).map(event => ({
         id: event.id,
         title: event.name || event.nombre,
@@ -146,13 +267,15 @@ export default function Home() {
         ...eventsMapped.map((e, i) => ({ ...e, id: `${e.id}-dup2-${i}` })),
       ];
 
+      console.log(`📦 Setting ${tripleEvents.length} events (tripled) for category ${index}`);
+
       setCategories((prev) =>
         prev.map((cat, i) =>
           i === index ? { ...cat, events: tripleEvents, loaded: true } : cat
         )
       );
     } catch (error) {
-      console.error(`Error loading category ${category.slug}:`, error);
+      console.error(`❌ Error loading category ${category.slug}:`, error);
     }
   };
   
@@ -183,9 +306,9 @@ export default function Home() {
   }
 
   return (
-    <div className="flex min-h-screen bg-background-light">
+    <div className="flex min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200">
       {/* Sidebar - Desktop only - Fixed */}
-      <aside className="w-64 flex-shrink-0 bg-gradient-to-b from-white via-gray-50 to-white border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 shadow-sm overflow-y-auto">
+      <aside className="w-64 flex-shrink-0 bg-gradient-to-b from-gray-50 via-gray-100 to-gray-50 border-r border-gray-200/50 p-6 hidden md:flex flex-col fixed left-0 top-0 bottom-0 z-40 shadow-sm overflow-y-auto backdrop-blur-sm">
         <Link href="/" className="flex items-center space-x-2 text-xl font-bold mb-10 text-text-light flex-shrink-0">
           <span className="material-symbols-outlined text-3xl">confirmation_number</span>
           <span>GRADA NEGRA</span>
@@ -246,19 +369,153 @@ export default function Home() {
         </div>
       </aside>
 
+      {/* Mobile Drawer Menu - Netflix Style */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-[60] md:hidden">
+          {/* Overlay */}
+          <div 
+            className="absolute inset-0 bg-black/50 backdrop-blur-sm" 
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+          
+          {/* Drawer */}
+          <div className="absolute left-0 top-0 bottom-0 w-80 bg-gradient-to-b from-gray-50 via-gray-100 to-gray-50 shadow-2xl animate-slide-in-left">
+            {/* Header */}
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <Link href="/" className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-gradient-to-br from-gray-900 to-gray-700 rounded-lg flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-xl">GN</span>
+                </div>
+                <div>
+                  <h1 className="text-lg font-bold text-gray-900">GRADA NEGRA</h1>
+                  <p className="text-xs text-gray-600">Tu boleto digital</p>
+                </div>
+              </Link>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <span className="material-symbols-outlined text-gray-700">close</span>
+              </button>
+            </div>
+
+            {/* Navigation */}
+            <nav className="p-4 space-y-2">
+              <Link 
+                href="/" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg"
+              >
+                <span className="material-symbols-outlined">home</span>
+                <span className="font-medium">Inicio</span>
+              </Link>
+              
+              <Link 
+                href="/eventos" 
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-gray-700 transition-all"
+              >
+                <span className="material-symbols-outlined">confirmation_number</span>
+                <span>Todos los Eventos</span>
+              </Link>
+              
+              <div className="pt-2 border-t border-gray-200 mt-2">
+                <p className="px-4 py-2 text-xs font-semibold text-gray-600 uppercase tracking-wider">Categorías</p>
+                {categories.map((category) => (
+                  <Link
+                    key={category.slug}
+                    href={`/categoria/${category.slug}`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-between px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-gray-700 transition-all"
+                  >
+                    <span>{category.name}</span>
+                    <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full">{category.eventCount}</span>
+                  </Link>
+                ))}
+              </div>
+
+              {user ? (
+                <>
+                  <div className="pt-2 border-t border-gray-200 mt-2">
+                    <Link 
+                      href="/perfil" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-gray-700 transition-all"
+                    >
+                      <span className="material-symbols-outlined">person</span>
+                      <span>Mi Perfil</span>
+                    </Link>
+                    
+                    <Link 
+                      href="/mis-eventos" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-gray-100 hover:to-gray-50 text-gray-700 transition-all"
+                    >
+                      <span className="material-symbols-outlined">event_available</span>
+                      <span>Mis Eventos</span>
+                    </Link>
+                    
+                    <Link 
+                      href="/logout" 
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-gradient-to-r hover:from-red-50 hover:to-red-100 text-red-600 transition-all"
+                    >
+                      <span className="material-symbols-outlined">logout</span>
+                      <span>Salir</span>
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                <div className="pt-2 border-t border-gray-200 mt-2">
+                  <Link 
+                    href="/login" 
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center space-x-3 px-4 py-3 rounded-lg bg-gradient-to-r from-gray-900 to-gray-700 text-white shadow-lg"
+                  >
+                    <span className="material-symbols-outlined">login</span>
+                    <span className="font-medium">Iniciar Sesión</span>
+                  </Link>
+                </div>
+              )}
+            </nav>
+
+            {/* Help Button */}
+            <div className="absolute bottom-6 left-0 right-0 px-4">
+              <Link
+                href="/ayuda"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 w-full bg-white border border-gray-200 rounded-lg py-3 shadow-md hover:shadow-lg transition-all text-gray-700"
+              >
+                <span className="material-symbols-outlined text-xl">help</span>
+                <span className="font-medium">Ayuda</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Main Content - With left margin to account for fixed sidebar */}
       <div className="flex-1 flex flex-col md:ml-64">
         {/* Header */}
-        <header className="fixed top-0 right-0 left-0 md:left-64 z-50 bg-gradient-to-r from-white via-gray-50 to-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
-          <div className="w-full px-6 py-4 flex justify-between items-center gap-4">
-            <div className="flex items-center gap-3 flex-1 max-w-2xl">
-              <div className="relative flex-1 max-w-xs">
+        <header className="fixed top-0 right-0 left-0 md:left-64 z-50 bg-gradient-to-r from-gray-50 via-gray-100 to-gray-50/95 backdrop-blur-md border-b border-gray-300/50 shadow-lg">
+          <div className="w-full px-4 md:px-6 py-3 md:py-4 flex justify-between items-center gap-2 md:gap-4">
+            {/* Mobile Hamburger Menu */}
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors"
+              aria-label="Abrir menú"
+            >
+              <span className="material-symbols-outlined text-2xl text-gray-700">menu</span>
+            </button>
+
+            <div className="flex items-center gap-2 md:gap-3 flex-1 max-w-3xl">
+              <div className="relative flex-1">
                 <input
-                  className="w-full bg-gradient-to-r from-gray-100 to-gray-50 border-none rounded-full py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-offset-2 focus:ring-offset-background-light focus:ring-gray-900 focus:from-white focus:to-gray-100 transition-all"
-                  placeholder="Buscar eventos, artistas..."
+                  className="w-full bg-white border border-gray-200 rounded-lg py-3 pl-12 pr-4 text-base focus:ring-2 focus:ring-gray-900 focus:border-transparent transition-all shadow-sm hover:shadow-md"
+                  placeholder="¿Qué evento buscas hoy?"
                   type="search"
                 />
-                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted-light">search</span>
+                <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xl">search</span>
               </div>
               
               {/* City Filter - Segmented Control (iOS Style) */}
@@ -284,14 +541,6 @@ export default function Home() {
                               <rect x="3" y="10" width="4" height="11" fill="currentColor" opacity="0.7"/>
                               <rect x="10" y="6" width="4" height="15" fill="currentColor"/>
                               <rect x="17" y="8" width="4" height="13" fill="currentColor" opacity="0.7"/>
-                              <rect x="4" y="12" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="4" y="15" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="11" y="8" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="11" y="11" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="11" y="14" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="18" y="10" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="18" y="13" width="2" height="2" fill="white" opacity="0.5"/>
-                              <rect x="18" y="16" width="2" height="2" fill="white" opacity="0.5"/>
                             </svg>
                             Todas
                           </span>
@@ -419,90 +668,133 @@ export default function Home() {
               </div>
             </div>
             
-            <div className="md:hidden">
-              <Link href="/" className="flex items-center space-x-2 text-xl font-bold">
-                <span className="material-symbols-outlined text-3xl">confirmation_number</span>
+            <div className="md:hidden flex items-center">
+              <Link href="/" className="flex items-center space-x-2 text-lg font-bold text-text-light">
+                <span className="material-symbols-outlined text-2xl">confirmation_number</span>
+                <span className="hidden sm:inline">GRADA NEGRA</span>
               </Link>
             </div>
             
             <div className="hidden md:flex items-center space-x-4">
-              <Link href="#" className="hover:text-text-muted-light transition-colors">Ayuda</Link>
+              <Link 
+                href="#" 
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all text-gray-700 hover:text-gray-900"
+              >
+                <span className="material-symbols-outlined text-xl">help</span>
+                <span className="font-medium">Ayuda</span>
+              </Link>
             </div>
           </div>
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto pt-20">
-          <div className="w-full max-w-[1600px] mx-auto px-6 py-12 space-y-12">
-            {/* Featured Events - Hero Carousel with Dynamic Scaling */}
+        <main className="flex-1 overflow-y-auto pt-20 pb-20 md:pb-0 relative">
+          {/* Fondo con degradado radial */}
+          <div className="absolute inset-0 bg-gradient-radial from-gray-100 via-gray-200 to-gray-300 opacity-60 pointer-events-none"></div>
+          <div className="relative z-10 w-full max-w-[1600px] mx-auto px-4 sm:px-6 py-8 sm:py-12 space-y-8 sm:space-y-12">
+            {/* Featured Events - Clean Centered Carousel */}
             {featuredEvents.length > 0 && (
-              <section className="w-full -mx-6">
-                {/* Contenedor con altura fija para evitar saltos */}
-                <div className="h-[300px] md:h-[450px]">
-                  <div className="flex overflow-x-auto gap-8 px-6 pb-4 scrollbar-hide snap-x snap-mandatory w-full h-full items-center">
+              <section className="w-full relative">
+                <div className="relative h-[350px] md:h-[500px] overflow-hidden">
+                  {/* Botones de navegación */}
+                  {featuredEvents.length > 1 && (
+                    <>
+                      <button
+                        onClick={prevSlide}
+                        className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 md:p-4 rounded-full transition-all duration-300 hover:scale-110 shadow-2xl"
+                        aria-label="Evento anterior"
+                      >
+                        <span className="material-symbols-outlined text-2xl md:text-3xl">chevron_left</span>
+                      </button>
+                      
+                      <button
+                        onClick={nextSlide}
+                        className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-20 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white p-3 md:p-4 rounded-full transition-all duration-300 hover:scale-110 shadow-2xl"
+                        aria-label="Evento siguiente"
+                      >
+                        <span className="material-symbols-outlined text-2xl md:text-3xl">chevron_right</span>
+                      </button>
+                    </>
+                  )}
+
+                  {/* Carousel Container */}
+                  <div 
+                    ref={carouselRef}
+                    className="relative w-full h-full flex items-center justify-center"
+                    onWheel={handleWheelReact}
+                    onTouchStart={handleDragStart}
+                    onTouchMove={handleDragMove}
+                    onTouchEnd={handleDragEnd}
+                  >
+                    {/* Slides */}
                     {featuredEvents.map((event, index) => {
-                      const isActive = activeHeroIndex === index;
-                      const isFirst = index === 0;
+                      const offset = index - currentSlide;
+                      const isActive = index === currentSlide;
                       
                       return (
-                        <div 
+                        <div
                           key={event.id}
-                          data-hero-index={index}
-                          ref={(el) => {
-                            if (el && heroObserverRef.current) {
-                              heroObserverRef.current.observe(el);
-                            }
+                          onClick={() => !isActive && goToSlide(index)}
+                          className="absolute transition-all duration-500 ease-out cursor-pointer"
+                          style={{
+                            transform: `translateX(${offset * 100}%) scale(${isActive ? 1 : 0.85})`,
+                            opacity: Math.abs(offset) > 1 ? 0 : isActive ? 1 : 0.6,
+                            zIndex: isActive ? 10 : Math.abs(offset) === 1 ? 5 : 0,
+                            pointerEvents: Math.abs(offset) > 1 ? 'none' : 'auto',
+                            width: isActive ? '85%' : '75%',
+                            maxWidth: isActive ? '1200px' : '900px',
                           }}
-                          className={`flex-shrink-0 snap-center transition-all duration-700 ease-out h-full ${
-                            isActive 
-                              ? 'w-[calc(100vw-48px)] md:w-[calc(100vw-320px)] scale-100 opacity-100' 
-                              : isFirst 
-                                ? 'w-[calc((100vw-48px)*0.5)] md:w-[calc((100vw-320px)*0.5)] scale-90 opacity-70'
-                                : 'w-[calc((100vw-48px)*0.3)] md:w-[calc((100vw-320px)*0.3)] scale-75 opacity-50'
-                          }`}
-                          style={{ maxWidth: isActive ? '1552px' : isFirst ? '776px' : '465px' }}
                         >
-                          <div className="relative rounded-lg overflow-hidden group w-full h-full shadow-2xl">
+                          <div className="relative rounded-2xl overflow-hidden shadow-2xl h-[350px] md:h-[500px]">
                             <Image
                               src={event.image || event.imagen || '/placeholder-event.jpg'}
                               alt={event.name || event.nombre || 'Evento'}
                               fill
-                              sizes="(max-width: 768px) 100vw, 1552px"
-                              className="object-cover transition-transform duration-700"
+                              sizes="(max-width: 768px) 85vw, 1200px"
+                              className="object-cover"
                               priority={index === 0}
                             />
-                            <div className={`absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent transition-opacity duration-500 ${
-                              isActive ? 'opacity-100' : 'opacity-40'
-                            }`}></div>
-                            <div className={`absolute bottom-0 left-0 right-0 p-4 md:p-8 text-white transition-all duration-500 ${
-                              isActive ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                            }`}>
-                              <div className="max-w-4xl">
-                                <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-lg">
+                            
+                            {/* Overlay gradient */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                            
+                            {/* Content - Only visible on active slide */}
+                            {isActive && (
+                              <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10 text-white">
+                                <span className="bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-wider mb-3 inline-block shadow-lg">
                                   Destacado
                                 </span>
-                                <h2 className="text-xl md:text-4xl font-bold mb-2 drop-shadow-lg line-clamp-2">{event.name || event.nombre}</h2>
-                                <p className="max-w-2xl text-xs md:text-base text-gray-200 hidden md:block drop-shadow-md line-clamp-2">
+                                <h2 className="text-2xl md:text-5xl font-bold mb-3 drop-shadow-lg">
+                                  {event.name || event.nombre}
+                                </h2>
+                                <p className="text-sm md:text-lg text-gray-200 mb-4 max-w-3xl line-clamp-2">
                                   {event.description || event.descripcion}
                                 </p>
-                                <div className="flex items-center flex-wrap gap-3 text-xs md:text-sm mt-4">
-                                  <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                    <span className="material-symbols-outlined text-base md:text-lg">calendar_month</span>
-                                    <span>{new Date(event.date || event.proximaFecha || Date.now()).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</span>
+                                <div className="flex items-center flex-wrap gap-4 mb-6">
+                                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                                    <span className="material-symbols-outlined text-xl">calendar_month</span>
+                                    <span className="text-sm md:text-base">
+                                      {new Date(event.date || event.proximaFecha || Date.now()).toLocaleDateString('es-MX', { 
+                                        day: 'numeric', 
+                                        month: 'long' 
+                                      })}
+                                    </span>
                                   </div>
-                                  <div className="flex items-center space-x-1.5 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full">
-                                    <span className="material-symbols-outlined text-base md:text-lg">location_on</span>
-                                    <span className="truncate max-w-[200px]">{event.location || event.ubicacion || event.city || event.ciudad}</span>
+                                  <div className="flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full">
+                                    <span className="material-symbols-outlined text-xl">location_on</span>
+                                    <span className="text-sm md:text-base">
+                                      {event.location || event.ubicacion || event.city || event.ciudad}
+                                    </span>
                                   </div>
                                 </div>
                                 <Link
                                   href={`/eventos/${event.id}`}
-                                  className="bg-gradient-to-r from-white to-gray-100 text-black font-bold py-2 px-6 rounded-full text-xs md:text-sm hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 ease-in-out mt-4 inline-block shadow-lg"
+                                  className="inline-block bg-gradient-to-r from-white to-gray-100 text-black font-bold py-3 px-8 rounded-full text-sm md:text-base hover:from-gray-100 hover:to-white transform hover:scale-105 transition-all duration-300 shadow-xl"
                                 >
                                   Ver Detalles
                                 </Link>
                               </div>
-                            </div>
+                            )}
                           </div>
                         </div>
                       );
@@ -510,18 +802,20 @@ export default function Home() {
                   </div>
                 </div>
                 
-                {/* Scroll Indicators */}
+                {/* Indicators */}
                 {featuredEvents.length > 1 && (
-                  <div className="flex justify-center gap-2 mt-6 px-6">
+                  <div className="flex justify-center gap-2 mt-8">
                     {featuredEvents.map((_, index) => (
-                      <div 
+                      <button
                         key={index}
-                        className={`h-2 rounded-full transition-all duration-300 ${
-                          activeHeroIndex === index 
-                            ? 'w-8 bg-gradient-to-r from-gray-900 to-gray-700' 
-                            : 'w-2 bg-gray-300 hover:bg-gray-500'
+                        onClick={() => goToSlide(index)}
+                        className={`rounded-full transition-all duration-300 ${
+                          currentSlide === index 
+                            ? 'w-8 h-2 bg-gradient-to-r from-gray-900 to-gray-700' 
+                            : 'w-2 h-2 bg-gray-300 hover:bg-gray-500'
                         }`}
-                      ></div>
+                        aria-label={`Ir al evento ${index + 1}`}
+                      />
                     ))}
                   </div>
                 )}
@@ -547,18 +841,18 @@ export default function Home() {
                   </span>
                 </Link>
                 
-                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-6 px-6">
+                <div className="flex overflow-x-auto space-x-4 pb-4 scrollbar-hide -mx-4 sm:-mx-6 px-4 sm:px-6">
                   {category.loaded && category.events.length > 0 ? (
                     category.events.map((event: any) => (
-                      <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`} className="flex-shrink-0 w-80 group">
+                      <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`} className="flex-shrink-0 w-72 sm:w-80 group">
                         <div className="bg-gradient-to-br from-white to-gray-50 rounded-lg shadow-lg hover:shadow-xl overflow-hidden transition-all duration-300 border border-gray-100/50">
                           <div className="overflow-hidden relative">
-                            <div className="relative w-full h-48">
+                            <div className="relative w-full h-44 sm:h-48">
                               <Image
                                 src={event.image}
                                 alt={event.title}
                                 fill
-                                sizes="320px"
+                                sizes="(max-width: 640px) 288px, 320px"
                                 className="object-cover group-hover:scale-110 transition-transform duration-500"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -573,7 +867,7 @@ export default function Home() {
                               </div>
                               <div className="flex items-start bg-gradient-to-r from-gray-50 to-transparent px-2 py-1 rounded">
                                 <span className="material-symbols-outlined text-base mr-2 mt-0.5">location_on</span>
-                                <span>{event.location}</span>
+                                <span className="line-clamp-1">{event.location}</span>
                               </div>
                             </div>
                           </div>
@@ -583,9 +877,9 @@ export default function Home() {
                   ) : (
                     // Skeleton loading
                     Array.from({ length: 3 }).map((_, i) => (
-                      <div key={i} className="flex-shrink-0 w-80">
+                      <div key={i} className="flex-shrink-0 w-72 sm:w-80">
                         <div className="bg-gradient-to-br from-gray-100 to-gray-50 rounded-lg shadow-lg overflow-hidden animate-pulse">
-                          <div className="w-full h-48 bg-gradient-to-br from-gray-200 to-gray-300"></div>
+                          <div className="w-full h-44 sm:h-48 bg-gradient-to-br from-gray-200 to-gray-300"></div>
                           <div className="p-4">
                             <div className="h-6 bg-gradient-to-r from-gray-200 to-gray-300 rounded mb-2"></div>
                             <div className="space-y-1">
@@ -603,6 +897,40 @@ export default function Home() {
           </div>
         </main>
       </div>
+
+      {/* Bottom Navigation Bar - Netflix Style (Mobile Only) */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 md:hidden z-50 shadow-2xl">
+        <div className="flex justify-around items-center py-2 px-4 max-w-screen-sm mx-auto">
+          <Link href="/" className="flex flex-col items-center py-2 px-3 min-w-[60px] group">
+            <span className="material-symbols-outlined text-2xl text-gray-900 group-hover:scale-110 transition-transform">home</span>
+            <span className="text-[10px] font-semibold text-gray-900 mt-1">Inicio</span>
+          </Link>
+          
+          <button 
+            onClick={() => {
+              const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+              searchInput?.focus();
+            }}
+            className="flex flex-col items-center py-2 px-3 min-w-[60px] group"
+          >
+            <span className="material-symbols-outlined text-2xl text-gray-600 group-hover:scale-110 transition-transform">search</span>
+            <span className="text-[10px] text-gray-600 mt-1">Buscar</span>
+          </button>
+          
+          <button 
+            onClick={() => setIsMobileMenuOpen(true)}
+            className="flex flex-col items-center py-2 px-3 min-w-[60px] group"
+          >
+            <span className="material-symbols-outlined text-2xl text-gray-600 group-hover:scale-110 transition-transform">category</span>
+            <span className="text-[10px] text-gray-600 mt-1">Categorías</span>
+          </button>
+          
+          <Link href={user ? "/perfil" : "/login"} className="flex flex-col items-center py-2 px-3 min-w-[60px] group">
+            <span className="material-symbols-outlined text-2xl text-gray-600 group-hover:scale-110 transition-transform">person</span>
+            <span className="text-[10px] text-gray-600 mt-1">{user ? "Perfil" : "Entrar"}</span>
+          </Link>
+        </div>
+      </nav>
     </div>
   );
 }
