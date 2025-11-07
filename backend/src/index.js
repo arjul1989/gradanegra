@@ -49,6 +49,7 @@ app.use('/api/users', require('./routes/user.routes'));
 app.use('/api/events', require('./routes/event.routes'));
 app.use('/api/tickets', require('./routes/ticket.routes'));
 app.use('/api/validate', require('./routes/validation.routes'));
+app.use('/api/comercios', require('./routes/comercio.routes'));
 app.use('/api/public', require('./routes/public.routes'));
 app.use('/api/jobs', require('./routes/job.routes'));
 app.use('/api/buyers', require('./routes/buyer.routes'));
@@ -56,6 +57,21 @@ app.use('/api/buyers', require('./routes/buyer.routes'));
 // New API Routes for Firestore Data Model
 app.use('/api/categorias', require('./routes/categoria.routes'));
 app.use('/api/eventos', require('./routes/eventos.routes'));
+app.use('/api/fechasEvento', require('./routes/fechasEvento.routes'));
+app.use('/api/tiers', require('./routes/tiers.routes'));
+app.use('/api/usuarios-comercios', require('./routes/usuarios-comercios.routes'));
+app.use('/api/verificacion', require('./routes/verificacion.routes'));
+app.use('/api/cupones', require('./routes/cupones.routes'));
+
+// Panel de Usuario - User Routes
+app.use('/api/users', require('./routes/users.routes'));
+app.use('/api/boletos', require('./routes/boletos-user.routes'));
+app.use('/api/compras', require('./routes/compras-user.routes'));
+
+// Panel de Administrador - Admin Routes
+app.use('/api/admin/dashboard', require('./routes/admin/dashboard.routes'));
+app.use('/api/admin/comercios', require('./routes/admin/comercios.routes'));
+app.use('/api/admin/reportes', require('./routes/admin/reportes.routes'));
 
 // 404 handler
 app.use((req, res) => {
