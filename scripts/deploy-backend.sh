@@ -11,7 +11,7 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo ""
 
 # Variables
-PROJECT_ID="gradanegra-prod"
+PROJECT_ID="gradanegra-api-350907539319"
 REGION="us-central1"
 SERVICE_NAME="gradanegra-api"
 BACKEND_DIR="../backend"

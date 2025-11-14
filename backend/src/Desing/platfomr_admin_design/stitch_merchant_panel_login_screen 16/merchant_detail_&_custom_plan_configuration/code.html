@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Merchant Details</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0d59f2",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
+    }
+  </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-white">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col bg-[#111318] border-r border-white/10 p-4">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Grada Negra company logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDZVJtZXZZOC8P8Cpdj8q1YDEG_GDd0BKdU1d2cGwFtC1VCilT5T3RHCMXbI_83KNyggmW_JlBxn5XiA5ujqYv8s_uJ7yQ1JpCww2WouqDut0BPQuOf-wfZVSfL9M8njc_gv9_2_ZcAlwYA31swz2Rjyvt3vWQ3uSnCd5zeOHcsiSXbe9f_EATwL0JNPCFmMQ1apOVqYMyB5QY4qivVR5T3dJ-OpGaJ0rdwRsjrBrHfAKtIfaeF95kb6FTc_CwL-9myB9XklgxoGWwF");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Grada Negra</h1>
+<p class="text-[#9ca6ba] text-sm font-normal leading-normal">Admin Panel</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white" href="#">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">store</span>
+<p class="text-sm font-medium leading-normal">Merchants</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">credit_card</span>
+<p class="text-sm font-medium leading-normal">Plans</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">bar_chart</span>
+<p class="text-sm font-medium leading-normal">Reports</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">settings</span>
+<p class="text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+</div>
+<div class="mt-auto flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">help</span>
+<p class="text-sm font-medium leading-normal">Help</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors" href="#">
+<span class="material-symbols-outlined text-2xl">logout</span>
+<p class="text-sm font-medium leading-normal">Logout</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 overflow-y-auto">
+<div class="p-8">
+<!-- PageHeading -->
+<div class="mb-8">
+<p class="text-white text-3xl font-black leading-tight tracking-[-0.033em]">Merchant Details</p>
+<p class="text-[#9ca6ba] text-base font-normal leading-normal mt-2">View and manage merchant information, performance, and plan settings.</p>
+</div>
+<!-- Three-Column Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+<!-- Left Column (Merchant Info) -->
+<div class="xl:col-span-1 lg:col-span-1 flex flex-col gap-6">
+<div class="bg-[#1a202c] p-6 rounded-xl flex flex-col gap-6">
+<!-- ProfileHeader -->
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-lg size-20 shrink-0" data-alt="Merchant logo, abstract geometric pattern" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAzkjdicO9jlx6-ca3RiF-wxlCvGFePM8Oar-agdHfTbwLxf0e_m3DLFH8YkVNlPKBizgoQbUoZkIk79L3tMXnrXqP_BPnDIPCq0ghqUExSOpIo24-glyTw-Suf6lq6_TMk-P4WCgmm-P4AnhXVp7lDLgaqAOD9m_iWQHfgVzl_Jzv04xC0hrLWrPrbZP-uPYVMrhqraJksozxA-2L8y_W7AFtfJGt98aiyF1qIWb0uhCgILtMWdagfh0Nb31ZX8bZxKuIstClT7LDI");'></div>
+<div class="flex flex-col">
+<p class="text-white text-xl font-bold leading-tight tracking-[-0.015em]">Night Club Venue</p>
+<div class="mt-1 flex items-center gap-2">
+<span class="bg-green-500/20 text-green-400 text-xs font-medium px-2.5 py-0.5 rounded-full">Activo</span>
+</div>
+</div>
+</div>
+<!-- DescriptionList -->
+<div class="flex flex-col">
+<div class="grid grid-cols-[auto_1fr] gap-x-4 border-t border-white/10 py-4">
+<p class="text-[#9ca6ba] text-sm font-normal">Email:</p>
+<p class="text-white text-sm font-medium text-right truncate">contact@nightclubvenue.com</p>
+</div>
+<div class="grid grid-cols-[auto_1fr] gap-x-4 border-t border-white/10 py-4">
+<p class="text-[#9ca6ba] text-sm font-normal">Phone:</p>
+<p class="text-white text-sm font-medium text-right">+1 234 567 890</p>
+</div>
+<div class="grid grid-cols-[auto_1fr] gap-x-4 border-t border-white/10 py-4">
+<p class="text-[#9ca6ba] text-sm font-normal">Registered:</p>
+<p class="text-white text-sm font-medium text-right">Jan 15, 2023</p>
+</div>
+</div>
+</div>
+<!-- Card -->
+<div class="bg-[#1a202c] p-6 rounded-xl">
+<div class="flex flex-col gap-4">
+<p class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">Current Plan: Plan Pro</p>
+<p class="text-[#9ca6ba] text-base font-normal leading-normal">This is the base plan for the merchant. Custom overrides can be set.</p>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary/20 text-primary text-sm font-medium leading-normal hover:bg-primary/30 transition-colors">
+<span class="truncate">View Standard Plan Details</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Center Column (Performance) -->
+<div class="xl:col-span-2 lg:col-span-2 flex flex-col gap-6">
+<h2 class="text-xl font-bold text-white">Estadísticas de Rendimiento</h2>
+<!-- Stat Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div class="bg-[#1a202c] p-6 rounded-xl">
+<p class="text-sm font-medium text-[#9ca6ba]">Eventos Activos</p>
+<p class="text-4xl font-bold text-white mt-2">12</p>
+</div>
+<div class="bg-[#1a202c] p-6 rounded-xl">
+<p class="text-sm font-medium text-[#9ca6ba]">Tickets Vendidos</p>
+<p class="text-4xl font-bold text-white mt-2">8,452</p>
+</div>
+<div class="bg-[#1a202c] p-6 rounded-xl">
+<p class="text-sm font-medium text-[#9ca6ba]">Ingresos Totales</p>
+<p class="text-4xl font-bold text-white mt-2">$253.5K</p>
+</div>
+</div>
+<!-- Chart -->
+<div class="bg-[#1a202c] p-6 rounded-xl">
+<div class="flex justify-between items-center mb-4">
+<h3 class="text-lg font-bold text-white">Ventas Mensuales</h3>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1 text-sm font-medium rounded-md bg-white/10 text-white">Last 6 months</button>
+<button class="px-3 py-1 text-sm font-medium rounded-md text-[#9ca6ba] hover:bg-white/5">YTD</button>
+</div>
+</div>
+<div class="h-64 w-full" data-alt="A bar chart showing monthly sales from January to June. Sales increase steadily each month.">
+<svg height="100%" preserveaspectratio="none" viewbox="0 0 500 250" width="100%">
+<g class="text-[#9ca6ba]" style="font-size: 10px; font-family: Inter;">
+<line stroke="currentColor" stroke-width="1" x1="40" x2="480" y1="220" y2="220"></line>
+<text x="65" y="235">Jan</text>
+<text x="135" y="235">Feb</text>
+<text x="205" y="235">Mar</text>
+<text x="275" y="235">Apr</text>
+<text x="345" y="235">May</text>
+<text x="415" y="235">Jun</text>
+<text dy="3" x="10" y="220">0</text>
+<text dy="3" x="10" y="150">$25k</text>
+<text dy="3" x="10" y="80">$50k</text>
+<text dy="3" x="10" y="10">$75k</text>
+</g>
+<g class="bars" fill="#0d59f2">
+<rect height="40" rx="4" width="20" x="60" y="180"></rect>
+<rect height="60" rx="4" width="20" x="130" y="160"></rect>
+<rect height="80" rx="4" width="20" x="200" y="140"></rect>
+<rect height="110" rx="4" width="20" x="270" y="110"></rect>
+<rect height="140" rx="4" width="20" x="340" y="80"></rect>
+<rect height="180" rx="4" width="20" x="410" y="40"></rect>
+</g>
+</svg>
+</div>
+</div>
+</div>
+<!-- Right Column (Custom Config) -->
+<div class="xl:col-span-1 lg:col-span-3 bg-[#1a202c] p-6 rounded-xl flex flex-col self-start">
+<h2 class="text-xl font-bold text-white mb-2">Configuración Custom del Plan</h2>
+<p class="text-[#9ca6ba] text-sm mb-6">Estos valores anulan la configuración del plan estándar para este comerciante.</p>
+<div class="flex flex-col gap-6">
+<div>
+<label class="block text-sm font-medium text-white mb-2" for="event-limit">Límite de Eventos</label>
+<input class="block w-full rounded-lg border-0 bg-[#101622] py-2.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm" id="event-limit" type="number" value="75"/>
+<p class="mt-1.5 text-xs text-[#9ca6ba]">Plan Estándar: 50</p>
+</div>
+<div>
+<label class="block text-sm font-medium text-white mb-2" for="featured-limit">Límite de Destacados</label>
+<input class="block w-full rounded-lg border-0 bg-[#101622] py-2.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm" id="featured-limit" type="number" value="10"/>
+<p class="mt-1.5 text-xs text-[#9ca6ba]">Plan Estándar: 5</p>
+</div>
+<div>
+<label class="block text-sm font-medium text-white mb-2" for="user-limit">Límite de Usuarios</label>
+<input class="block w-full rounded-lg border-0 bg-[#101622] py-2.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm" id="user-limit" type="number" value="10"/>
+<p class="mt-1.5 text-xs text-[#9ca6ba]">Plan Estándar: 10</p>
+</div>
+<div>
+<label class="block text-sm font-medium text-white mb-2" for="commission">Porcentaje de Comisión (%)</label>
+<input class="block w-full rounded-lg border-0 bg-[#101622] py-2.5 px-3 text-white ring-1 ring-inset ring-white/10 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm" id="commission" step="0.1" type="number" value="3.5"/>
+<p class="mt-1.5 text-xs text-[#9ca6ba]">Plan Estándar: 5.0%</p>
+</div>
+</div>
+<div class="mt-8 flex flex-col gap-4">
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-medium leading-normal hover:bg-primary/90 transition-colors">
+<span class="truncate">Guardar Cambios</span>
+</button>
+<button class="flex w-full min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 text-[#9ca6ba] text-sm font-medium leading-normal hover:bg-white/5 hover:text-white transition-colors">
+<span class="truncate">Restablecer a Estándar</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

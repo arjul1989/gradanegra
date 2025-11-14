@@ -25,25 +25,36 @@ router.get('/metricas', async (req, res) => {
     const eventosActivos = eventosSnapshot.size;
 
     // 3. Total de boletos vendidos (último mes)
+    // Nota: Evitamos consultas compuestas que requieren índices
+    // En su lugar, obtenemos todos y filtramos en memoria
     const now = new Date();
     const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, now.getDate());
     
-    const boletosSnapshot = await db.collection('boletos')
-      .where('status', 'in', ['vendido', 'usado'])
-      .where('createdAt', '>=', lastMonth)
-      .get();
-    const boletosVendidos = boletosSnapshot.size;
+    const allBoletosSnapshot = await db.collection('boletos').get();
+    const boletosVendidos = allBoletosSnapshot.docs.filter(doc => {
+      const data = doc.data();
+      const status = data.status;
+      const createdAt = data.createdAt ? data.createdAt.toDate() : null;
+      return (status === 'vendido' || status === 'usado') && createdAt && createdAt >= lastMonth;
+    }).length;
 
     // 4. Comisiones totales (último mes)
-    const comprasSnapshot = await db.collection('compras')
+    // Obtener todas las compras y filtrar en memoria para evitar índices compuestos
+    const allComprasSnapshot = await db.collection('compras')
       .where('status', '==', 'completada')
-      .where('fechaCompra', '>=', lastMonth)
       .get();
+    
+    const comprasRecientes = allComprasSnapshot.docs.filter(doc => {
+      const fechaCompra = doc.data().fechaCompra;
+      if (!fechaCompra) return false;
+      const fecha = fechaCompra.toDate ? fechaCompra.toDate() : new Date(fechaCompra);
+      return fecha >= lastMonth;
+    });
 
     let comisionesTotales = 0;
     const comerciosCache = {};
 
-    for (const doc of comprasSnapshot.docs) {
+    for (const doc of comprasRecientes) {
       const compra = doc.data();
       
       // Cachear comercios para evitar múltiples queries

@@ -49,7 +49,7 @@ exports.registerBuyer = async (req, res) => {
         lastName: '',
         preferences: {
           language: 'es',
-          currency: 'MXN',
+          currency: 'COP',
           notifications: {
             email: true,
             sms: false,
@@ -140,7 +140,7 @@ exports.googleAuth = async (req, res) => {
           lastName: name ? name.split(' ').slice(1).join(' ') : '',
           preferences: {
             language: 'es',
-            currency: 'MXN',
+            currency: 'COP',
             notifications: {
               email: true,
               sms: false,
@@ -432,7 +432,11 @@ exports.getMyTicket = async (req, res) => {
       });
     }
 
-    const ticket = await Ticket.findById(id);
+    // Buscar ticket por ticketNumber o por ID de documento
+    let ticket = await Ticket.findByTicketNumber(id);
+    if (!ticket) {
+      ticket = await Ticket.findById(id);
+    }
 
     if (!ticket) {
       return res.status(404).json({
@@ -452,9 +456,19 @@ exports.getMyTicket = async (req, res) => {
       });
     }
 
+    // Cargar información del evento
+    const Event = require('../models/Event');
+    const ticketData = ticket.toPublicJSON();
+    if (ticket.eventId) {
+      const event = await Event.findById(ticket.eventId);
+      if (event) {
+        ticketData.event = event.toJSON();
+      }
+    }
+
     res.json({
       success: true,
-      data: ticket.toPublicJSON()
+      data: ticketData
     });
 
   } catch (error) {

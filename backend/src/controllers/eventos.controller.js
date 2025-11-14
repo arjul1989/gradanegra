@@ -288,27 +288,32 @@ const getEventoById = async (req, res) => {
       }
     }
 
-    // Obtener fechas con tiers
+    // Obtener fechas con tiers (simplified to avoid composite index)
     const fechasSnapshot = await db.collection('fechas_evento')
       .where('eventoId', '==', evento.id)
-      .where('deletedAt', '==', null)
-      .orderBy('fecha', 'asc')
       .get();
 
-    const fechasPromises = fechasSnapshot.docs.map(async (fechaDoc) => {
-      const fecha = { id: fechaDoc.id, ...fechaDoc.data() };
+    // Filter and sort in memory to avoid Firestore index requirement
+    const fechasFiltered = fechasSnapshot.docs
+      .map(doc => ({ id: doc.id, ...doc.data() }))
+      .filter(fecha => fecha.deletedAt === null)
+      .sort((a, b) => {
+        const dateA = a.fecha?.toDate?.() || new Date(a.fecha);
+        const dateB = b.fecha?.toDate?.() || new Date(b.fecha);
+        return dateA.getTime() - dateB.getTime();
+      });
 
-      // Obtener tiers de esta fecha
+    const fechasPromises = fechasFiltered.map(async (fecha) => {
+      // Obtener tiers de esta fecha (simplified query)
       const tiersSnapshot = await db.collection('tiers')
         .where('fechaEventoId', '==', fecha.id)
-        .where('deletedAt', '==', null)
-        .orderBy('orden', 'asc')
         .get();
 
-      const tiers = tiersSnapshot.docs.map(tierDoc => ({
-        id: tierDoc.id,
-        ...tierDoc.data()
-      }));
+      // Filter and sort in memory
+      const tiers = tiersSnapshot.docs
+        .map(tierDoc => ({ id: tierDoc.id, ...tierDoc.data() }))
+        .filter(tier => tier.deletedAt === null)
+        .sort((a, b) => (a.orden || 0) - (b.orden || 0));
 
       return {
         ...fecha,

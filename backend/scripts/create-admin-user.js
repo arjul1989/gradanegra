@@ -12,12 +12,18 @@
  */
 
 const admin = require('firebase-admin');
-const serviceAccount = require('../config/serviceAccountKey.json');
+require('dotenv').config();
 
 // Inicializar Firebase Admin
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
-});
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: process.env.FIREBASE_PROJECT_ID,
+      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
+    })
+  });
+}
 
 const ROLES_PERMITIDOS = ['super_admin', 'finance_admin', 'support_admin'];
 

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Detalle del Ticket - Grada Negra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col items-center justify-center p-4">
+<!-- Modal Container -->
+<div class="layout-container flex h-full w-full max-w-md flex-col overflow-hidden rounded-xl bg-[#1E1E1E] shadow-2xl">
+<!-- ToolBar -->
+<div class="flex justify-between items-center gap-2 px-4 py-3 border-b border-white/10">
+<h2 class="text-lg font-bold text-[#EAEAEA]">Detalle del Ticket</h2>
+<button class="p-2 text-[#EAEAEA] hover:bg-white/10 rounded-full">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+<!-- Scrollable Content Area -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6">
+<!-- QR Code Section -->
+<div class="flex flex-col items-center">
+<div class="w-full max-w-[240px] aspect-square bg-white p-4 rounded-xl">
+<div class="w-full h-full bg-center bg-no-repeat bg-contain" data-alt="Scannable QR code for event entry" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCuyZ2kg6jpBbKTlfSMn04vxzzLLmGaL8ZblFlUb7U_w2CUdwb0xqkkhNWsK-hIQmxJX0VVBnKHPYHRkwsHmZwvRxNsfN_mWkBnjUBTyfwS2onHnqze2wKHeEsWnhWFejv4M6BgKnwK29fkcW0R3sUFcr8T9EdUvtUKzHhRLne85mX1yfvML9wPEsfH3t7MhGSc57qZt-87YGEngjJ9Q3I0-X6zR10kcAqOHngAKL7GL8U0E8adRjzVh92XSuMN9vS1l8ntTCrtOS1n");'></div>
+</div>
+<p class="text-[#EAEAEA] text-base font-normal leading-normal pt-4 text-center">Ticket Number: #GN12345678</p>
+</div>
+<!-- ButtonGroup -->
+<div class="flex w-full flex-col items-stretch gap-3">
+<button class="flex w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em]">
+<span class="material-symbols-outlined">download</span>
+<span class="truncate">Descargar PDF</span>
+</button>
+<button class="flex w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-5 bg-[#282e39] text-[#EAEAEA] text-base font-bold leading-normal tracking-[0.015em]">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M21.2 6.1C21.2 5.2 20.6 4.6 19.8 4.6H18.9C18.9 3.1 17.8 2 16.3 2C14.9 2 13.8 3.1 13.7 4.5H10.3C10.2 3.1 9.1 2 7.7 2C6.2 2 5.1 3.1 5.1 4.6H4.2C3.4 4.6 2.8 5.2 2.8 6.1V8.6C3.7 8.9 4.3 9.7 4.3 10.6C4.3 11.5 3.7 12.3 2.8 12.6V15.1C2.8 15.9 3.4 16.6 4.2 16.6H5.1C5.1 18 6.2 19.2 7.7 19.2C9.1 19.2 10.2 18 10.3 16.6H13.7C13.8 18 14.9 19.2 16.3 19.2C17.8 19.2 18.9 18 18.9 16.6H19.8C20.6 16.6 21.2 15.9 21.2 15.1V12.6C20.3 12.3 19.7 11.5 19.7 10.6C19.7 9.7 20.3 8.9 21.2 8.6V6.1ZM15.4 13.4L10.3 15.9C10.1 16 9.8 16 9.6 15.9L6.1 14.1C5.6 13.8 5.4 13.3 5.6 12.8L7.4 9.3C7.6 8.8 8.1 8.6 8.6 8.8L13.7 11.3C14.2 11.5 14.4 12 14.2 12.5L13.9 13.1C14.5 13.3 15 13.3 15.4 13.4ZM18.2 12.5L16.4 9C16.2 8.5 15.7 8.3 15.2 8.5L14.7 8.7C15.1 9.6 15.3 10.6 15.3 11.6C15.2 12.1 15.4 12.6 15.8 12.9L16.2 13.1C16.4 13.2 16.7 13.2 16.9 13.1L17.9 12.6C18.2 12.8 18.3 12.7 18.2 12.5Z" fill="#EAEAEA"></path></svg>
+<span class="truncate">Añadir a Google Wallet</span>
+</button>
+<button class="flex w-full min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-12 px-5 bg-[#282e39] text-[#EAEAEA] text-base font-bold leading-normal tracking-[0.015em]">
+<svg class="w-6 h-6" fill="none" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M19.88,7.39a1.6,1.6,0,0,0-1.58-1.29H5.69a1.6,1.6,0,0,0-1.58,1.29L2,14.51v1.94A1.6,1.6,0,0,0,3.55,18H20.45A1.6,1.6,0,0,0,22,16.45V14.51Zm-9,6.76a1,1,0,0,1-.88.5,1,1,0,0,1-.88-.5l-1.33-2.23a1,1,0,0,1,.88-1.5h2.66a1,1,0,0,1,.88,1.5Z" fill="#EAEAEA"></path></svg>
+<span class="truncate">Añadir a Apple Wallet</span>
+</button>
+</div>
+<!-- Separator -->
+<div class="w-full h-px bg-white/10"></div>
+<!-- Event Information Section -->
+<div>
+<h3 class="text-[#EAEAEA] text-lg font-bold leading-tight tracking-[-0.015em] pb-3">Información del Evento</h3>
+<div class="space-y-4">
+<div class="w-full bg-center bg-no-repeat bg-cover aspect-[2/1] rounded-lg" data-alt="Dynamic and colorful concert stage with bright lights" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD7iLAIp6-Yg21s5ieDsWmtGIlb-4NGf98NdbO91a76nRZStnQe-SxYv3T7OGhqEc6bDx3SSTuvHFsBEKCTbeO1W6rb2_qA9vGK90m8_AEMyNuKbL2ztbIjVyD_xl31-u8gP5WcUvTx1t1eJ9leyl_lL7yNpFO6KabdgZS9qLSrEmV3pl4ocBRvAOduGHN9IXCp_PpiQS4G9yew2T0wCFh5rrGwjA1WgoSf25SGcNeROqLYn5E2iaeVZyZa1vne9dS1qFw7reXdrlbU");'></div>
+<div class="flex flex-col gap-1">
+<p class="text-xl font-bold text-white">The Midnight - US Tour</p>
+<p class="text-sm text-white/70">Sábado 25 de Mayo, 2024 - 21:00 hrs</p>
+<p class="text-sm text-white/70">Foro Sol, Ciudad de México</p>
+</div>
+<div class="w-full h-40 bg-center bg-no-repeat bg-cover rounded-lg" data-location="Mexico City" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCe7qx0cGHqcALFeu4hLf6wv8VOwf7_fIhcigkXtVFPkiUjDNuURNj1_SrytqXOAhjQNUsmrpM_P_Ujkd06pIINLnTRGCIyZ6512zJnG7Mkr0xryValq84OW8-vws6VVwHizuaUdeCUUXQKXPDr-Ugx17eTlU9bXwpGYo08nfJCVlqyWzJn9N8j5b94MWy0LpjzBGdJp_cTKNzeK-yzcQE7y1YPkfRDtg98qXUhXMlw3e0vZvK-YJHAhvIULXwD2i0zAi1bWBPAKZ_A");'></div>
+</div>
+</div>
+<!-- Ticket Details Section -->
+<div>
+<h3 class="text-[#EAEAEA] text-lg font-bold leading-tight tracking-[-0.015em] pb-3">Detalles del Ticket</h3>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<p class="text-sm text-white/70">Tipo de Ticket:</p>
+<p class="text-sm text-white font-semibold">General A</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-white/70">Precio:</p>
+<p class="text-sm text-white font-semibold">$1,250.00 MXN</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-white/70">Fecha de Compra:</p>
+<p class="text-sm text-white font-semibold">15 de Enero, 2024</p>
+</div>
+</div>
+</div>
+<!-- Buyer Information Section -->
+<div>
+<h3 class="text-[#EAEAEA] text-lg font-bold leading-tight tracking-[-0.015em] pb-3">Información del Comprador</h3>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-center">
+<p class="text-sm text-white/70">Nombre:</p>
+<p class="text-sm text-white font-semibold">Juan Pérez</p>
+</div>
+<div class="flex justify-between items-center">
+<p class="text-sm text-white/70">Email:</p>
+<p class="text-sm text-white font-semibold">juan.perez@email.com</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

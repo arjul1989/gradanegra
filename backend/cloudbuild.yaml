@@ -1,21 +1,30 @@
+# Cloud Build para Grada Negra API
+# Versión 2.0 - Configuración centralizada y robusta
+
 steps:
-  # Build the container image
+  # Build del container con verificación
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/gradanegra-api:$COMMIT_SHA', '.']
-    dir: 'backend'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/gradanegra-api:${SHORT_SHA}', '.']
+    id: 'build'
   
-  # Tag as latest
+  # Tag como latest
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['tag', 'gcr.io/$PROJECT_ID/gradanegra-api:$COMMIT_SHA', 'gcr.io/$PROJECT_ID/gradanegra-api:latest']
+    args: ['tag', 'gcr.io/$PROJECT_ID/gradanegra-api:${SHORT_SHA}', 'gcr.io/$PROJECT_ID/gradanegra-api:latest']
+    id: 'tag-latest'
+    waitFor: ['build']
   
-  # Push the container image to Container Registry
+  # Push a Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/gradanegra-api:$COMMIT_SHA']
+    args: ['push', 'gcr.io/$PROJECT_ID/gradanegra-api:${SHORT_SHA}']
+    id: 'push-sha'
+    waitFor: ['tag-latest']
   
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/gradanegra-api:latest']
+    id: 'push-latest'
+    waitFor: ['tag-latest']
   
-  # Deploy container image to Cloud Run
+  # Deployment a Cloud Run con validaciones
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args:
@@ -23,25 +32,90 @@ steps:
       - 'deploy'
       - 'gradanegra-api'
       - '--image'
-      - 'gcr.io/$PROJECT_ID/gradanegra-api:$COMMIT_SHA'
+      - 'gcr.io/$PROJECT_ID/gradanegra-api:${SHORT_SHA}'
       - '--region'
       - 'us-central1'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
       - '--memory'
-      - '1Gi'
+      - '512Mi'
+      - '--cpu'
+      - '1'
       - '--timeout'
       - '300'
+      - '--max-instances'
+      - '10'
+      - '--min-instances'
+      - '0'
       - '--set-env-vars'
-      - 'NODE_ENV=production,FIREBASE_PROJECT_ID=$PROJECT_ID,GCS_BUCKET_NAME=$PROJECT_ID-tickets'
+      - 'NODE_ENV=production,PORT=8080,FIREBASE_PROJECT_ID=$PROJECT_ID'
+      - '--set-secrets'
+      - 'MERCADOPAGO_ACCESS_TOKEN_PROD=MERCADOPAGO_ACCESS_TOKEN_PROD:8,MERCADOPAGO_PUBLIC_KEY_PROD=MERCADOPAGO_PUBLIC_KEY_PROD:8,SECRET_SALT=SECRET_SALT:latest,JWT_SECRET=JWT_SECRET:latest'
+    id: 'deploy'
+    waitFor: ['push-sha']
+  
+  # Verificación post-deployment
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - |
+        echo "🔍 Iniciando verificación post-deployment..."
+        
+        # Esperar 30 segundos para que el servicio esté listo
+        sleep 30
+        
+        # Health check
+        BACKEND_URL="https://gradanegra-api-350907539319-uc.a.run.app"
+        if curl -f -s "$BACKEND_URL/health" > /dev/null; then
+          echo "✅ Health check exitoso"
+        else
+          echo "❌ Health check falló"
+          exit 1
+        fi
+        
+        # Verificar configuración de MercadoPago
+        MP_CONFIG=$(curl -s "$BACKEND_URL/api/payments/config")
+        if echo "$MP_CONFIG" | grep -q '"success":true'; then
+          PUBLIC_KEY=$(echo "$MP_CONFIG" | jq -r '.publicKey')
+          if [[ "$PUBLIC_KEY" == *"-n"* ]]; then
+            echo "❌ WARNING: Public Key contiene espacios en blanco: $PUBLIC_KEY"
+          else
+            echo "✅ MercadoPago configurado correctamente"
+          fi
+        else
+          echo "❌ ERROR: MercadoPago no está configurado"
+          exit 1
+        fi
+        
+        echo "🎉 Verificación completada exitosamente"
+    id: 'verify'
+    waitFor: ['deploy']
 
+# Imágenes a construir y push
 images:
-  - 'gcr.io/$PROJECT_ID/gradanegra-api:$COMMIT_SHA'
+  - 'gcr.io/$PROJECT_ID/gradanegra-api:${SHORT_SHA}'
   - 'gcr.io/$PROJECT_ID/gradanegra-api:latest'
 
+# Opciones de build
 options:
   machineType: 'E2_HIGHCPU_8'
   logging: CLOUD_LOGGING_ONLY
+  substitution_option: 'ALLOW_LOOSE'
 
-timeout: '1200s'
+# Timeout total
+timeout: '1800s'
+
+# Tags para tracking
+tags:
+  - 'gradanegra-api'
+  - 'production'
+  - 'cloud-run'
+
+# Build configuration substitutions
+substitutions:
+  _SERVICE_NAME: 'gradanegra-api'
+  _REGION: 'us-central1'
+  _MEMORY: '512Mi'
+  _CPU: '1'

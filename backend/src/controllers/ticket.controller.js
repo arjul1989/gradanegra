@@ -100,7 +100,7 @@ exports.createTickets = async (req, res) => {
           buyerId: req.user?.uid || null, // Vincular con comprador autenticado si existe
           buyer,
           price: tier.price,
-          currency: 'MXN',
+          currency: 'COP',
           fees: 0, // Calcular según configuración del tenant
           taxes: 0, // Calcular según configuración del tenant
           total: tier.price,
@@ -443,8 +443,8 @@ exports.validateTicket = async (req, res) => {
       });
     }
 
-    // Validar el ticket
-    await ticket.validate(req.user.uid);
+    // Validar el ticket (check-in)
+    await ticket.checkIn(req.user.uid);
 
     logger.info(`Ticket validado: ${ticket.ticketNumber}`, {
       ticketId: ticket.id,
@@ -499,8 +499,8 @@ exports.validateTicketByNumber = async (req, res) => {
       });
     }
 
-    // Validar el ticket
-    await ticket.validate(req.user.uid);
+    // Validar el ticket (check-in)
+    await ticket.checkIn(req.user.uid);
 
     logger.info(`Ticket validado: ${ticket.ticketNumber}`, {
       ticketId: ticket.id,

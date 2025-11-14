@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mis Entradas - Grada Negra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary": "#0d59f2",
+              "background-light": "#f5f6f8",
+              "background-dark": "#101622",
+              "surface-dark": "#1E1E1E",
+              "text-primary-dark": "#E0E0E0",
+              "text-secondary-dark": "#A0A0A0",
+              "status-valid": "#28a745",
+              "status-used": "#6c757d",
+              "status-cancelled": "#dc3545",
+            },
+            fontFamily: {
+              "display": ["Inter", "sans-serif"]
+            },
+            borderRadius: {
+              "DEFAULT": "0.25rem",
+              "lg": "0.5rem",
+              "xl": "0.75rem",
+              "full": "9999px"
+            },
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        font-size: 20px;
+      }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex h-auto min-h-screen w-full flex-col">
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 sm:px-8 md:px-16 lg:px-24 xl:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-6xl w-full flex-1">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/10 px-4 md:px-10 py-3">
+<div class="flex items-center gap-4 text-text-primary-dark">
+<div class="size-6 text-primary">
+<svg fill="currentColor" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path clip-rule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill-rule="evenodd"></path>
+</svg>
+</div>
+<h2 class="text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]">Grada Negra</h2>
+</div>
+<div class="hidden md:flex flex-1 justify-end items-center gap-8">
+<div class="flex items-center gap-9">
+<a class="text-text-primary-dark text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">My Profile</a>
+<a class="text-text-primary-dark text-sm font-medium leading-normal hover:text-primary transition-colors" href="#">Settings</a>
+</div>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-80 transition-opacity">
+<span class="truncate">Logout</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCtxzeTGITo2nTI2ZtHmRgF0oK6GmVbiSTDHjJ8IO-6_0B-oT-J8FcgpRgOHP0LcFrIhq8suUD0gvs1nFvh6-pt2HIdLoZDYU02oPNdJSC2XNl6mPGAfQt0BJH2ZsVEI2EdDg67AWgzdTlgPJPNl6JKgDqeUxJIPXD77_6zsvMSms-c7m4Upzn4nccUlyQp3NS6gx6KoDWXBQvMKfeHD1QpPbQfesASjjwp_th7J9AXGTcjuDPGFGM6M1sTcJlqsOJu8r4pcmP969Px");'></div>
+</div>
+<button class="md:hidden text-text-primary-dark">
+<span class="material-symbols-outlined !text-3xl">menu</span>
+</button>
+</header>
+<main class="flex flex-col gap-6 py-10 px-4">
+<div class="flex flex-wrap justify-between items-center gap-4">
+<p class="text-text-primary-dark text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Mis Entradas</p>
+</div>
+<div class="flex flex-col md:flex-row gap-4 justify-between">
+<div class="flex gap-3 flex-wrap">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Próximos</p>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 pl-4 pr-4 hover:bg-white/20 transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">Usados</p>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white/10 pl-4 pr-4 hover:bg-white/20 transition-colors">
+<p class="text-text-primary-dark text-sm font-medium leading-normal">Cancelados</p>
+</button>
+</div>
+<div class="min-w-40 md:w-80">
+<label class="flex flex-col h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-text-secondary-dark flex bg-surface-dark items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-text-primary-dark focus:outline-0 focus:ring-0 border-none bg-surface-dark focus:border-none h-full placeholder:text-text-secondary-dark px-4 pl-2 text-base font-normal leading-normal" placeholder="Buscar por evento, artista o ciudad..." value=""/>
+</div>
+</label>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Ticket Card 1 -->
+<div class="flex flex-col bg-surface-dark rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+<div class="relative w-full bg-center bg-no-repeat aspect-video bg-cover" data-alt="Concert stage with bright purple and blue lights" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA3_DCgO8D-tTtC1dWidA0CjXBPCBK2d9mJ436xoZx8RTwTNp96U2ibEfddFlGZkMxnRupIALcqwZDM8wUVrJAbeD03sciDl86fRb8uHPcPZ7zTf-nbZ7tAbJcjgawEyojFWB2ajpeCokmMgb-EKLEY0eSedqGMyTKTbnk5IxNwnc8dnAMhfaruvB8cTcJ3OgSixp0vDs6encJJzc6szrRGwNNaRJYCEtDRyuI1aKAr5rShWaHvZ6DsiQ4jKEeUhlvchvPiYr--YYWL");'>
+<div class="absolute top-3 right-3 bg-status-valid/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Válido</div>
+</div>
+<div class="p-4 flex flex-col gap-4 flex-grow">
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]">Concierto de Artista Famoso</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Sáb, 25 de Nov, 21:00 - Arena Principal, Ciudad Capital</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Entrada General - Pista</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-primary text-white text-sm font-medium hover:bg-opacity-80 transition-opacity">
+<span class="material-symbols-outlined !text-base">qr_code_2</span>
+<span>Ver QR</span>
+</button>
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-white/10 text-text-primary-dark text-sm font-medium hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined !text-base">download</span>
+<span>PDF</span>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-text-primary-dark hover:bg-white/20 transition-colors" data-alt="Apple Wallet Icon">
+<img class="h-5 invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwI3_Ek9lj-uza_wSrvs3tvnEu89VsQdlDByPDxiW-ujX1nWmHlRDETHccm1YhUjlXb7rl4n5lbWsqpe49Jv8pfAHVXYzArhDNn3j1AZNgko7wCw8yIeWWnm1vEhbLsB5LPGvPqrO6e_Dq_NUarZF6oQHsIcdTh4RpZl9DZSB5jml41q3_qudODDoZ79tLXE86ScUZ_KHPXgucz1sm9iziWnJDty13zNGxoK021ogYjyWbFLBntJIB8zPkNBl9R_5Mpq5PIzskKsTu"/>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-text-primary-dark hover:bg-white/20 transition-colors" data-alt="Google Wallet Icon">
+<img class="h-5 invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwI3_Ek9lj-uza_wSrvs3tvnEu89VsQdlDByPDxiW-ujX1nWmHlRDETHccm1YhUjlXb7rl4n5lbWsqpe49Jv8pfAHVXYzArhDNn3j1AZNgko7wCw8yIeWWnm1vEhbLsB5LPGvPqrO6e_Dq_NUarZF6oQHsIcdTh4RpZl9DZSB5jml41q3_qudODDoZ79tLXE86ScUZ_KHPXgucz1sm9iziWnJDty13zNGxoK021ogYjyWbFLBntJIB8zPkNBl9R_5Mpq5PIzskKsTu"/>
+</button>
+</div>
+</div>
+</div>
+<!-- Ticket Card 2 - Used -->
+<div class="flex flex-col bg-surface-dark rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+<div class="relative w-full bg-center bg-no-repeat aspect-video bg-cover" data-alt="Music festival with a large crowd and confetti in the air" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCsoQsUzujtxdBswrKFQNxmUg8VrQ5Z3XRjAYqaWSfPvptR6kJZLGXfrjSmTcvD5kAFpb9Y-wgzlAzXNRRgeCMMBABTwcFB3W38qoMT9Q8TZBQgP98upaf790GCUwkEsDC8CFgT9oigju-4c8okTOUwbf2hDTkAAWNFVUix-v3e5OutN3qUsi9ZCz_LtEwum6pC4Xp-a7sYUJvcbBUsen2mVE5pNXLQRpZZhBqYKZlNfcetIoQGm8Ek7vsJGIwvhDd0RMZyW8VcPKz-");'>
+<div class="absolute top-3 right-3 bg-status-used/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Usado</div>
+</div>
+<div class="p-4 flex flex-col gap-4 flex-grow">
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]">Festival de Verano 2023</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Dom, 15 de Ago, 18:00 - Parque Central, Ciudad del Sol</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Acceso VIP</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto opacity-50">
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-primary text-white text-sm font-medium cursor-not-allowed">
+<span class="material-symbols-outlined !text-base">qr_code_2</span>
+<span>Ver QR</span>
+</button>
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-white/10 text-text-primary-dark text-sm font-medium cursor-not-allowed">
+<span class="material-symbols-outlined !text-base">download</span>
+<span>PDF</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Ticket Card 3 -->
+<div class="flex flex-col bg-surface-dark rounded-xl overflow-hidden shadow-lg transition-transform hover:scale-[1.02]">
+<div class="relative w-full bg-center bg-no-repeat aspect-video bg-cover" data-alt="Theater stage with red curtains" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDAfETum4Dp4SryIsCg5Txm_t5iWLlO1wTEpvjJ1QDFMsoW6deaBelyvqIetmZVF1TFVjTK_JPs6M5VK2mWbXPhlkB0CgB9fKUnGzdwxislnCxH8l4Ra0vDI6itzr-uaWAUk562ZlwKtT5BkUFCWJiX8xiS-Ae3vdhnoGX5YjRC3mEn7u6mdEZ0tIVPXY2GWJCN0wkIT3VcQwS-Re7bV8GO7tEs2FSkHVrlT06CI6A1gOtIHkgimzngxAkOoCEA-UJ9RPJiQZH7D1px");'>
+<div class="absolute top-3 right-3 bg-status-valid/80 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">Válido</div>
+</div>
+<div class="p-4 flex flex-col gap-4 flex-grow">
+<div class="flex flex-col gap-1">
+<p class="text-text-primary-dark text-lg font-bold leading-tight tracking-[-0.015em]">Obra de Teatro Clásica</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Vie, 08 de Dic, 20:00 - Teatro Nacional, Metrópolis</p>
+<p class="text-text-secondary-dark text-sm font-normal leading-normal">Platea Preferente - Fila 5</p>
+</div>
+<div class="flex flex-wrap gap-2 mt-auto">
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-primary text-white text-sm font-medium hover:bg-opacity-80 transition-opacity">
+<span class="material-symbols-outlined !text-base">qr_code_2</span>
+<span>Ver QR</span>
+</button>
+<button class="flex-1 min-w-[120px] flex items-center justify-center gap-2 rounded-lg h-10 px-3 bg-white/10 text-text-primary-dark text-sm font-medium hover:bg-white/20 transition-colors">
+<span class="material-symbols-outlined !text-base">download</span>
+<span>PDF</span>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-text-primary-dark hover:bg-white/20 transition-colors" data-alt="Apple Wallet Icon">
+<img class="h-5 invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwI3_Ek9lj-uza_wSrvs3tvnEu89VsQdlDByPDxiW-ujX1nWmHlRDETHccm1YhUjlXb7rl4n5lbWsqpe49Jv8pfAHVXYzArhDNn3j1AZNgko7wCw8yIeWWnm1vEhbLsB5LPGvPqrO6e_Dq_NUarZF6oQHsIcdTh4RpZl9DZSB5jml41q3_qudODDoZ79tLXE86ScUZ_KHPXgucz1sm9iziWnJDty13zNGxoK021ogYjyWbFLBntJIB8zPkNBl9R_5Mpq5PIzskKsTu"/>
+</button>
+<button class="h-10 w-10 flex items-center justify-center rounded-lg bg-white/10 text-text-primary-dark hover:bg-white/20 transition-colors" data-alt="Google Wallet Icon">
+<img class="h-5 invert brightness-0" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAwI3_Ek9lj-uza_wSrvs3tvnEu89VsQdlDByPDxiW-ujX1nWmHlRDETHccm1YhUjlXb7rl4n5lbWsqpe49Jv8pfAHVXYzArhDNn3j1AZNgko7wCw8yIeWWnm1vEhbLsB5LPGvPqrO6e_Dq_NUarZF6oQHsIcdTh4RpZl9DZSB5jml41q3_qudODDoZ79tLXE86ScUZ_KHPXgucz1sm9iziWnJDty13zNGxoK021ogYjyWbFLBntJIB8zPkNBl9R_5Mpq5PIzskKsTu"/>
+</button>
+</div>
+</div>
+</div>
+<!-- Empty State Card -->
+<div class="md:col-span-2 lg:col-span-3 min-h-[400px] flex flex-col items-center justify-center bg-surface-dark/50 rounded-xl border-2 border-dashed border-white/10 p-8 text-center">
+<span class="material-symbols-outlined !text-6xl text-text-secondary-dark mb-4">confirmation_number</span>
+<p class="text-xl font-bold text-text-primary-dark">No tienes más entradas en esta categoría.</p>
+<p class="text-text-secondary-dark mt-2">¡Explora nuestros eventos para encontrar tu próxima experiencia!</p>
+<button class="mt-6 flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-80 transition-opacity">
+<span class="truncate">Buscar Eventos</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+</div>
+</body></html>

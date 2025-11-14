@@ -44,46 +44,74 @@ export default function EventDetail({ params }: { params: Promise<{ id: string }
   useEffect(() => {
     if (!eventId) return;
     
-    // TODO: Conectar con el backend - GET /api/events/:id
-    // Por ahora datos mock
-    const mockEvent: Event = {
-      id: eventId,
-      name: 'METALLICA M72 WORLD TOUR',
-      description: 'Prepárate para una noche de puro poder y adrenalina con la legendaria banda Metallica. La gira M72 World Tour promete un espectáculo inolvidable con sus más grandes éxitos y nuevo material. Siente la energía de miles de fans vibrando al unísono en el icónico Foro Sol.',
-      imageUrl: 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1200',
-      date: '2024-10-26',
-      time: '21:00',
-      location: 'Foro Sol',
-      address: 'Viad. Río de la Piedad S/N, Granjas México, Iztacalco, 08400 Ciudad de México, CDMX',
-      ageRestriction: '18+',
-      lineup: 'Metallica / Greta Van Fleet / Mammoth WVH',
-      mapUrl: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800',
-      ticketTypes: [
-        {
-          id: 'general',
-          name: 'Acceso General',
-          price: 850,
-          description: 'De pie en la cancha. Vive la experiencia más cerca del escenario.',
-          available: 500
-        },
-        {
-          id: 'vip',
-          name: 'VIP Experience',
-          price: 2500,
-          description: 'Acceso preferencial, zona exclusiva y kit de mercancía oficial.',
-          available: 100
+    // Cargar evento real desde el backend
+    async function loadEvent() {
+      try {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080';
+        const response = await fetch(`${API_URL}/api/eventos/${eventId}`);
+        
+        if (!response.ok) {
+          throw new Error('Evento no encontrado');
         }
-      ]
-    };
-
-    setEvent(mockEvent);
+        
+        const data = await response.json();
+        const eventoData = data.success ? data.data : data;
+        
+        // Mapear datos del backend al formato esperado por el componente
+        const mappedEvent: Event = {
+          id: eventoData.id,
+          name: eventoData.nombre || eventoData.name,
+          description: eventoData.descripcion || eventoData.description || 'Descripción no disponible',
+          imageUrl: eventoData.imagenUrl || eventoData.imagen || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1200',
+          date: eventoData.fecha ? (eventoData.fecha._seconds ? new Date(eventoData.fecha._seconds * 1000).toISOString().split('T')[0] : eventoData.fecha.split('T')[0]) : '2024-01-01',
+          time: eventoData.hora || '20:00',
+          location: eventoData.lugar || eventoData.location || 'Ubicación por confirmar',
+          address: eventoData.direccion || eventoData.address || `${eventoData.lugar || ''}, ${eventoData.ciudad || ''}`,
+          ageRestriction: eventoData.restriccionEdad || '18+',
+          lineup: eventoData.artistas || '',
+          mapUrl: 'https://images.unsplash.com/photo-1524661135-423995f22d0b?w=800',
+          ticketTypes: []
+        };
+        
+        // Mapear tiers a ticketTypes
+        if (eventoData.tiers && Array.isArray(eventoData.tiers)) {
+          mappedEvent.ticketTypes = eventoData.tiers.map((tier: any) => ({
+            id: tier.id,
+            name: tier.nombre,
+            price: tier.precio,
+            description: tier.descripcion || `Acceso ${tier.nombre}`,
+            available: tier.capacidad - (tier.vendidos || 0)
+          }));
+        } else {
+          // Fallback si no hay tiers
+          mappedEvent.ticketTypes = [
+            {
+              id: 'general',
+              name: 'General',
+              price: eventoData.precio || eventoData.precioBase || 50000,
+              description: 'Acceso general al evento',
+              available: eventoData.capacidad || 100
+            }
+          ];
+        }
+        
+        setEvent(mappedEvent);
+        
+        // Inicializar cantidades en 0
+        const initialQuantities: { [key: string]: number } = {};
+        mappedEvent.ticketTypes.forEach(ticket => {
+          initialQuantities[ticket.id] = 0;
+        });
+        setTicketQuantities(initialQuantities);
+        
+      } catch (error) {
+        console.error('Error al cargar evento:', error);
+        // Fallback a datos básicos si falla
+        setEvent(null);
+      }
+    }
     
-    // Inicializar cantidades en 0
-    const initialQuantities: { [key: string]: number } = {};
-    mockEvent.ticketTypes.forEach(ticket => {
-      initialQuantities[ticket.id] = 0;
-    });
-    setTicketQuantities(initialQuantities);
+    loadEvent();
   }, [eventId]);
 
   const updateQuantity = (ticketId: string, delta: number) => {
@@ -104,9 +132,26 @@ export default function EventDetail({ params }: { params: Promise<{ id: string }
   };
 
   const handlePurchase = () => {
-    // TODO: Implementar flujo de compra
+    // Verificar que haya al menos un ticket seleccionado
+    const totalTickets = Object.values(ticketQuantities).reduce((sum, qty) => sum + qty, 0);
+    
+    if (totalTickets === 0) {
+      alert('Por favor selecciona al menos un ticket');
+      return;
+    }
+    
     console.log('Comprar tickets:', ticketQuantities);
-    // Redirigir a checkout o mostrar modal de pago
+    
+    // Construir query params con las cantidades seleccionadas
+    const queryParams = new URLSearchParams();
+    Object.entries(ticketQuantities).forEach(([ticketId, quantity]) => {
+      if (quantity > 0) {
+        queryParams.append(ticketId, quantity.toString());
+      }
+    });
+    
+    // Redirigir a checkout con los parámetros
+    router.push(`/checkout/${eventId}?${queryParams.toString()}`);
   };
 
   if (!event) {

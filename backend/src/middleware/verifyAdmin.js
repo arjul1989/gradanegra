@@ -6,8 +6,21 @@ const { admin } = require('../config/firebase');
  */
 const verifyAdmin = async (req, res, next) => {
   try {
+    // Development bypass: allow X-Dev-Admin: yes to act as an admin when not in production
+    if (process.env.NODE_ENV !== 'production') {
+      const devHeader = req.get('X-Dev-Admin') || req.get('x-dev-admin');
+      if (devHeader && devHeader.toLowerCase() === 'yes') {
+        req.admin = {
+          uid: 'dev-admin',
+          email: 'dev@local',
+          role: 'super_admin'
+        };
+        return next();
+      }
+    }
+
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'Token no proporcionado' });
     }

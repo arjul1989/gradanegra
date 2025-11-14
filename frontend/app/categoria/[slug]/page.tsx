@@ -10,6 +10,7 @@ interface Event {
   date: string;
   price: number;
   image: string;
+  location?: string;
 }
 
 interface Category {
@@ -19,8 +20,10 @@ interface Category {
   events: Event[];
 }
 
-// Mock data - TODO: Reemplazar con llamadas al backend
-const categoriesData: Category[] = [
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+
+// DEPRECATED: Mock data - usando backend real ahora
+const categoriesData_DEPRECATED: Category[] = [
   {
     slug: "rock-underground",
     name: "Noches de Rock Underground",
@@ -215,6 +218,8 @@ const categoriesData: Category[] = [
 export default function CategoriaPage({ params }: { params: Promise<{ slug: string }> }) {
   const [slug, setSlug] = useState<string>("");
   const [category, setCategory] = useState<Category | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     params.then((resolvedParams) => {
@@ -224,34 +229,130 @@ export default function CategoriaPage({ params }: { params: Promise<{ slug: stri
 
   useEffect(() => {
     if (slug) {
-      // TODO: Reemplazar con llamada al backend
-      const foundCategory = categoriesData.find((cat) => cat.slug === slug);
-      setCategory(foundCategory || null);
+      const loadCategoryData = async () => {
+        setLoading(true);
+        setError("");
+        
+        try {
+          // Fetch category info
+          const categoryResponse = await fetch(`${API_URL}/api/categorias`);
+          if (!categoryResponse.ok) {
+            throw new Error('Error al cargar categorías');
+          }
+          
+          const categoriesResponse = await categoryResponse.json();
+          const categoriesData = categoriesResponse.data || categoriesResponse;
+          
+          if (!Array.isArray(categoriesData)) {
+            throw new Error('Formato de respuesta inválido');
+          }
+          
+          const foundCategory = categoriesData.find((cat: any) => cat.slug === slug);
+          
+          if (!foundCategory) {
+            setCategory(null);
+            setLoading(false);
+            return;
+          }
+          
+          // Fetch events for this category
+          const eventsResponse = await fetch(`${API_URL}/api/eventos`);
+          if (!eventsResponse.ok) {
+            throw new Error('Error al cargar eventos');
+          }
+          
+          const eventsResponseData = await eventsResponse.json();
+          const eventsData = eventsResponseData.data || eventsResponseData;
+          
+          if (!Array.isArray(eventsData)) {
+            throw new Error('Formato de respuesta de eventos inválido');
+          }
+          
+          // Filter events by category slug
+          const categoryEvents = eventsData
+            .filter((event: any) => event.category === slug || event.categoria === slug)
+            .map((event: any) => ({
+              id: event.id,
+              title: event.name || event.nombre,
+              date: new Date(event.date || event.proximaFecha || Date.now()).toLocaleDateString('es-MX', { 
+                day: 'numeric', 
+                month: 'short'
+              }),
+              price: event.price || event.precioBase || 0,
+              image: event.image || event.imagen || '/placeholder-event.jpg',
+              location: event.city || event.ciudad || event.location || event.ubicacion || 'Sin ubicación'
+            }));
+          
+          setCategory({
+            slug: foundCategory.slug,
+            name: foundCategory.name || foundCategory.nombre,
+            description: foundCategory.description || foundCategory.descripcion || '',
+            events: categoryEvents
+          });
+          
+        } catch (err: any) {
+          console.error('Error al cargar categoría:', err);
+          setError(err.message || 'Error al cargar la categoría');
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      loadCategoryData();
     }
   }, [slug]);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 dark:bg-slate-950 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+          <p className="text-white text-xl">Cargando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-slate-950 dark:bg-slate-950 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-red-500 text-xl">⚠️ {error}</p>
+          <Link href="/" className="text-white hover:text-primary underline">
+            Volver al inicio
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   if (!category) {
     return (
-      <div className="min-h-screen bg-background-dark flex items-center justify-center">
-        <p className="text-white text-xl">Categoría no encontrada</p>
+      <div className="min-h-screen bg-slate-950 dark:bg-slate-950 flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4">
+          <p className="text-white text-xl">Categoría no encontrada</p>
+          <Link href="/" className="text-white hover:text-primary underline">
+            Volver al inicio
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
+    <div className="relative flex min-h-screen w-full flex-col bg-slate-950">
       {/* Header - Sticky */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-background-dark/80 backdrop-blur-sm">
-        <div className="container mx-auto flex items-center justify-between px-4 md:px-10 py-3 text-white max-w-7xl">
-          <div className="flex items-center gap-4 md:gap-8">
+      <header className="sticky top-0 z-50 w-full border-b border-white/10 bg-slate-950/80 backdrop-blur-sm">
+        <div className="container mx-auto flex items-center justify-between px-3 md:px-10 py-3 text-white max-w-7xl">
+          <div className="flex items-center gap-2 md:gap-8">
             {/* Back Button */}
-            <Link href="/" className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/10 transition-colors">
-              <span className="material-symbols-outlined">arrow_back</span>
+            <Link href="/" className="flex items-center justify-center w-9 h-9 md:w-10 md:h-10 rounded-full hover:bg-white/10 transition-colors">
+              <span className="material-symbols-outlined text-xl md:text-2xl">arrow_back</span>
             </Link>
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 text-white">
-              <div className="size-6 text-primary">
+            <Link href="/" className="flex items-center gap-2 md:gap-3 text-white">
+              <div className="size-5 md:size-6 text-primary">
                 <svg fill="currentColor" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
                   <path
                     clipRule="evenodd"
@@ -260,7 +361,7 @@ export default function CategoriaPage({ params }: { params: Promise<{ slug: stri
                   />
                 </svg>
               </div>
-              <h2 className="text-white text-lg md:text-xl font-bold font-display">Grada Negra</h2>
+              <h2 className="text-white text-base md:text-xl font-bold font-display">Grada Negra</h2>
             </Link>
 
             {/* Navigation - Hidden on mobile */}
@@ -274,70 +375,88 @@ export default function CategoriaPage({ params }: { params: Promise<{ slug: stri
             </nav>
           </div>
 
-          <div className="flex flex-1 justify-end gap-3 md:gap-6">
+          <div className="flex flex-1 justify-end gap-2 md:gap-6">
             {/* Search - Hidden on mobile */}
-            <label className="relative hidden sm:flex flex-col min-w-40 h-10 max-w-64">
-              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+            <label className="relative hidden sm:flex flex-col min-w-40 h-9 md:h-10 max-w-64">
+              <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-white/50 text-lg md:text-xl">
                 search
               </span>
               <input
-                className="flex w-full h-full resize-none rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:border-primary focus:ring-1 focus:ring-primary pl-10 pr-4 text-base outline-none"
+                className="flex w-full h-full resize-none rounded-lg border border-white/20 bg-white/10 text-white placeholder:text-white/50 focus:border-primary focus:ring-1 focus:ring-primary pl-9 md:pl-10 pr-3 md:pr-4 text-sm md:text-base outline-none"
                 placeholder="Buscar eventos..."
               />
             </label>
 
             {/* User Avatar */}
-            <Link href="/perfil" className="bg-primary/20 rounded-full size-10 flex items-center justify-center">
-              <span className="material-symbols-outlined text-primary">person</span>
+            <Link href="/perfil" className="bg-primary/20 rounded-full size-9 md:size-10 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-primary text-xl md:text-2xl">person</span>
             </Link>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto flex flex-col px-4 md:px-10 py-5 max-w-7xl pb-24 md:pb-8">
+      <main className="container mx-auto flex flex-col px-3 md:px-10 py-4 md:py-5 max-w-7xl pb-24 md:pb-8">
         {/* Category Header */}
-        <div className="px-4 pb-6 pt-8">
-          <h1 className="text-white tracking-tight text-3xl md:text-4xl lg:text-5xl font-bold font-display pb-3">
+        <div className="px-2 md:px-4 pb-4 md:pb-6 pt-4 md:pt-8">
+          <h1 className="text-white tracking-tight text-2xl md:text-4xl lg:text-5xl font-bold font-display pb-2 md:pb-3">
             {category.name}
           </h1>
-          <p className="text-white/70 text-base md:text-lg max-w-3xl">
+          <p className="text-white/70 text-sm md:text-lg max-w-3xl">
             {category.description}
           </p>
         </div>
 
         {/* Events Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 p-4">
-          {category.events.map((event) => (
-            <Link key={event.id} href={`/eventos/${event.id}`}>
-              <div className="flex flex-col gap-3 group cursor-pointer">
-                {/* Event Image - Aspect ratio 3:4 (vertical) */}
-                <div className="w-full aspect-[3/4] rounded-lg overflow-hidden relative">
-                  <Image
-                    src={event.image}
-                    alt={event.title}
-                    fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 sm:gap-4 md:gap-6 p-2 sm:p-4">
+          {category.events.length > 0 ? (
+            category.events.map((event) => (
+              <Link key={event.id} href={`/eventos/${event.id.split('-')[0]}`}>
+                <div className="flex flex-col gap-2 sm:gap-3 group cursor-pointer">
+                  {/* Event Image - Aspect ratio 3:4 (vertical) */}
+                  <div className="w-full aspect-[3/4] rounded-lg overflow-hidden relative bg-slate-800">
+                    <Image
+                      src={event.image}
+                      alt={event.title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 20vw"
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
+                  {/* Event Info */}
+                  <div>
+                    <p className="text-white text-sm sm:text-base md:text-lg font-medium leading-tight sm:leading-normal group-hover:text-primary transition-colors line-clamp-2">
+                      {event.title}
+                    </p>
+                    <p className="text-white/60 text-xs sm:text-sm font-normal leading-normal line-clamp-1">
+                      {event.date}
+                    </p>
+                    {event.location && (
+                      <p className="text-white/50 text-xs font-normal leading-normal line-clamp-1">
+                        {event.location}
+                      </p>
+                    )}
+                    <p className="text-primary font-semibold text-xs sm:text-sm mt-1">
+                      {event.price === 0 ? "Gratis" : `$${event.price.toLocaleString('es-MX')}`}
+                    </p>
+                  </div>
                 </div>
-                {/* Event Info */}
-                <div>
-                  <p className="text-white text-base md:text-lg font-medium leading-normal group-hover:text-primary transition-colors line-clamp-2">
-                    {event.title}
-                  </p>
-                  <p className="text-white/60 text-sm font-normal leading-normal">
-                    {event.date} - {event.price === 0 ? "Gratis" : `$${event.price}`}
-                  </p>
-                </div>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full flex flex-col items-center justify-center py-16 text-white/60">
+              <span className="material-symbols-outlined text-6xl mb-4">event_busy</span>
+              <p className="text-xl">No hay eventos disponibles en esta categoría</p>
+              <Link href="/" className="mt-4 text-primary hover:underline">
+                Explorar otras categorías
+              </Link>
+            </div>
+          )}
         </div>
       </main>
 
       {/* Bottom Navigation - Mobile only */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-20 items-center justify-around border-t border-white/10 bg-background-dark/80 backdrop-blur-md">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-20 items-center justify-around border-t border-white/10 bg-slate-950/90 backdrop-blur-md">
         <Link
           href="/"
           className="flex flex-1 flex-col items-center justify-end gap-1 rounded-full py-1 text-zinc-500 dark:text-zinc-400 hover:text-primary transition-colors"

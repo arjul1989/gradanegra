@@ -15,9 +15,9 @@ class Tenant {
     this.settings = data.settings || {
       primaryColor: '#000000',
       secondaryColor: '#ffffff',
-      timezone: 'America/Mexico_City',
-      currency: 'MXN',
-      taxRate: 0.16 // 16% IVA México
+      timezone: 'America/Bogota',
+      currency: 'COP',
+      taxRate: 0.19 // 19% IVA Colombia
     };
     this.contactInfo = data.contactInfo || {
       phone: '',

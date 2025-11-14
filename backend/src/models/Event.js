@@ -1,3 +1,4 @@
+const admin = require('firebase-admin');
 const { db } = require('../config/firebase');
 
 /**
@@ -7,12 +8,21 @@ const { db } = require('../config/firebase');
 class Event {
   constructor(data) {
     this.id = data.id || null;
-    this.tenantId = data.tenantId; // ID del tenant propietario
-    this.name = data.name;
-    this.description = data.description || '';
-    this.date = data.date; // ISO timestamp del evento
+    this.tenantId = data.tenantId || data.comercioId; // ID del tenant propietario
+    
+    // Soporte para campos en inglés y español
+    this.name = data.name || data.nombre;
+    this.nombre = data.nombre || data.name;
+    
+    this.description = data.description || data.descripcion || '';
+    this.descripcion = data.descripcion || data.description || '';
+    
+    this.date = data.date || data.fecha; // ISO timestamp del evento
+    this.fecha = data.fecha || data.date;
+    
     this.endDate = data.endDate || null; // Para eventos de varios días
-    this.venue = data.venue || {
+    
+    this.venue = data.venue || data.lugar || {
       name: '',
       address: '',
       city: '',
@@ -20,14 +30,25 @@ class Event {
       country: 'MX',
       coordinates: null // { lat, lng }
     };
+    this.lugar = data.lugar || data.venue;
+    this.ciudad = data.ciudad || data.venue?.city;
+    this.pais = data.pais || data.venue?.country || 'CO';
+    
     this.status = data.status || 'draft'; // draft, published, active, past, cancelled
-    this.capacity = data.capacity || 1000; // Capacidad máxima total (límite: 1000)
+    
+    this.capacity = data.capacity || data.capacidad || 1000; // Capacidad máxima total (límite: 1000)
+    this.capacidad = data.capacidad || data.capacity || 1000;
+    
     this.tiers = data.tiers || []; // Array de tipos de entrada (max 10)
-    this.images = data.images || {
+    
+    this.images = data.images || data.imagenes || (data.imagen ? { banner: data.imagen, thumbnail: data.imagen } : {
       banner: null,
       thumbnail: null,
       gallery: []
-    };
+    });
+    this.imagen = data.imagen || data.images?.banner;
+    this.imagenes = data.imagenes || data.images;
+    
     this.settings = data.settings || {
       isPublic: true,
       requiresApproval: false,
@@ -40,7 +61,7 @@ class Event {
       checkedInCount: 0
     };
     this.metadata = data.metadata || {
-      category: '', // Música, Deportes, Arte, etc.
+      category: data.categoria || '', // Música, Deportes, Arte, etc.
       tags: [],
       ageRestriction: null // 18+, etc.
     };
@@ -137,13 +158,13 @@ class Event {
 
       if (this.id) {
         // Actualizar evento existente
-        await db.collection('events').doc(this.id).update(eventData);
+        await db.collection('eventos').doc(this.id).update(eventData);
       } else {
         // Crear nuevo evento
         eventData.createdAt = this.createdAt;
         eventData.createdBy = this.createdBy;
 
-        const docRef = await db.collection('events').add(eventData);
+        const docRef = await db.collection('eventos').add(eventData);
         this.id = docRef.id;
       }
 
@@ -154,11 +175,42 @@ class Event {
   }
 
   /**
+   * Actualiza el conteo de vendidos de un tier específico
+   */
+  async updateTierSoldCount(tierId, newVendidos) {
+    try {
+      if (!this.id) {
+        throw new Error('El evento debe tener un ID para actualizar');
+      }
+
+      // Buscar el tier en el array
+      const tierIndex = this.tiers.findIndex(t => t.id === tierId);
+      if (tierIndex === -1) {
+        throw new Error(`Tier ${tierId} no encontrado en el evento`);
+      }
+
+      // Actualizar el tier localmente
+      this.tiers[tierIndex].vendidos = newVendidos;
+      this.updatedAt = admin.firestore.FieldValue.serverTimestamp();
+
+      // Actualizar en Firestore
+      await db.collection('eventos').doc(this.id).update({
+        tiers: this.tiers,
+        updatedAt: this.updatedAt
+      });
+
+      return this;
+    } catch (error) {
+      throw new Error(`Error al actualizar tier vendidos: ${error.message}`);
+    }
+  }
+
+  /**
    * Busca un evento por ID
    */
   static async findById(eventId) {
     try {
-      const doc = await db.collection('events').doc(eventId).get();
+      const doc = await db.collection('eventos').doc(eventId).get();
       
       if (!doc.exists) {
         return null;
@@ -175,7 +227,7 @@ class Event {
    */
   static async list(filters = {}) {
     try {
-      let query = db.collection('events');
+      let query = db.collection('eventos');
 
       // Filtrar por tenant
       if (filters.tenantId) {
@@ -224,7 +276,7 @@ class Event {
       this.status = 'cancelled';
       this.updatedAt = new Date().toISOString();
 
-      await db.collection('events').doc(this.id).update({
+      await db.collection('eventos').doc(this.id).update({
         status: this.status,
         updatedAt: this.updatedAt
       });
@@ -247,7 +299,7 @@ class Event {
       this.stats = { ...this.stats, ...stats };
       this.updatedAt = new Date().toISOString();
 
-      await db.collection('events').doc(this.id).update({
+      await db.collection('eventos').doc(this.id).update({
         stats: this.stats,
         updatedAt: this.updatedAt
       });
@@ -297,15 +349,25 @@ class Event {
     return {
       id: this.id,
       tenantId: this.tenantId,
-      name: this.name,
-      description: this.description,
-      date: this.date,
+      // Soporte para campos en inglés y español
+      name: this.name || this.nombre,
+      nombre: this.nombre || this.name,
+      description: this.description || this.descripcion,
+      descripcion: this.descripcion || this.description,
+      date: this.date || this.fecha,
+      fecha: this.fecha || this.date,
       endDate: this.endDate,
-      venue: this.venue,
+      venue: this.venue || this.lugar,
+      lugar: this.lugar || this.venue,
+      ciudad: this.ciudad,
+      pais: this.pais,
       status: this.status,
-      capacity: this.capacity,
+      capacity: this.capacity || this.capacidad,
+      capacidad: this.capacidad || this.capacity,
       tiers: this.tiers,
-      images: this.images,
+      images: this.images || (this.imagen ? { banner: this.imagen, thumbnail: this.imagen } : null),
+      imagen: this.imagen || this.images?.banner,
+      imagenes: this.imagenes || this.images,
       settings: this.settings,
       stats: this.stats,
       metadata: this.metadata,

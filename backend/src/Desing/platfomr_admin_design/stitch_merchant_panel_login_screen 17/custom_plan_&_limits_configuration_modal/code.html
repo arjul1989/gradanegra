@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Configuración Custom</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+    }
+  </style>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0d59f2",
+            "background-light": "#f5f6f8",
+            "background-dark": "#101622",
+          },
+          fontFamily: {
+            "display": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display antialiased">
+<div class="relative flex min-h-screen items-center justify-center bg-gray-500/70 p-4">
+<!-- Modal -->
+<div class="w-full max-w-2xl rounded-xl bg-background-light dark:bg-background-dark shadow-2xl">
+<div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-700 p-6">
+<div class="flex flex-col gap-1">
+<h2 class="text-xl font-bold text-gray-900 dark:text-white">Configuración Custom</h2>
+<p class="text-sm text-gray-500 dark:text-gray-400">Selecciona un plan y personaliza los valores si es necesario.</p>
+</div>
+<button class="flex h-8 w-8 items-center justify-center rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-800 dark:hover:bg-gray-700 dark:hover:text-gray-200">
+<span class="material-symbols-outlined text-2xl">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-6 p-6">
+<!-- Plan Base Section -->
+<div>
+<h3 class="px-1 pb-2 text-base font-bold text-gray-900 dark:text-white">Plan Base</h3>
+<div class="flex h-11 flex-1 items-center justify-center rounded-lg bg-gray-200 dark:bg-[#282e39] p-1">
+<label class="flex h-full flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium text-gray-500 dark:text-[#9ca6ba] has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-sm dark:has-[:checked]:bg-[#111318] dark:has-[:checked]:text-white">
+<span class="truncate">Free</span>
+<input class="sr-only" name="base-plan" type="radio" value="Free"/>
+</label>
+<label class="flex h-full flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium text-gray-500 dark:text-[#9ca6ba] has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-sm dark:has-[:checked]:bg-[#111318] dark:has-[:checked]:text-white">
+<span class="truncate">Basic</span>
+<input class="sr-only" name="base-plan" type="radio" value="Basic"/>
+</label>
+<label class="flex h-full flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium text-gray-500 dark:text-[#9ca6ba] has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-sm dark:has-[:checked]:bg-[#111318] dark:has-[:checked]:text-white">
+<span class="truncate">Pro</span>
+<input checked="" class="sr-only" name="base-plan" type="radio" value="Pro"/>
+</label>
+<label class="flex h-full flex-1 cursor-pointer items-center justify-center overflow-hidden rounded-md px-2 text-sm font-medium text-gray-500 dark:text-[#9ca6ba] has-[:checked]:bg-white has-[:checked]:text-gray-900 has-[:checked]:shadow-sm dark:has-[:checked]:bg-[#111318] dark:has-[:checked]:text-white">
+<span class="truncate">Enterprise</span>
+<input class="sr-only" name="base-plan" type="radio" value="Enterprise"/>
+</label>
+</div>
+</div>
+<!-- Overrides Section -->
+<div>
+<h3 class="px-1 pb-2 text-base font-bold text-gray-900 dark:text-white">Overrides Personalizados</h3>
+<div class="divide-y divide-gray-200 dark:divide-gray-700 rounded-lg border border-gray-200 dark:border-gray-700">
+<!-- Eventos Override -->
+<div class="p-4 has-[:checked]:bg-gray-50 dark:has-[:checked]:bg-white/5">
+<div class="flex items-center justify-between">
+<div class="flex flex-col justify-center">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Customizar Eventos</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Asignar una cantidad de eventos diferente a la del plan.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-gray-300 dark:bg-[#282e39] p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-[27px] w-[27px] rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="sr-only" id="eventos-toggle" type="checkbox"/>
+</label>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="eventos-base">Plan Base</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-500 shadow-sm focus:border-primary focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 sm:text-sm" id="eventos-base" readonly="" type="text" value="50"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="eventos-custom">Valor Custom</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:disabled:bg-gray-700 dark:disabled:text-gray-500 sm:text-sm" disabled="" id="eventos-custom" placeholder="Ej: 75" type="number"/>
+</div>
+</div>
+</div>
+<!-- Destacados Override -->
+<div class="p-4 has-[:checked]:bg-gray-50 dark:has-[:checked]:bg-white/5">
+<div class="flex items-center justify-between">
+<div class="flex flex-col justify-center">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Customizar Destacados</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Asignar una cantidad de destacados diferente a la del plan.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-gray-300 dark:bg-[#282e39] p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-[27px] w-[27px] rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="sr-only" id="destacados-toggle" type="checkbox"/>
+</label>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="destacados-base">Plan Base</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-500 shadow-sm focus:border-primary focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 sm:text-sm" id="destacados-base" readonly="" type="text" value="10"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="destacados-custom">Valor Custom</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:disabled:bg-gray-700 dark:disabled:text-gray-500 sm:text-sm" disabled="" id="destacados-custom" placeholder="Ej: 15" type="number"/>
+</div>
+</div>
+</div>
+<!-- Comisión Override -->
+<div class="p-4 has-[:checked]:bg-gray-50 dark:has-[:checked]:bg-white/5">
+<div class="flex items-center justify-between">
+<div class="flex flex-col justify-center">
+<p class="text-sm font-medium text-gray-900 dark:text-white">Customizar Comisión</p>
+<p class="text-sm text-gray-500 dark:text-gray-400">Asignar una comisión por venta diferente a la del plan.</p>
+</div>
+<label class="relative flex h-[31px] w-[51px] cursor-pointer items-center rounded-full bg-gray-300 dark:bg-[#282e39] p-0.5 has-[:checked]:justify-end has-[:checked]:bg-primary">
+<div class="h-[27px] w-[27px] rounded-full bg-white shadow-sm transition-transform"></div>
+<input class="sr-only" id="comision-toggle" type="checkbox"/>
+</label>
+</div>
+<div class="mt-4 grid grid-cols-2 gap-4">
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="comision-base">Plan Base (%)</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 bg-gray-100 text-gray-500 shadow-sm focus:border-primary focus:ring-primary dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 sm:text-sm" id="comision-base" readonly="" type="text" value="5"/>
+</div>
+<div>
+<label class="block text-xs font-medium text-gray-500 dark:text-gray-400" for="comision-custom">Valor Custom (%)</label>
+<input class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary focus:ring-primary disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-400 dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:disabled:bg-gray-700 dark:disabled:text-gray-500 sm:text-sm" disabled="" id="comision-custom" placeholder="Ej: 3.5" step="0.1" type="number"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Justificación Section -->
+<div>
+<label class="px-1 pb-2 block text-base font-bold text-gray-900 dark:text-white" for="motivo">Motivo del cambio</label>
+<textarea class="block w-full rounded-lg border-gray-300 shadow-sm focus:border-primary focus:ring-primary dark:border-gray-600 dark:bg-gray-800 dark:text-white sm:text-sm" id="motivo" name="motivo" placeholder="Describe por qué se está aplicando esta configuración especial..." required="" rows="4"></textarea>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="flex items-center justify-end gap-3 border-t border-gray-200 dark:border-gray-700 p-6">
+<button class="rounded-lg px-4 py-2.5 text-sm font-semibold text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">Cancelar</button>
+<button class="rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary/90">Guardar Configuración</button>
+</div>
+</div>
+</div>
+</body></html>

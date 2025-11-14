@@ -42,13 +42,16 @@ export default function ComerciosPage() {
   const loadComercios = async () => {
     try {
       const token = await getToken();
-      if (!token) return;
+      // If there's no token in development, allow dev bypass so local testing
+      // can proceed using the backend `X-Dev-Admin` header. In production we
+      // must require a token.
+      if (!token && process.env.NODE_ENV === 'production') return;
 
       const params: any = { limit: 50 };
       if (statusFilter) params.status = statusFilter;
       if (planFilter) params.tipoPlan = planFilter;
 
-      const data: any = await comerciosAPI.getList(token, params);
+  const data: any = await comerciosAPI.getList(token, params);
       setComercios(data.comercios || []);
     } catch (error) {
       console.error('Error loading comercios:', error);

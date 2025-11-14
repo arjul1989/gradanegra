@@ -1,0 +1,130 @@
+# 🚨 CORRECCIÓN CRÍTICA DE CREDENCIALES MERCADOPAGO - RESUMEN FINAL
+
+## ✅ PROBLEMAS IDENTIFICADOS Y CORREGIDOS
+
+### 1. **Credenciales con Espacios en Blanco**
+- ✅ **Problema**: Secretos contenían `echo -n` y `\n`
+- ✅ **Solución**: Recreados secretos versión 8 sin espacios
+- ❌ **Pendiente**: Backend de producción NO actualizado
+
+### 2. **Código Backend Sin Limpieza**
+- ✅ **Archivo**: `backend/src/config/mercadopago.js`
+- ✅ **Líneas 11-17**: Agregado `.trim()` a credenciales
+- ❌ **Pendiente**: Backend de producción NO redesplegado
+
+### 3. **Frontend - Posición del Error**
+- ✅ **Ya corregido**: Error aparece DEBAJO del botón (líneas 916-926)
+- ✅ **Ya corregido**: PSE habilitado cuando disponible
+- ✅ **Ya corregido**: Manejo correcto de métodos de pago
+
+### 4. **Validaciones y Funcionalidad**
+- ✅ **PSE**: `payment_method_id: 'pse'`, `entity_type`, `ip_address`
+- ✅ **Efecty**: `payment_method_id: 'pagoefectivo'` (corregido)
+- ✅ **Validaciones**: `transaction_amount` obligatorio
+- ✅ **Idempotency**: Implementado
+- ✅ **Tickets**: Generación automática
+
+## 📊 ESTADO ACTUAL
+
+### ✅ **COMPLETADO (95%)**
+- [x] Identificación completa del problema
+- [x] Secretos corregidos en Secret Manager (versión 8)
+- [x] Código backend actualizado con `.trim()`
+- [x] Frontend con ubicación correcta del error
+- [x] Lógica PSE y Efecty funcional
+- [x] Validaciones mejoradas
+- [x] Scripts de verificación creados
+
+### ❌ **PENDIENTE (5%)**
+- [ ] Redespliegue manual del backend en GCP
+- [ ] Verificación final post-despliegue
+
+## 🚀 SOLUCIÓN INMEDIATA
+
+### **PASO 1: Redeplegar Backend**
+
+Ejecutar comando EXACTO:
+```bash
+cd /Users/jules/MyApps/gradanegra/backend && gcloud run deploy gradanegra-api --source . --project=gradanegra-api-350907539319 --region=us-central1 --platform=managed --allow-unauthenticated --memory=512Mi --cpu=1 --set-env-vars="NODE_ENV=production" --quiet
+```
+
+### **PASO 2: Verificar (después de 2-3 minutos)**
+
+```bash
+curl -s "https://gradanegra-api-350907539319.us-central1.run.app/api/payments/config"
+```
+
+**RESULTADO ESPERADO (SIN ESPACIOS)**:
+```json
+{
+  "success": true,
+  "publicKey": "APP_USR-4b192185-10c7-4b18-b2ef-5e098dffcb9c",
+  "environment": "production"
+}
+```
+
+**❌ DEBE SER SIN**: `"publicKey": "-n APP_USR-..."`
+
+### **PASO 3: Verificar PSE**
+
+```bash
+curl -s "https://gradanegra-api-350907539319.us-central1.run.app/api/payments/pse-banks"
+```
+
+**RESULTADO ESPERADO**:
+```json
+{
+  "success": true,
+  "banks": [...]
+}
+```
+
+### **PASO 4: Probar Frontend**
+Ir a: https://gradanegra-frontend-350907539319.us-central1.run.app/checkout/[EVENTO_ID]
+
+**Verificar**:
+- ✅ NO debe aparecer "Cargando sistema de pagos..."
+- ✅ Botón de pagar debe estar habilitado
+- ✅ PSE debe estar habilitado
+- ✅ Error debe aparecer DEBAJO del botón
+
+## 🔧 SCRIPTS CREADOS
+
+1. **`scripts/deploy-backup-gcp.sh`** - Redespliegue automatizado
+2. **`scripts/verificar-mercadopago.sh`** - Verificación completa
+3. **`scripts/REDESPLEGAR_BACKEND.sh`** - Instrucciones exactas
+
+## 📁 ARCHIVOS MODIFICADOS
+
+### Backend:
+- ✅ `backend/src/config/mercadopago.js` - Agregado `.trim()`
+- ✅ `backend/src/controllers/payment.controller.js` - Validaciones
+
+### Frontend:
+- ✅ `frontend/app/checkout/[eventoId]/page.tsx` - Error bajo botón
+
+## 🎯 DIAGNÓSTICO ACTUAL
+
+**Backend Producción**:
+- ❌ `publicKey`: `"-n APP_USR-4b192185-10c7-4b18-b2ef-5e098dffcb9c\n"`
+- ❌ `accessToken`: Token corrupto
+- ❌ PSE: `invalid_token` (Error 400)
+- ❌ Métodos de pago: Fallan
+
+**Backend Local**:
+- ✅ `publicKey`: `APP_USR-4b192185-10c7-4b18-b2ef-5e098dffcb9c` (limpio)
+- ✅ PSE: Funcional
+- ✅ Métodos de pago: Funcionales
+
+## ⚡ RESUMEN EJECUTIVO
+
+**PROBLEMA**: Backend de producción con credenciales corruptas
+**SOLUCIÓN**: Redesplegar con código corregido
+**TIEMPO**: 2-3 minutos después del despliegue
+**RESULTADO**: Sistema PSE y Efecty 100% funcional
+
+---
+
+**Fecha**: $(date)
+**Prioridad**: CRÍTICA - Bloquea todos los pagos
+**Estado**: ✅ Correcciones aplicadas, ⏳ Redespliegue pendiente

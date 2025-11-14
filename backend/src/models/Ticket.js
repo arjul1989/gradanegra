@@ -1,5 +1,5 @@
 const { db } = require('../config/firebase');
-const { generateHash } = require('../utils/crypto');
+const { generateTicketHash } = require('../utils/crypto');
 const { v4: uuidv4 } = require('uuid');
 
 /**
@@ -35,7 +35,7 @@ class Ticket {
     
     // Información de precio
     this.price = data.price || 0;
-    this.currency = data.currency || 'MXN';
+    this.currency = data.currency || 'COP';
     this.fees = data.fees || 0; // Comisiones
     this.taxes = data.taxes || 0; // Impuestos
     this.total = data.total || 0;
@@ -80,14 +80,15 @@ class Ticket {
    */
   async generateSecurityHash() {
     const data = {
-      ticketNumber: this.ticketNumber,
+      id: this.id || this.ticketNumber,
       eventId: this.eventId,
-      tierId: this.tierId,
+      tenantId: this.tenantId,
       buyerEmail: this.buyer.email,
-      createdAt: this.createdAt
+      price: this.price,
+      purchaseDate: this.createdAt
     };
     
-    this.securityHash = generateHash(JSON.stringify(data));
+    this.securityHash = generateTicketHash(data);
     return this.securityHash;
   }
 
@@ -133,7 +134,10 @@ class Ticket {
   async save() {
     const validation = this.validate();
     if (!validation.isValid) {
-      throw new Error(`Validación fallida: ${validation.errors.join(', ')}`);
+      const errorList = validation.errors && validation.errors.length > 0 
+        ? validation.errors.join(', ') 
+        : 'Error de validación desconocido';
+      throw new Error(`Validación fallida: ${errorList}`);
     }
 
     // Generar hash si no existe
@@ -173,13 +177,13 @@ class Ticket {
 
       if (this.id) {
         // Actualizar ticket existente
-        await db.collection('tickets').doc(this.id).update(ticketData);
+        await db.collection('boletos').doc(this.id).update(ticketData);
       } else {
         // Crear nuevo ticket
         ticketData.createdAt = this.createdAt;
         ticketData.expiresAt = this.expiresAt;
 
-        const docRef = await db.collection('tickets').add(ticketData);
+        const docRef = await db.collection('boletos').add(ticketData);
         this.id = docRef.id;
       }
 
@@ -194,7 +198,7 @@ class Ticket {
    */
   static async findById(ticketId) {
     try {
-      const doc = await db.collection('tickets').doc(ticketId).get();
+      const doc = await db.collection('boletos').doc(ticketId).get();
       
       if (!doc.exists) {
         return null;
@@ -211,7 +215,7 @@ class Ticket {
    */
   static async findByTicketNumber(ticketNumber) {
     try {
-      const snapshot = await db.collection('tickets')
+      const snapshot = await db.collection('boletos')
         .where('ticketNumber', '==', ticketNumber)
         .limit(1)
         .get();
@@ -232,7 +236,7 @@ class Ticket {
    */
   static async findByEvent(eventId, filters = {}) {
     try {
-      let query = db.collection('tickets').where('eventId', '==', eventId);
+      let query = db.collection('boletos').where('eventId', '==', eventId);
 
       if (filters.status) {
         query = query.where('status', '==', filters.status);
@@ -263,7 +267,7 @@ class Ticket {
     try {
       // NOTA: Removemos orderBy para evitar requerir índice compuesto
       // El ordenamiento se hace en memoria en el controlador
-      const snapshot = await db.collection('tickets')
+      const snapshot = await db.collection('boletos')
         .where('buyer.email', '==', email)
         .get();
 
@@ -283,7 +287,7 @@ class Ticket {
    */
   static async list(filters = {}) {
     try {
-      let query = db.collection('tickets');
+      let query = db.collection('boletos');
 
       // Filtrar por buyerId
       if (filters.buyerId) {
@@ -351,7 +355,7 @@ class Ticket {
   /**
    * Valida el ticket (check-in)
    */
-  async validate(validatorUserId) {
+  async checkIn(validatorUserId) {
     if (this.isValidated) {
       throw new Error('Este ticket ya ha sido validado');
     }
@@ -360,8 +364,8 @@ class Ticket {
       throw new Error('Este ticket ha sido cancelado');
     }
 
-    if (this.status !== 'confirmed') {
-      throw new Error('Este ticket no está confirmado');
+    if (this.status === 'used') {
+      throw new Error('Este ticket ya fue usado');
     }
 
     this.isValidated = true;
@@ -384,7 +388,7 @@ class Ticket {
     this.status = 'cancelled';
     this.updatedAt = new Date().toISOString();
 
-    await db.collection('tickets').doc(this.id).update({
+    await db.collection('boletos').doc(this.id).update({
       status: this.status,
       updatedAt: this.updatedAt
     });

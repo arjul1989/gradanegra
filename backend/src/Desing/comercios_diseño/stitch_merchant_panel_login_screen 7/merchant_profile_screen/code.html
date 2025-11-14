@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mi Perfil - Grada Negra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+        .material-symbols-outlined.fill {
+            font-variation-settings:
+            'FILL' 1,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="flex h-screen w-64 flex-col bg-white dark:bg-[#111318] p-4 sticky top-0 border-r border-gray-200 dark:border-gray-800">
+<div class="flex flex-col gap-4">
+<div class="flex gap-3 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Grada Negra company logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBUOqTvL9KMz29UVWov87Eapt5CvmWgj8J01ejutGbaudq0xyAc4f47SHqCxFnsJFBKfCQ80M4RkUp2RPb6Zqp8HqDmju39WNAThibn57_ucmBNiDf14KU3CEvVYJq34g2m_9mJsB569ReW2d4Cw0TsLF9MFD5OZgxHne7ZRaNy603aiyBJn4gusywat1-N403cmgwL595HC9BlJOk3kmjQAIN-vLqgMtUz6Pc05WjowvOUvhygFBJSf30pe_MGHtLz5aUgW8mkbHvU");'></div>
+<div class="flex flex-col">
+<h1 class="text-gray-900 dark:text-white text-base font-medium leading-normal">Grada Negra</h1>
+<p class="text-gray-500 dark:text-[#9ca6ba] text-sm font-normal leading-normal">Panel de Admin</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">dashboard</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">calendar_month</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Eventos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">shopping_cart</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Ventas</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">bar_chart</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Reportes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 dark:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined fill text-primary dark:text-white">person</span>
+<p class="text-primary dark:text-white text-sm font-medium leading-normal">Mi Perfil</p>
+</a>
+</nav>
+</div>
+<div class="mt-auto flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">help</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Ayuda</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-primary/20 transition-colors" href="#">
+<span class="material-symbols-outlined text-gray-600 dark:text-white">logout</span>
+<p class="text-gray-700 dark:text-white text-sm font-medium leading-normal">Cerrar Sesión</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8">
+<div class="max-w-4xl mx-auto">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between gap-3 mb-6">
+<h1 class="text-gray-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em] min-w-72">Mi Perfil</h1>
+</div>
+<!-- Tabs -->
+<div class="pb-3">
+<div class="flex border-b border-gray-200 dark:border-[#3b4354] gap-8">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary pb-[13px] pt-4" href="#">
+<p class="text-primary dark:text-white text-sm font-bold leading-normal tracking-[0.015em]">Información del Negocio</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-gray-500 dark:text-[#9ca6ba] pb-[13px] pt-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Branding</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-gray-500 dark:text-[#9ca6ba] pb-[13px] pt-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Redes Sociales</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-gray-500 dark:text-[#9ca6ba] pb-[13px] pt-4 hover:border-gray-300 dark:hover:border-gray-600 transition-colors" href="#">
+<p class="text-sm font-bold leading-normal tracking-[0.015em]">Plan y Facturación</p>
+</a>
+</div>
+</div>
+<!-- Form Section -->
+<div class="mt-6">
+<!-- SectionHeader -->
+<h3 class="text-gray-900 dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] pb-2 pt-4">Información del Negocio</h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 py-4">
+<!-- TextField: Nombre del Negocio -->
+<div class="flex flex-col col-span-2">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-white text-base font-medium leading-normal pb-2">Nombre del Negocio</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3b4354] bg-white dark:bg-[#1b1f27] h-14 placeholder:text-gray-400 dark:placeholder:text-[#9ca6ba] p-[15px] text-base font-normal leading-normal" value="Mi Tienda de Eventos"/>
+</label>
+</div>
+<!-- TextArea: Descripción -->
+<div class="flex flex-col col-span-2">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-white text-base font-medium leading-normal pb-2">Descripción</p>
+<textarea class="form-textarea flex w-full min-w-0 flex-1 resize-y overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3b4354] bg-white dark:bg-[#1b1f27] min-h-32 placeholder:text-gray-400 dark:placeholder:text-[#9ca6ba] p-[15px] text-base font-normal leading-normal">La mejor plataforma para encontrar y comprar boletos para los eventos más emocionantes de Colombia.</textarea>
+</label>
+</div>
+<!-- TextField: Correo -->
+<div class="flex flex-col">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-white text-base font-medium leading-normal pb-2">Correo Electrónico de Contacto</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3b4354] bg-white dark:bg-[#1b1f27] h-14 placeholder:text-gray-400 dark:placeholder:text-[#9ca6ba] p-[15px] text-base font-normal leading-normal" type="email" value="contacto@mitienda.com"/>
+</label>
+</div>
+<!-- TextField: Teléfono -->
+<div class="flex flex-col">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-white text-base font-medium leading-normal pb-2">Teléfono</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3b4354] bg-white dark:bg-[#1b1f27] h-14 placeholder:text-gray-400 dark:placeholder:text-[#9ca6ba] p-[15px] text-base font-normal leading-normal" type="tel" value="+57 300 123 4567"/>
+</label>
+</div>
+<!-- TextField: Dirección -->
+<div class="flex flex-col col-span-2">
+<label class="flex flex-col w-full">
+<p class="text-gray-800 dark:text-white text-base font-medium leading-normal pb-2">Dirección</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-gray-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-gray-300 dark:border-[#3b4354] bg-white dark:bg-[#1b1f27] h-14 placeholder:text-gray-400 dark:placeholder:text-[#9ca6ba] p-[15px] text-base font-normal leading-normal" value="Calle Falsa 123, Bogotá, Colombia"/>
+</label>
+</div>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="flex justify-end gap-4 mt-8 pt-6 border-t border-gray-200 dark:border-[#3b4354]">
+<button class="px-6 py-3 rounded-lg text-sm font-bold bg-gray-200 dark:bg-[#282e39] text-gray-800 dark:text-white hover:bg-gray-300 dark:hover:bg-[#3b4354] transition-colors">Cancelar</button>
+<button class="px-6 py-3 rounded-lg text-sm font-bold bg-primary text-white hover:bg-primary/90 transition-colors">Guardar Cambios</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

@@ -38,7 +38,9 @@ export default function ComercioDetailPage({ params }: { params: Promise<{ id: s
   const loadComercio = async () => {
     try {
       const token = await getToken();
-      if (!token) return;
+      // In production we require a token. In development allow null so the
+      // backend dev-bypass (`X-Dev-Admin`) can be used.
+      if (!token && process.env.NODE_ENV === 'production') return;
 
       const [comercioData, estadisticasData, eventosData] = await Promise.all([
         comerciosAPI.getById(token, id),
@@ -59,7 +61,7 @@ export default function ComercioDetailPage({ params }: { params: Promise<{ id: s
   const handleUpdatePlan = async (data: any) => {
     try {
       const token = await getToken();
-      if (!token) return;
+      if (!token && process.env.NODE_ENV === 'production') return;
 
       await comerciosAPI.updatePlan(token, id, data);
       await loadComercio(); // Reload data
@@ -76,7 +78,7 @@ export default function ComercioDetailPage({ params }: { params: Promise<{ id: s
     
     try {
       const token = await getToken();
-      if (!token) return;
+      if (!token && process.env.NODE_ENV === 'production') return;
 
       await comerciosAPI.updateEstado(token, id, status, motivo || undefined);
       await loadComercio();

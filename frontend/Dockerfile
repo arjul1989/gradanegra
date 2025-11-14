@@ -18,10 +18,8 @@ COPY . .
 # Variables de entorno para build
 ENV NEXT_TELEMETRY_DISABLED=1
 
-# El archivo .env.production ya está copiado con COPY . .
-# Next.js lo leerá automáticamente durante el build
-
 # Build de Next.js con standalone output
+# Next.js leerá automáticamente las variables de .env.production
 RUN npm run build
 
 # Runner

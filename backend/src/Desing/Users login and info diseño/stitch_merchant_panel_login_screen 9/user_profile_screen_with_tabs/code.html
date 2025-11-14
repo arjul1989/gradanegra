@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Perfil de Usuario</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col items-center">
+<div class="flex w-full max-w-5xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+<!-- Profile Header -->
+<div class="mb-8 w-full p-4 @container">
+<div class="flex w-full flex-col gap-6 @[520px]:flex-row @[520px]:items-center @[520px]:justify-between">
+<div class="flex items-center gap-4">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full h-24 w-24 sm:h-32 sm:w-32 flex-shrink-0" data-alt="User avatar with a gradient background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAtT79lvv0AVcmbd5OJzLzvEU8F6otuRJH-N5Q_2lrnMLH_uLN32y2Q_u98003f3jAQLKAgyFAZ1sUvT7FmFB2ItDrgYh4TbCS_HOU3xvOcVZlSR3Ltu_oQ6OWG0SlxeV1sUZtQP6x6j4ezFo8XsZQIU3WbDUul_0Wpe7QJGTGUJzuElcDkY1WYl3nA7_V5L98ri7L6bSRMzurqpveLpqTrYocpYgW-VidhxMwBrUGpoeGX2nrLLLGqqHV7kgENBXpORm6kLl7Z1Y_U");'></div>
+<div class="flex flex-col justify-center">
+<p class="text-slate-900 dark:text-white text-2xl sm:text-3xl font-bold tracking-tight">Elara Vance</p>
+<p class="text-slate-500 dark:text-slate-400 text-base font-normal">elara.vance@email.com</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Tabs -->
+<div class="w-full pb-3">
+<div class="flex border-b border-slate-200 dark:border-slate-800 gap-4 sm:gap-8 px-4">
+<a class="flex flex-col items-center justify-center border-b-[3px] border-primary pb-3 pt-2 text-slate-900 dark:text-white" href="#">
+<p class="text-sm font-bold">Información Personal</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-slate-700 dark:hover:text-slate-300" href="#">
+<p class="text-sm font-bold">Preferencias</p>
+</a>
+<a class="flex flex-col items-center justify-center border-b-[3px] border-b-transparent text-slate-500 dark:text-slate-400 pb-3 pt-2 hover:text-slate-700 dark:hover:text-slate-300" href="#">
+<p class="text-sm font-bold">Seguridad</p>
+</a>
+</div>
+</div>
+<!-- Main Content: Personal Information Form -->
+<div class="w-full flex-1 pt-8">
+<div class="p-4">
+<!-- Page Heading -->
+<div class="flex flex-wrap justify-between gap-3 pb-6">
+<p class="text-slate-900 dark:text-white text-3xl font-bold tracking-tight">Información Personal</p>
+</div>
+<!-- Form -->
+<div class="grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2">
+<!-- Full Name -->
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-white text-base font-medium pb-2" for="full-name">Nombre Completo</label>
+<input class="form-input w-full rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/40 focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-base font-normal" id="full-name" type="text" value="Elara Vance"/>
+</div>
+<!-- Email -->
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-white text-base font-medium pb-2" for="email">Correo Electrónico</label>
+<div class="relative">
+<input class="form-input w-full rounded-lg text-slate-500 dark:text-slate-400 focus:outline-0 border border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-base font-normal cursor-not-allowed" id="email" readonly="" type="email" value="elara.vance@email.com"/>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500">lock</span>
+</div>
+</div>
+<!-- Phone Number -->
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-white text-base font-medium pb-2" for="phone">Número de Teléfono</label>
+<input class="form-input w-full rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/40 focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-base font-normal" id="phone" placeholder="Ej: +1 234 567 890" type="tel"/>
+</div>
+<!-- ID Number -->
+<div class="flex flex-col">
+<label class="text-slate-900 dark:text-white text-base font-medium pb-2" for="id-number">Número de Identificación</label>
+<input class="form-input w-full rounded-lg text-slate-900 dark:text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900/40 focus:border-primary h-12 placeholder:text-slate-400 dark:placeholder:text-slate-500 px-4 text-base font-normal" id="id-number" placeholder="Ej: 12345678A" type="text"/>
+</div>
+</div>
+<!-- Action Buttons -->
+<div class="mt-12 flex flex-col items-center gap-4 border-t border-slate-200 dark:border-slate-800 pt-6 sm:flex-row sm:justify-end">
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-11 px-6 bg-transparent text-slate-700 dark:text-slate-300 text-sm font-bold border border-slate-300 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 sm:w-auto">
+<span>Cancelar</span>
+</button>
+<button class="flex w-full cursor-pointer items-center justify-center rounded-lg h-11 px-6 bg-primary text-white text-sm font-bold hover:bg-primary/90 sm:w-auto">
+<span>Guardar Cambios</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body></html>

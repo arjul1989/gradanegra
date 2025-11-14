@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Merchant Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+<div class="relative flex min-h-screen w-full">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col bg-[#111318] p-4 border-r border-gray-800">
+<div class="flex flex-col gap-4 mb-8">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Grada Negra logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBg9mjSlEYyW5qba08L4yTtJeNfgoNB13P3qcsXztnEpUv56elAtYst0ur2WdFFg9AdjJqRHF9Wa2iiKKNJMhWfTg_QwmHYouvS2-_wGwle6ch0-hgHRLpqqKf30TekET7I_UcefxXMwRV9i5WH3rYJRqwyqPqS_pLcD13DObKr2aO8UzdxX7eU2mlTd84RHg5MxshE2N2KVK0MzO-F5tO6bnivOiCK8jTwLYWKOmNu8k-G8M77v56fnMYCuVHqYWZtvP5BnImTLlEM");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Admin Panel</h1>
+<p class="text-[#9ca6ba] text-sm font-normal leading-normal">Grada Negra</p>
+</div>
+</div>
+</div>
+<nav class="flex flex-col gap-2 flex-grow">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white">dashboard</span>
+<p class="text-white text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">store</span>
+<p class="text-white text-sm font-medium leading-normal">Merchants</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white">credit_card</span>
+<p class="text-white text-sm font-medium leading-normal">Plans</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white">bar_chart</span>
+<p class="text-white text-sm font-medium leading-normal">Reports</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white">settings</span>
+<p class="text-white text-sm font-medium leading-normal">Settings</p>
+</a>
+</nav>
+<div class="flex flex-col gap-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#282e39]" href="#">
+<span class="material-symbols-outlined text-white">help</span>
+<p class="text-white text-sm font-medium leading-normal">Support</p>
+</a>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] w-full mt-2">
+<span class="truncate">Logout</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex-col p-8">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Merchant Management</h1>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] gap-2">
+<span class="material-symbols-outlined">add</span>
+<span class="truncate">New Merchant</span>
+</button>
+</div>
+<!-- Search and Filters -->
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+<!-- SearchBar -->
+<div class="flex-grow">
+<label class="flex flex-col min-w-40 h-12 w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+<div class="text-[#9ca6ba] flex bg-[#282e39] items-center justify-center pl-4 rounded-l-lg">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-r-lg text-white focus:outline-0 focus:ring-0 border-none bg-[#282e39] h-full placeholder:text-[#9ca6ba] px-4 text-base font-normal leading-normal" placeholder="Search by name or email..." value=""/>
+</div>
+</label>
+</div>
+<!-- Chips/Filters -->
+<div class="flex gap-3 flex-wrap items-center">
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] pl-4 pr-3">
+<p class="text-white text-sm font-medium leading-normal">Plan: All</p>
+<span class="material-symbols-outlined text-white text-xl">expand_more</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] pl-4 pr-3">
+<p class="text-white text-sm font-medium leading-normal">Status: All</p>
+<span class="material-symbols-outlined text-white text-xl">expand_more</span>
+</button>
+<button class="flex h-12 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] pl-4 pr-3">
+<p class="text-white text-sm font-medium leading-normal">City: All</p>
+<span class="material-symbols-outlined text-white text-xl">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Table -->
+<div class="w-full @container">
+<div class="overflow-hidden rounded-lg border border-[#3b4354] bg-[#111318]">
+<div class="overflow-x-auto">
+<table class="w-full min-w-[1024px]">
+<thead>
+<tr class="bg-[#1b1f27]">
+<th class="px-4 py-3 text-left w-12"></th>
+<th class="px-4 py-3 text-left text-white w-[320px] text-sm font-medium leading-normal">Merchant</th>
+<th class="px-4 py-3 text-left text-white w-40 text-sm font-medium leading-normal">Plan</th>
+<th class="px-4 py-3 text-left text-white w-40 text-sm font-medium leading-normal">Status</th>
+<th class="px-4 py-3 text-left text-white w-48 text-sm font-medium leading-normal">Event Limits</th>
+<th class="px-4 py-3 text-left text-white w-48 text-sm font-medium leading-normal">Current Sales</th>
+<th class="px-4 py-3 text-left text-white w-40 text-sm font-medium leading-normal">Actions</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-t border-t-[#3b4354]">
+<td class="px-4 py-2 h-[72px]">
+<div class="size-2.5 rounded-full bg-green-500" data-alt="Active status indicator dot"></div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10" data-alt="Arena Shows logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuALMnJee_Q-nXooZRYTQFt3B1r09sKW8kXGx0ySM5JKt5A3jjTjJF0Eh8uUc4FdxlKvLEevkaYWTlSiPAeohY__CkEZw1vXKNudJliDQp0hEfocfQdlemNsLQMk2F7GRcYAC8zseEDIT_4XuTgr2U3EZkRomVhe1wMPOZ787BFDye87B9GDhwGhbsZjT-WZlG-vBZKounVNcByt9149GCqIkSvTlJzmVl_aLwaygouk-2WBvsHuTH_lq3NmcphrypUTC_bonnavBVBt");'></div>
+<div>
+<p class="text-white text-sm font-medium">Arena Shows</p>
+<p class="text-[#9ca6ba] text-sm">contact@arenashows.com</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<span class="inline-flex items-center rounded-md bg-blue-500/20 px-2.5 py-1 text-xs font-semibold text-blue-400">Pro</span>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Active</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">50 / 100</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-white text-sm font-medium">$15,400.00</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-t border-t-[#3b4354]">
+<td class="px-4 py-2 h-[72px]">
+<div class="size-2.5 rounded-full bg-red-500" data-alt="Inactive status indicator dot"></div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10" data-alt="Teatro Central logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuD73JR8vhyuAFP-yK1eQ7L4oVVFpzH4YJewqp_Fmi7oKnxFUbQa5rhSS0jtRLXbB7Z18MciYYuMzA7mGo24lNsEb_csNKx5fIadT6H9uT0F6YeroJF8RFx1Q-E7X_UdnyBrHPe4B3TqyaXiLK3Hn1TrbT2AqDqiAEmadbhiw8c-5n9mHdCC3_Q1-dOrVUtrEgUsMAKWnMEbdb4WC9Tbm_angOrPQ3520i5gp5ggqIcRZtVcS9ddNBfWyhPns9Otpwp0CwqAmVQNsM0d");'></div>
+<div>
+<p class="text-white text-sm font-medium">Teatro Central</p>
+<p class="text-[#9ca6ba] text-sm">info@teatrocentral.co</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<span class="inline-flex items-center rounded-md bg-purple-500/20 px-2.5 py-1 text-xs font-semibold text-purple-400">Basic</span>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Inactive</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">10 / 10</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-white text-sm font-medium">$2,300.50</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-t border-t-[#3b4354]">
+<td class="px-4 py-2 h-[72px]">
+<div class="size-2.5 rounded-full bg-yellow-500" data-alt="Pending status indicator dot"></div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10" data-alt="Music Fest Org logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAkayrKZdrLDRN8ZcGx9CG_1CpLiRalsPD60UtkUqfyN5_ybb98-NjI94Q4Qgl0wXOgjcHbInYaQ2BY4_UuD8qwFl-vyM6rTk-MF8Fzt8ynXMu8DID5lc4MhEW7b8dSB5ALqu8-SlilaTji-qQG0Ab-hqbCF0wrK8GKCxjw5jU3aXuzC1j2UmK7jeMECtoO5bdAP6uJCRBMlzc7RiE41oZExWH0zCkryUfDUp_uL9nClBuJFl1IVfIOfgkREUmMmUTX_kLmrRXAuZrb");'></div>
+<div>
+<p class="text-white text-sm font-medium">Music Fest Org</p>
+<p class="text-[#9ca6ba] text-sm">organizers@musicfest.com</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<span class="inline-flex items-center rounded-md bg-blue-500/20 px-2.5 py-1 text-xs font-semibold text-blue-400">Pro</span>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Pending</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">0 / 100</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-white text-sm font-medium">$0.00</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-t border-t-[#3b4354]">
+<td class="px-4 py-2 h-[72px]">
+<div class="size-2.5 rounded-full bg-green-500" data-alt="Active status indicator dot"></div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10" data-alt="The Local Venue logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAm6ddy592eYjN4N_8kKpWJV_PnDOyKZT_bEMduRBYdfCoK1cA7e9WK8da9gOWvOxDykdAJh2EAzPSbkXFetQD6YjRQYvw5yTb_xuUlcNlKdDD_aTYGSf_KOr5x4Rh_YeYBXEsvKI48E7_w9ZiZGZyjzuipzODOw8u240RBu99Z2zwWTX6UZY8NujP_C1cW7xshsP2LFfXzLmwM6QrlmugFiROxFNzLCdLplJFq854iYtZcQITrTphyV_0cLyKSINZU7h0VqkJT1S0f");'></div>
+<div>
+<p class="text-white text-sm font-medium">The Local Venue</p>
+<p class="text-[#9ca6ba] text-sm">bookings@thelocal.venue</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<span class="inline-flex items-center rounded-md bg-purple-500/20 px-2.5 py-1 text-xs font-semibold text-purple-400">Basic</span>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Active</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">8 / 10</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-white text-sm font-medium">$5,820.00</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-t border-t-[#3b4354]">
+<td class="px-4 py-2 h-[72px]">
+<div class="size-2.5 rounded-full bg-green-500" data-alt="Active status indicator dot"></div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-3">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full w-10" data-alt="City Stadium Events logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBWjn39dPMRp2nKl4_QYGjgActcUH7xg9vrdHjjoUcOSwkqmJTa9m1x9eIumKUI0dMEcwgSDItPlXTANf66kvUDk7sFv6y1yEXoSuMbzuMnMBmjBsiqUkgUkEkOqFnuhzXOwgcEal1lcHcjby6XvsHEV1KeQ0tcO0RmPq7KPZDv8TrYmRtqGBV9QsLzdlzLW6FqO256bUnnv8YNQ9Dz-BeAPnVeeKHKr9B-1Cf7zE7_yXnfcXAl9VR44L5JO-KokI2Emm92_QY-rcYj");'></div>
+<div>
+<p class="text-white text-sm font-medium">City Stadium Events</p>
+<p class="text-[#9ca6ba] text-sm">admin@citystadium.gov</p>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<span class="inline-flex items-center rounded-md bg-yellow-500/20 px-2.5 py-1 text-xs font-semibold text-yellow-400">Enterprise</span>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Active</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-[#9ca6ba] text-sm">Unlimited</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<p class="text-white text-sm font-medium">$88,950.00</p>
+</td>
+<td class="px-4 py-2 h-[72px]">
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">edit</span></button>
+<button class="p-2 rounded-md hover:bg-[#282e39] text-[#9ca6ba] hover:text-white"><span class="material-symbols-outlined text-xl">settings</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex justify-between items-center mt-6">
+<p class="text-sm text-[#9ca6ba]">Showing 1 to 5 of 25 results</p>
+<div class="flex items-center gap-2">
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-[#282e39] disabled:opacity-50" disabled="">
+<span class="material-symbols-outlined text-white">chevron_left</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white text-sm font-bold">1</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#282e39] text-white text-sm">2</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#282e39] text-white text-sm">3</button>
+<span class="text-white">...</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-[#282e39] text-white text-sm">5</button>
+<button class="flex items-center justify-center p-2 rounded-lg hover:bg-[#282e39]">
+<span class="material-symbols-outlined text-white">chevron_right</span>
+</button>
+</div>
+</div>
+</main>
+</div>
+</body></html>

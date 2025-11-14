@@ -6,14 +6,15 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./contexts/**/*.{js,ts,jsx,tsx,mdx}", // Añadido
   ],
   theme: {
     extend: {
       colors: {
-        primary: "#ffffff",
+        primary: "#0d59f2",
         "primary-dark": "#f20d33",
-        "background-light": "#f3f4f6",
-        "background-dark": "#111111",
+        "background-light": "#f5f6f8",
+        "background-dark": "#101622",
         "card-light": "#ffffff",
         "card-dark": "#1f1f1f",
         "text-light": "#1f2937",
@@ -31,10 +32,10 @@ const config: Config = {
         display: ["var(--font-inter)", "system-ui", "sans-serif"],
       },
       borderRadius: {
-        DEFAULT: "0.75rem",
-        lg: "0.75rem",
-        xl: "1rem",
-        "2xl": "1.25rem",
+        DEFAULT: "0.5rem",
+        lg: "0.5rem",
+        xl: "0.75rem",
+        "2xl": "1rem",
         full: "9999px",
       },
       spacing: {

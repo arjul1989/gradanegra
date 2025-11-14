@@ -2,7 +2,6 @@
 node_modules/
 npm-debug.log
 yarn-error.log
-# package-lock.json - NECESARIO para Docker build
 
 # Archivos de desarrollo
 .env
@@ -17,9 +16,10 @@ logs/
 .gitignore
 .github/
 
-# Archivos de Cloud Build
-# cloudbuild.yaml
-# Dockerfile - NECESARIO para Cloud Build
+# Archivos de Cloud Build (NECESARIOS para deployment)
+cloudbuild.yaml
+Dockerfile
+.gcloudignore
 
 # Archivos de prueba
 __tests__/
@@ -34,19 +34,38 @@ temp/
 *.swp
 *.bak
 
-# Scripts locales
+# Scripts locales y configuración (NO incluir en build)
 scripts/
 *.sh
+.deployment-config
+Makefile
+verify-deployment.sh
+deploy-robust.sh
 
 # Archivos de configuración local
 .vscode/
 .idea/
 *.sublime-*
 
-# Archivos de documentación
+# Archivos de documentación (NO incluir en build)
 README.md
 CHANGELOG.md
 docs/
+DEPLOYMENT_SYSTEM_DOCS.md
 
 # Credenciales (se manejan con Secret Manager)
 *credentials*.json
+
+# Archivos de Firebase (configuración local)
+firebase.json
+firestore.indexes.json
+
+# Scripts de desarrollo (NO incluir en build)
+check-*.js
+test-*.js
+seed-*.js
+generate-*.js
+create-*.js
+update-*.js
+fix-*.js
+run-*.js

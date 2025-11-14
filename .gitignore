@@ -85,3 +85,9 @@ Thumbs.db
 # Secrets
 secrets/
 credentials/
+firebase-credentials.json
+*-credentials.json
+
+# Documentos con credenciales sensibles
+SOLUCION_MCP_MERCADOPAGO.md
+*_CREDENCIALES*.md

@@ -17,8 +17,8 @@ interface AuthContextType {
   user: User | null;
   loading: boolean;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
+  signUp: (email: string, password: string, displayName: string) => Promise<{ user: User }>;
+  signInWithGoogle: () => Promise<any>;
   signOut: () => Promise<void>;
 }
 
@@ -26,7 +26,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   loading: true,
   signIn: async () => {},
-  signUp: async () => {},
+  signUp: async () => ({ user: {} as User }),
   signInWithGoogle: async () => {},
   signOut: async () => {},
 });
@@ -38,7 +38,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Set up auth state listener
     const unsubscribe = onAuthStateChanged(auth, (user) => {
+      console.log('🔄 Auth state changed:', user?.email || 'No user');
       setUser(user);
       setLoading(false);
     });
@@ -58,16 +60,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName });
+      // Retornar el userCredential para poder enviar email de verificación
+      return userCredential;
     } catch (error: any) {
-      throw new Error(error.message || 'Error al crear cuenta');
+      throw error; // Throw original error to preserve error codes
     }
   };
 
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      console.log('✅ Login exitoso con Google:', result.user.email);
+      return result;
     } catch (error: any) {
+      console.error('❌ Error en signInWithGoogle:', error);
       throw new Error(error.message || 'Error al iniciar sesión con Google');
     }
   };

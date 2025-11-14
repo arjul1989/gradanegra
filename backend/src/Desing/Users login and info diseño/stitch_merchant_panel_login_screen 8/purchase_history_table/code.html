@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra - Historial de Compras</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+<div class="flex h-full flex-1">
+<!-- SideNavBar -->
+<aside class="flex w-64 flex-col bg-white/5 dark:bg-background-dark/30 p-4 border-r border-white/10">
+<div class="flex h-full flex-col justify-between">
+<div class="flex flex-col gap-6">
+<div class="flex items-center gap-3 p-2">
+<div class="flex items-center justify-center size-10 bg-primary rounded-lg text-white font-black text-2xl">GN</div>
+<h2 class="text-white text-xl font-bold">Grada Negra</h2>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<p class="text-sm font-medium leading-normal">Mi Perfil</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-white/70 hover:bg-white/5 hover:text-white transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">confirmation_number</span>
+<p class="text-sm font-medium leading-normal">Mis Boletos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20 text-primary" href="#">
+<span class="material-symbols-outlined !font-bold" style="font-variation-settings: 'FILL' 1;">receipt_long</span>
+<p class="text-sm font-medium leading-normal text-white">Historial de Compras</p>
+</a>
+</div>
+</div>
+<div class="border-t border-white/10 pt-4">
+<div class="flex gap-3 items-center">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="User avatar with a colorful gradient background" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA1yszU683qW9xPYrGOxNc_X1C8LKZgQxbljKPHTGBN9vMkCZ-Mk-1Hpn_yWZrjUkgp4UOkIRq6ktbawlNyACN52ZCPqYWxd6-Q29Bvi40oQjSZQEbEXhmOoZelYaggKyhKj3SOuh3dow8fPPfSvm4oor0slAc65Fq2HgOOgtnWxrih4nUcxRpW6kdD9xvpi4bo6AgqlmYjyAg1xMOE5OHpgZEJnHyqkhKeJi9OUndmpcItQOZrHtWYdSSEZCQlrYTmk69WHx4zW21o");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Usuario</h1>
+<p class="text-white/60 text-sm font-normal leading-normal">usuario@email.com</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8">
+<div class="flex flex-col gap-8 max-w-7xl mx-auto">
+<!-- PageHeading -->
+<div>
+<p class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Historial de Compras</p>
+</div>
+<!-- Filters Section -->
+<div class="bg-white/5 dark:bg-background-dark/30 p-6 rounded-xl border border-white/10">
+<div class="flex flex-col gap-4">
+<div class="flex flex-wrap items-end gap-4">
+<!-- TextField for Date Range -->
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-white text-sm font-medium leading-normal pb-2">Desde</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#3b4354] bg-[#1b1f27] h-12 placeholder:text-[#9ca6ba] px-4 text-base font-normal leading-normal" placeholder="dd/mm/aaaa" type="date" value=""/>
+</label>
+<label class="flex flex-col min-w-40 flex-1">
+<p class="text-white text-sm font-medium leading-normal pb-2">Hasta</p>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-white focus:outline-0 focus:ring-2 focus:ring-primary/50 border border-[#3b4354] bg-[#1b1f27] h-12 placeholder:text-[#9ca6ba] px-4 text-base font-normal leading-normal" placeholder="dd/mm/aaaa" type="date" value=""/>
+</label>
+<div class="flex-1 min-w-40">
+<!-- Chips for Status -->
+<p class="text-white text-sm font-medium leading-normal pb-2">Estado de la compra</p>
+<div class="flex gap-2 flex-wrap">
+<div class="flex h-8 cursor-pointer shrink-0 items-center justify-center gap-x-2 rounded-lg bg-primary pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Todos</p>
+</div>
+<div class="flex h-8 cursor-pointer shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] hover:bg-primary/50 transition-colors pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Completado</p>
+</div>
+<div class="flex h-8 cursor-pointer shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] hover:bg-primary/50 transition-colors pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Pendiente</p>
+</div>
+<div class="flex h-8 cursor-pointer shrink-0 items-center justify-center gap-x-2 rounded-lg bg-[#282e39] hover:bg-primary/50 transition-colors pl-4 pr-4">
+<p class="text-white text-sm font-medium leading-normal">Cancelado</p>
+</div>
+</div>
+</div>
+</div>
+<!-- ButtonGroup -->
+<div class="flex flex-1 gap-3 flex-wrap justify-start pt-2">
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="truncate">Aplicar Filtros</span>
+</button>
+<button class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-transparent text-white/70 hover:bg-white/10 hover:text-white transition-colors text-sm font-bold leading-normal tracking-[0.015em]">
+<span class="truncate">Limpiar Filtros</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Data Table -->
+<div class="overflow-x-auto bg-white/5 dark:bg-background-dark/30 rounded-xl border border-white/10">
+<table class="w-full text-left text-sm text-white/80">
+<thead class="border-b border-white/10 text-xs uppercase text-white/60">
+<tr>
+<th class="px-6 py-4" scope="col">Fecha de compra</th>
+<th class="px-6 py-4" scope="col">Evento</th>
+<th class="px-6 py-4 text-center" scope="col">Boletos</th>
+<th class="px-6 py-4" scope="col">Total pagado</th>
+<th class="px-6 py-4" scope="col">Método de pago</th>
+<th class="px-6 py-4" scope="col">Status</th>
+<th class="px-6 py-4" scope="col"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-white/10 hover:bg-white/5">
+<td class="px-6 py-4 text-white">15/07/2024</td>
+<td class="px-6 py-4 font-medium text-white">Concierto de Rock Nacional</td>
+<td class="px-6 py-4 text-center text-white">2</td>
+<td class="px-6 py-4 text-white">$1,200.00 MXN</td>
+<td class="px-6 py-4 text-white">Tarjeta de Crédito •••• 1234</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-xs font-medium text-green-400">Completado</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-white font-bold text-sm">Ver Boletos</button>
+</td>
+</tr>
+<tr class="border-b border-white/10 hover:bg-white/5">
+<td class="px-6 py-4 text-white">10/06/2024</td>
+<td class="px-6 py-4 font-medium text-white">Final de Fútbol Liga MX</td>
+<td class="px-6 py-4 text-center text-white">4</td>
+<td class="px-6 py-4 text-white">$3,500.00 MXN</td>
+<td class="px-6 py-4 text-white">PayPal</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-green-500/20 px-3 py-1 text-xs font-medium text-green-400">Completado</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-white font-bold text-sm">Ver Boletos</button>
+</td>
+</tr>
+<tr class="border-b border-white/10 hover:bg-white/5">
+<td class="px-6 py-4 text-white">05/05/2024</td>
+<td class="px-6 py-4 font-medium text-white">Festival de Música Electrónica</td>
+<td class="px-6 py-4 text-center text-white">1</td>
+<td class="px-6 py-4 text-white">$850.00 MXN</td>
+<td class="px-6 py-4 text-white">Tarjeta de Crédito •••• 5678</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-red-500/20 px-3 py-1 text-xs font-medium text-red-400">Cancelado</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-white font-bold text-sm">Ver Boletos</button>
+</td>
+</tr>
+<tr class="hover:bg-white/5">
+<td class="px-6 py-4 text-white">20/04/2024</td>
+<td class="px-6 py-4 font-medium text-white">Obra de Teatro Clásico</td>
+<td class="px-6 py-4 text-center text-white">2</td>
+<td class="px-6 py-4 text-white">$900.00 MXN</td>
+<td class="px-6 py-4 text-white">Tarjeta de Débito •••• 9012</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center rounded-full bg-yellow-500/20 px-3 py-1 text-xs font-medium text-yellow-400">Pendiente</span>
+</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary hover:text-white font-bold text-sm">Ver Boletos</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<nav aria-label="Table navigation" class="flex items-center justify-between pt-4">
+<span class="text-sm font-normal text-white/60">Mostrando <span class="font-semibold text-white">1-4</span> de <span class="font-semibold text-white">10</span></span>
+<ul class="inline-flex -space-x-px text-sm h-8">
+<li>
+<a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-white/60 bg-white/5 border border-white/10 rounded-s-lg hover:bg-white/10 hover:text-white" href="#">Anterior</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-primary border border-primary hover:bg-primary/90" href="#">1</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-white/60 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white" href="#">2</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-white/60 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white" href="#">3</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-white/60 bg-white/5 border border-white/10 rounded-e-lg hover:bg-white/10 hover:text-white" href="#">Siguiente</a>
+</li>
+</ul>
+</nav>
+</div>
+</main>
+</div>
+</div>
+</body></html>

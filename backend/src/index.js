@@ -33,6 +33,28 @@ app.use((req, res, next) => {
   next();
 });
 
+// Development-only auth header logger for troubleshooting missing tokens
+if (process.env.NODE_ENV !== 'production') {
+  app.use('/api/admin', (req, res, next) => {
+    try {
+      const authHeader = req.get('authorization') || req.get('Authorization');
+      const devHeader = req.get('X-Dev-Admin') || req.get('x-dev-admin');
+      // Only log presence and a short preview to avoid leaking full tokens
+      logger.info('DEV_AUTH_CHECK', {
+        path: req.path,
+        method: req.method,
+        authPresent: !!authHeader,
+        authPreview: authHeader ? `${authHeader.slice(0, 16)}...` : null,
+        xDevAdminPresent: !!devHeader
+      });
+    } catch (e) {
+      // don't break request flow if logging fails
+      logger.warn('DEV_AUTH_CHECK_FAILED', { error: e && e.message });
+    }
+    next();
+  });
+}
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({
@@ -45,7 +67,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/auth', require('./routes/auth.routes'));
 app.use('/api/tenants', require('./routes/tenant.routes'));
-app.use('/api/users', require('./routes/user.routes'));
+// app.use('/api/users', require('./routes/user.routes')); // OLD - usando users.routes en línea 67
 app.use('/api/events', require('./routes/event.routes'));
 app.use('/api/tickets', require('./routes/ticket.routes'));
 app.use('/api/validate', require('./routes/validation.routes'));
@@ -68,10 +90,16 @@ app.use('/api/users', require('./routes/users.routes'));
 app.use('/api/boletos', require('./routes/boletos-user.routes'));
 app.use('/api/compras', require('./routes/compras-user.routes'));
 
+// Pagos - Payment Routes
+app.use('/api/payments', require('./routes/payment.routes'));
+
 // Panel de Administrador - Admin Routes
 app.use('/api/admin/dashboard', require('./routes/admin/dashboard.routes'));
 app.use('/api/admin/comercios', require('./routes/admin/comercios.routes'));
 app.use('/api/admin/reportes', require('./routes/admin/reportes.routes'));
+
+// Panel de Administrador - Payments Admin Routes
+app.use('/api/payments-admin', require('./routes/payments-admin.routes'));
 
 // 404 handler
 app.use((req, res) => {

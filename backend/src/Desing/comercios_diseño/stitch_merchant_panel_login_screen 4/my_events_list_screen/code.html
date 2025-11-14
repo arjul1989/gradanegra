@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mis Eventos - Grada Negra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="w-64 flex-shrink-0 bg-[#111318] p-4 flex flex-col justify-between">
+<div class="flex flex-col gap-8">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Grada Negra company logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuA4hyba2o0aerzUEIAZi9WqfDqIVnVQ2AwoRAipj-cArUvZWOSe-Fclb6TctxaJvbyYxwhQhYqZnol33F6wwQLoIreFyKQVj_BjYODQvZNnAGIz3kapNSGOcnnJjPM6accmVaA21CsArRziSXcYkwVazOXDZG24q8HsekcNzGuIOsUY1nBMMWu_SZQxK9LMU0CmbguFeYbUiwiEMw0xEByWlZ7nOyUtCoWI119jCQI9StetHa74EFGU8RGB4xlgsCKL-P8j0ydimO1p");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Grada Negra</h1>
+<p class="text-[#9ca6ba] text-sm font-normal leading-normal">Panel de Aliado</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2">
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<p class="text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary text-white" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">event</span>
+<p class="text-sm font-medium leading-normal">Mis Eventos</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">analytics</span>
+<p class="text-sm font-medium leading-normal">Analytics</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">campaign</span>
+<p class="text-sm font-medium leading-normal">Marketing</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<p class="text-sm font-medium leading-normal">Configuración</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">help_center</span>
+<p class="text-sm font-medium leading-normal">Ayuda</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/70 hover:text-white hover:bg-[#282e39] rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">logout</span>
+<p class="text-sm font-medium leading-normal">Cerrar Sesión</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-6 lg:p-10">
+<div class="mx-auto max-w-7xl">
+<!-- PageHeading -->
+<div class="flex flex-wrap justify-between items-center gap-4 mb-8">
+<h1 class="text-slate-900 dark:text-white text-3xl font-bold leading-tight tracking-[-0.015em]">Mis Eventos</h1>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-primary/90 transition-colors">
+<span class="material-symbols-outlined !text-base">add_circle</span>
+<span class="truncate">Crear Nuevo Evento</span>
+</button>
+</div>
+<!-- Toolbar & Filters -->
+<div class="flex flex-col md:flex-row gap-4 mb-6">
+<!-- SearchBar -->
+<div class="flex-1">
+<label class="flex flex-col w-full">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-10 bg-white dark:bg-[#1C2433]">
+<div class="text-slate-400 dark:text-slate-500 flex items-center justify-center pl-3">
+<span class="material-symbols-outlined">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden text-slate-900 dark:text-white focus:outline-0 focus:ring-0 border-none bg-transparent h-full placeholder:text-slate-400 dark:placeholder:text-slate-500 px-2 text-sm font-normal leading-normal" placeholder="Buscar por nombre..." value=""/>
+</div>
+</label>
+</div>
+<!-- Chips/Filters -->
+<div class="flex gap-3 flex-wrap items-center">
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-[#1C2433] pl-4 pr-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<p class="text-sm font-medium leading-normal">Ciudad</p>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</button>
+<button class="flex h-10 shrink-0 items-center justify-center gap-x-2 rounded-lg bg-white dark:bg-[#1C2433] pl-4 pr-2 text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+<p class="text-sm font-medium leading-normal">Estado</p>
+<span class="material-symbols-outlined text-slate-400">expand_more</span>
+</button>
+</div>
+</div>
+<!-- Events Table -->
+<div class="bg-white dark:bg-[#1C2433] rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left text-slate-500 dark:text-slate-400">
+<thead class="text-xs text-slate-700 dark:text-slate-300 uppercase bg-slate-50 dark:bg-slate-800">
+<tr>
+<th class="px-6 py-3" scope="col">Evento</th>
+<th class="px-6 py-3" scope="col">Ciudad</th>
+<th class="px-6 py-3" scope="col">Estado</th>
+<th class="px-6 py-3" scope="col">Tickets Vendidos / Total</th>
+<th class="px-6 py-3" scope="col">Ingresos</th>
+<th class="px-6 py-3 text-center" scope="col">Acciones</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<th class="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap" scope="row">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-md object-cover" data-alt="Concert with lights and crowd" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz6AjjHYhf5SoIBL8R2_UFzTHujDQ6T60m8mkMgzAX5w91WCiQfMs2c-wan1EoWsiDY_KkKaWuSXMQYn6ETFXJiABx-ec7rmk_RbSsYL4b-NBsec9kDFQyedmpwGVnG-yZ-jbbmvaFfHFhXKnee8fqCqtaWBGaWN7MPiArMR7KXBphwluo5jNObOdtAYA_y5wvWrYIcqb-rzwquiVcGCLisFCZEdBb7bh_Z1MBqxOH7qMFwKLuXUbg711bpaU_FNnVjfMtRFfVV6c3"/>
+<span>Festival Estéreo Picnic 2024</span>
+</div>
+</th>
+<td class="px-6 py-4">Bogotá D.C.</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300">
+<span class="size-1.5 inline-block bg-green-500 rounded-full"></span>
+                                            Activo
+                                        </span>
+</td>
+<td class="px-6 py-4">780 / 1500</td>
+<td class="px-6 py-4">$250,000,000 COP</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center items-center gap-2">
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">pause_circle</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<th class="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap" scope="row">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-md object-cover" data-alt="Electronic music festival" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDArWHD3gQcb-by-nW0_OIgVu7UXAP3a7DrSJnsDmZHvVRoxb73xI87YX0XcS1kDc63EvDz4QjgoMQcApWA6AOaUbQv_Lincaj_I0y_vRdIuACrZV-oNDR01H8pkpp0vAxIJUKXLteJoeTk5C3VOhTdnaygVuKQDZ8PsuEBEnjehz85cPRZlAofm_9NmIspM2hw0A9dMEE2CTOu6lZoHKG7sHM1Npw3KNsllYEXCZor_gSj1DDMa35lo7Upcmc5OXyEPXUlw9VDa6b9"/>
+<span>Medellín Style Fest</span>
+</div>
+</th>
+<td class="px-6 py-4">Medellín</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300">
+<span class="size-1.5 inline-block bg-orange-500 rounded-full"></span>
+                                            Pausado
+                                        </span>
+</td>
+<td class="px-6 py-4">520 / 1000</td>
+<td class="px-6 py-4">$85,000,000 COP</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center items-center gap-2">
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">play_circle</span></button>
+</div>
+</td>
+</tr>
+<tr class="border-b border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<th class="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap" scope="row">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-md object-cover" data-alt="Food festival with people" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYr4XE7_OidYP9wlc1of4Qi3UNSKumHeb3bEJxzQ4GyeJsj4_1mIf19bCixxIj02C4IQa8P1_QcnMDuYmbHvqajsnk8sApN6Hqdg46gvBvHuEItIUQ7PTcqeV0hpDSV0qjiQBO0Kuce82WEv1AkhwWDse2us7Pn1aVL9YR2ujjc7ccMJLAEF3nuBWpbyyu58J8Pt72FX_wE_btFIkDyHgTP0Nf4dxGT3ByQDWz4ve957YcBoJpF68EXLr8m75jVt107bFFhqmMTeLP"/>
+<span>Sabor Barranquilla</span>
+</div>
+</th>
+<td class="px-6 py-4">Barranquilla</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-300">
+<span class="size-1.5 inline-block bg-slate-500 rounded-full"></span>
+                                            Finalizado
+                                        </span>
+</td>
+<td class="px-6 py-4">1200 / 1200</td>
+<td class="px-6 py-4">$150,000,000 COP</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center items-center gap-2">
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">delete</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+<th class="px-6 py-4 font-medium text-slate-900 dark:text-white whitespace-nowrap" scope="row">
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-md object-cover" data-alt="Theater stage with red curtains" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCf7Au8fhuq9-WKrEPAIhHXP-85BUe3JdBYC9EruZpHKL2Wk8j273zISMLr5qICpu7j28N0i3gbyeaAO4WKu7PHgzMfl9-jUAV0EY9cfoQruykkFK_NOaaXCS1EHg3Rk1EOxBI91811m_-eFCRL4-sbHSPNlYAQ8AM_Jc4c2cWq3NSKtG1InVmuGConZ33gAUDwzusEZwkO9rNrDCRUZbUs3WDuGFjIOV-B254hvCYMDhnqrAHjyrd2be5eQZJTNGUwki_XftiqvVsl"/>
+<span>Obra de Teatro: El Método</span>
+</div>
+</th>
+<td class="px-6 py-4">Cali</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 py-1 px-2.5 rounded-full text-xs font-medium bg-slate-200 text-slate-800 dark:bg-slate-700 dark:text-slate-300">
+<span class="size-1.5 inline-block bg-slate-500 rounded-full"></span>
+                                            Borrador
+                                        </span>
+</td>
+<td class="px-6 py-4">0 / 300</td>
+<td class="px-6 py-4">$0 COP</td>
+<td class="px-6 py-4 text-center">
+<div class="flex justify-center items-center gap-2">
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">visibility</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">edit</span></button>
+<button class="p-2 rounded-md hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 transition-colors"><span class="material-symbols-outlined">publish</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Pagination -->
+<nav aria-label="Table navigation" class="flex items-center justify-between pt-6">
+<span class="text-sm font-normal text-slate-500 dark:text-slate-400">Mostrando <span class="font-semibold text-slate-900 dark:text-white">1-4</span> de <span class="font-semibold text-slate-900 dark:text-white">100</span></span>
+<ul class="inline-flex items-center -space-x-px">
+<li>
+<a class="flex items-center justify-center h-9 px-3 ml-0 leading-tight text-slate-500 bg-white border border-slate-300 rounded-l-lg hover:bg-slate-100 hover:text-slate-700 dark:bg-[#1C2433] dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white" href="#">Anterior</a>
+</li>
+<li>
+<a class="flex items-center justify-center h-9 px-4 leading-tight text-slate-500 bg-white border border-slate-300 hover:bg-slate-100 hover:text-slate-700 dark:bg-[#1C2433] dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white" href="#">1</a>
+</li>
+<li>
+<a class="flex items-center justify-center h-9 px-4 leading-tight text-primary bg-primary/20 border border-primary hover:bg-primary/30 dark:border-slate-700 dark:text-white dark:bg-primary" href="#">2</a>
+</li>
+<li>
+<a class="flex items-center justify-center h-9 px-4 leading-tight text-slate-500 bg-white border border-slate-300 rounded-r-lg hover:bg-slate-100 hover:text-slate-700 dark:bg-[#1C2433] dark:border-slate-700 dark:text-slate-400 dark:hover:bg-slate-700 dark:hover:text-white" href="#">Siguiente</a>
+</li>
+</ul>
+</nav>
+</div>
+</main>
+</div>
+</body></html>

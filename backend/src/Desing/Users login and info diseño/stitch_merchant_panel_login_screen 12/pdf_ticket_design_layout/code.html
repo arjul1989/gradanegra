@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Grada Negra Ticket</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d59f2",
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden" style='font-family: Inter, "Noto Sans", sans-serif;'>
+<div class="layout-container flex h-full grow flex-col">
+<div class="px-4 sm:px-8 md:px-20 lg:px-40 flex flex-1 justify-center py-5">
+<div class="layout-content-container flex flex-col max-w-[960px] flex-1 bg-white" style="box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
+<!-- Header with Logo -->
+<header class="flex justify-center p-8 border-b border-gray-200">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-black text-3xl">local_activity</span>
+<span class="text-2xl font-bold text-black">GRADA NEGRA</span>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex flex-col items-center p-8">
+<!-- QR Code Section -->
+<div class="flex w-full flex-col items-center justify-center bg-white p-4">
+<div class="w-full max-w-[300px] gap-1 overflow-hidden bg-white @[480px]:gap-2 aspect-square rounded-lg flex">
+<div class="w-full bg-center bg-no-repeat bg-cover aspect-auto rounded-none flex-1" data-alt="A large, scannable QR code for event entry." style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDKFD7ADjAFOvyMw9ztSkP1Oey9ESLOJTPEKLXjZZ2IBdBGYzTQuhyGhmVwEn5PqIJilWA0zb3XL3bn5wYTFbXho7OGrYRKNBEHGEBl7AOvDT6Xc-lONGDXEd1TJ78czTiRvs7Rk7YmEe5CXDAXT9dxiKnteB_LboO9eFfJUXh5WfcmHKbVvDeOjKsXrqsOikGue2BR1IeRfwT2DuuZNVIU9xLytySTorjo-uuYYl7VniF9TD5eV9TN3Fy1aBb0USKgaBDindpOo3as");'></div>
+</div>
+<p class="text-[#111318] text-base font-medium leading-normal pb-3 pt-4 px-4 text-center">Scan at entry</p>
+</div>
+<!-- Event Details Section -->
+<div class="w-full text-center mt-6">
+<h1 class="text-[#111318] tracking-tight text-[32px] font-bold leading-tight px-4 text-center pb-2 pt-6">Music Fest 2024</h1>
+<p class="text-[#333333] text-lg font-normal leading-normal px-4">Saturday, August 24, 2024, 7:00 PM</p>
+<p class="text-[#333333] text-lg font-normal leading-normal px-4">Grand Park Arena, 123 Music Lane, Downtown</p>
+</div>
+<!-- Divider -->
+<div class="w-full max-w-lg border-b border-gray-200 my-10"></div>
+<!-- Ticket Holder & Details Section -->
+<div class="w-full max-w-lg grid grid-cols-1 sm:grid-cols-2 gap-8 text-left">
+<div>
+<h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">TICKET HOLDER</h2>
+<p class="text-lg text-[#111318] mt-1">Alex Doe</p>
+</div>
+<div>
+<h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">ORDER NUMBER</h2>
+<p class="text-lg text-[#111318] mt-1">#A5B2C3D4E5</p>
+</div>
+<div>
+<h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">TICKET TIER</h2>
+<p class="text-lg text-[#111318] mt-1">General Admission</p>
+</div>
+<div>
+<h2 class="text-sm font-semibold text-gray-500 uppercase tracking-wider">PRICE</h2>
+<p class="text-lg text-[#111318] mt-1">$75.00 USD</p>
+</div>
+</div>
+</main>
+<!-- Footer Section -->
+<footer class="mt-auto p-8 bg-gray-50 border-t border-gray-200">
+<div class="text-center">
+<h3 class="font-semibold text-gray-800 mb-2">Important Information</h3>
+<p class="text-xs text-gray-600 max-w-xl mx-auto">
+                                This ticket is non-refundable and valid for one entry only. The barcode allows one entry per scan. Unauthorized duplication of this ticket may prevent your admittance to the event. For full terms and conditions, please visit our website.
+                            </p>
+<p class="text-xs text-gray-600 mt-4">
+                                Contact Support: support@gradanegra.com | www.gradanegra.com
+                            </p>
+</div>
+</footer>
+</div>
+</div>
+</div>
+</div>
+</body></html>

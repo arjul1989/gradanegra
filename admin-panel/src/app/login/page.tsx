@@ -6,7 +6,7 @@ import { useState, FormEvent } from 'react';
 import { LogIn } from 'lucide-react';
 
 export default function LoginPage() {
-  const { signIn } = useAuth();
+  const { signIn, signInWithGoogle } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +23,19 @@ export default function LoginPage() {
       router.push('/dashboard');
     } catch (err: any) {
       setError(err.message || 'Error al iniciar sesión');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogle = async () => {
+    setError('');
+    setLoading(true);
+    try {
+      await signInWithGoogle();
+      router.push('/dashboard');
+    } catch (err: any) {
+      setError(err.message || 'Error al iniciar sesión con Google');
     } finally {
       setLoading(false);
     }
@@ -87,6 +100,16 @@ export default function LoginPage() {
               {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
             </button>
           </form>
+
+          <div className="mt-4">
+            <button
+              onClick={handleGoogle}
+              disabled={loading}
+              className="w-full bg-white/5 hover:bg-white/10 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Iniciando...' : 'Continuar con Google'}
+            </button>
+          </div>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-400">

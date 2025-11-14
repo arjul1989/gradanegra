@@ -23,12 +23,10 @@ interface Ticket {
     location: string;
     venue: string;
   };
-}
-
-interface Achievement {
-  id: string;
-  name: string;
-  image: string;
+  tierName?: string;
+  ticketNumber?: string;
+  price?: number;
+  currency?: string;
 }
 
 function MisBoletosContent() {
@@ -36,10 +34,6 @@ function MisBoletosContent() {
   const [tickets, setTickets] = useState<Ticket[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [stats, setStats] = useState({
-    eventsAttended: 0,
-    badgesEarned: 0,
-  });
   const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
@@ -68,26 +62,57 @@ function MisBoletosContent() {
         const ticketsData = response.data || [];
         
         const transformedTickets = ticketsData.map((ticket: any) => {
-          // Convertir Firestore Timestamp a Date
-          const eventDate = ticket.event?.date?._seconds 
-            ? new Date(ticket.event.date._seconds * 1000)
-            : new Date(ticket.createdAt._seconds * 1000);
+          console.log('🔍 Processing ticket:', ticket);
           
-          return {
-            id: ticket.ticketNumber, // Usar ticketNumber como id
-            eventName: ticket.event?.name || 'Evento',
-            eventImage: ticket.event?.images?.banner || ticket.event?.images?.thumbnail || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=300&fit=crop',
+          // Convertir Firestore Timestamp a Date
+          let eventDate: Date;
+          
+          if (ticket.event?.fecha) {
+            // Si tiene fecha en el evento
+            if (typeof ticket.event.fecha === 'string') {
+              eventDate = new Date(ticket.event.fecha);
+            } else if (ticket.event.fecha._seconds) {
+              eventDate = new Date(ticket.event.fecha._seconds * 1000);
+            } else {
+              eventDate = new Date(); // Fallback a hoy
+            }
+          } else if (ticket.createdAt) {
+            // Si no, usar fecha de creación del ticket
+            if (typeof ticket.createdAt === 'string') {
+              eventDate = new Date(ticket.createdAt);
+            } else if (ticket.createdAt._seconds) {
+              eventDate = new Date(ticket.createdAt._seconds * 1000);
+            } else {
+              eventDate = new Date();
+            }
+          } else {
+            // Fallback: asumir que es próximo
+            eventDate = new Date();
+            eventDate.setDate(eventDate.getDate() + 30); // 30 días en el futuro
+          }
+          
+          const status = eventDate > new Date() ? 'upcoming' : 'past';
+          console.log('📅 Event date:', eventDate, '| Status:', status);
+          
+          const transformed = {
+            id: ticket.ticketNumber || ticket.id,
+            eventName: ticket.event?.nombre || ticket.event?.name || 'Evento',
+            eventImage: ticket.event?.imagen || ticket.event?.images?.banner || ticket.event?.images?.thumbnail || 'https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=400&h=300&fit=crop',
             date: eventDate.toISOString(),
-            location: ticket.event?.venue || 'Ubicación',
-            status: eventDate > new Date() ? 'upcoming' : 'past',
+            location: ticket.event?.ciudad || ticket.event?.ubicacion || ticket.event?.venue || 'Ubicación',
+            status: status,
             event: ticket.event,
             ticketNumber: ticket.ticketNumber,
             price: ticket.price,
-            currency: ticket.currency,
+            currency: ticket.currency || 'COP',
+            tierName: ticket.metadata?.tierName || ticket.tierName || ticket.tier?.name || ticket.tier?.nombre || ticket.tier?.metadata?.name
           };
+          
+          console.log('✅ Transformed ticket:', transformed);
+          return transformed;
         });
 
-        console.log('✨ Transformed tickets:', transformedTickets);
+        console.log('✨ All transformed tickets:', transformedTickets);
         setTickets(transformedTickets);
       } catch (error: any) {
         console.error('❌ Error loading tickets:', error);
@@ -100,40 +125,6 @@ function MisBoletosContent() {
 
     loadTickets();
   }, [user, authLoading]);
-
-  // Mock achievements (puedes reemplazar con datos reales después)
-  const achievements: Achievement[] = [
-    {
-      id: "1",
-      name: "Pionero Musical",
-      image: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=200&h=200&fit=crop",
-    },
-    {
-      id: "2",
-      name: "Explorador Urbano",
-      image: "https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=200&h=200&fit=crop",
-    },
-    {
-      id: "3",
-      name: "Fanático del Deporte",
-      image: "https://images.unsplash.com/photo-1546519638-68e109498ffc?w=200&h=200&fit=crop",
-    },
-    {
-      id: "4",
-      name: "Amante del Teatro",
-      image: "https://images.unsplash.com/photo-1503095396549-807759245b35?w=200&h=200&fit=crop",
-    },
-    {
-      id: "5",
-      name: "Alma de la Fiesta",
-      image: "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=200&h=200&fit=crop",
-    },
-    {
-      id: "6",
-      name: "Festivalero",
-      image: "https://images.unsplash.com/photo-1459749411175-04bf5292ceea?w=200&h=200&fit=crop",
-    },
-  ];
 
   const filteredTickets = tickets.filter((ticket) => ticket.status === filter);
 
@@ -152,142 +143,160 @@ function MisBoletosContent() {
   }
 
   return (
-    <div className="relative flex min-h-screen w-full flex-col bg-background-dark">
+    <div className="min-h-screen bg-[#F9FAFB] text-gray-800 dark:bg-[#0B1120] dark:text-gray-200">
       <Navbar />
 
-      {/* Main Content */}
-      <main className="flex flex-1 justify-center px-4 py-6 sm:px-6 lg:px-8 pb-20 md:pb-8">
-        <div className="flex w-full max-w-7xl flex-col gap-6">
-          {/* Error Message */}
+      <main className="px-4 py-8 sm:px-6 lg:px-8 pb-20 md:pb-8">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-8">
           {error && (
-            <div className="rounded-lg bg-red-900/20 border border-red-900/50 p-3">
-              <p className="text-red-400 text-sm">
+            <div className="rounded-lg border border-red-200 bg-red-100/60 p-4 text-red-700 dark:border-red-900/60 dark:bg-red-900/20 dark:text-red-200">
+              <p className="text-sm font-medium">
                 <span className="font-semibold">Error:</span> {error}
               </p>
             </div>
           )}
 
-          {/* Stats Section */}
-          <section className="grid grid-cols-2 gap-3">
-            <div className="flex flex-col gap-1 rounded-xl bg-card-dark p-4 border border-white/5">
-              <p className="text-white/50 text-sm font-medium">Eventos Asistidos</p>
-              <p className="text-white text-3xl font-bold">{stats.eventsAttended}</p>
+          <header className="space-y-3">
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white sm:text-4xl">
+              Mis Boletos
+            </h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 sm:text-base">
+              Aquí encontrarás todas tus entradas. Accede rápidamente a los detalles del evento, tu código QR y un resumen del tipo de ticket que compraste.
+            </p>
+            <div className="mt-4 flex items-center space-x-2 rounded-lg bg-gray-200 p-1 text-sm font-medium text-gray-600 dark:bg-gray-800 dark:text-gray-300 sm:max-w-xs">
+              <button
+                onClick={() => setFilter("upcoming")}
+                className={`flex-1 rounded-md px-4 py-2 transition-colors ${
+                  filter === "upcoming"
+                    ? "bg-primary text-white shadow"
+                    : "hover:bg-gray-300 dark:hover:bg-gray-700"
+                }`}
+              >
+                Próximos
+              </button>
+              <button
+                onClick={() => setFilter("past")}
+                className={`flex-1 rounded-md px-4 py-2 transition-colors ${
+                  filter === "past"
+                    ? "bg-primary text-white shadow"
+                    : "hover:bg-gray-300 dark:hover:bg-gray-700"
+                }`}
+              >
+                Pasados
+              </button>
             </div>
-            <div className="flex flex-col gap-1 rounded-xl bg-card-dark p-4 border border-white/5">
-              <p className="text-white/50 text-sm font-medium">Insignias Ganadas</p>
-              <p className="text-white text-3xl font-bold">{stats.badgesEarned}</p>
-            </div>
-          </section>
+          </header>
 
-          {/* Achievements Section */}
-          <section>
-            <h2 className="text-white text-lg font-bold mb-3">
-              Logros Recientes
-            </h2>
-            <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-              {achievements.map((achievement) => (
-                <div key={achievement.id} className="flex flex-col items-center gap-1.5">
-                  <div className="relative size-20 rounded-full overflow-hidden border-2 border-white/10">
-                    <Image
-                      src={achievement.image}
-                      alt={achievement.name}
-                      fill
-                      className="object-cover"
-                    />
-                    <div className="absolute inset-0 bg-black/30"></div>
-                  </div>
-                  <p className="text-white/70 text-xs font-medium text-center line-clamp-2">{achievement.name}</p>
-                </div>
-              ))}
+          {filteredTickets.length === 0 ? (
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center dark:border-gray-700 dark:bg-gray-900/40">
+              <span className="material-symbols-outlined text-5xl text-gray-400 dark:text-gray-600 mb-3">
+                confirmation_number
+              </span>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                No tienes boletos {filter === "upcoming" ? "próximos" : "pasados"}.
+              </p>
             </div>
-          </section>
-
-          {/* Tickets Section */}
-          <section className="flex flex-col gap-4">
-            <h2 className="text-white text-lg font-bold">Mis Boletos</h2>
-            
-            {/* Filter Tabs */}
-            <div className="flex justify-start">
-              <div className="flex h-9 items-center rounded-lg bg-card-dark p-1 border border-white/5">
-                <button
-                  onClick={() => setFilter("upcoming")}
-                  className={`flex h-full items-center justify-center rounded-md px-4 text-sm font-semibold transition-all ${
-                    filter === "upcoming"
-                      ? "bg-primary text-white shadow-lg shadow-primary/30"
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  Próximos
-                </button>
-                <button
-                  onClick={() => setFilter("past")}
-                  className={`flex h-full items-center justify-center rounded-md px-4 text-sm font-semibold transition-all ${
-                    filter === "past" 
-                      ? "bg-primary text-white shadow-lg shadow-primary/30" 
-                      : "text-white/60 hover:text-white"
-                  }`}
-                >
-                  Pasados
-                </button>
-              </div>
-            </div>
-
-            {/* Tickets Grid */}
-            {filteredTickets.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-12 text-center">
-                <span className="material-symbols-outlined text-6xl text-white/20 mb-3">confirmation_number</span>
-                <p className="text-white/60 text-sm">No tienes boletos {filter === 'upcoming' ? 'próximos' : 'pasados'}</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {filteredTickets.map((ticket) => (
+          ) : (
+            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {filteredTickets.map((ticket) => {
+                const isVip =
+                  ticket.tierName?.toLowerCase().includes("vip") ||
+                  ticket.tierName?.toLowerCase().includes("premium");
+                return (
                   <div
                     key={ticket.id}
-                    className="flex flex-col overflow-hidden rounded-lg bg-card-dark border border-white/5 hover:border-primary/30 transition-all cursor-pointer group"
+                    className="flex h-full flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-md transition-shadow duration-300 hover:shadow-lg dark:border-gray-800 dark:bg-gray-800/60"
                   >
-                    {/* Ticket Image */}
-                    <div className="relative aspect-[16/9] w-full overflow-hidden">
-                      <Image 
-                        src={ticket.eventImage} 
-                        alt={ticket.eventName} 
-                        fill 
-                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                    <div className="relative h-40 w-full">
+                      <Image
+                        src={ticket.eventImage}
+                        alt={ticket.eventName}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        className="object-cover"
                       />
                     </div>
 
-                    {/* Ticket Info */}
-                    <div className="flex flex-col gap-3 p-4">
-                      <div className="flex flex-col gap-1.5">
-                        <h3 className="text-base font-bold text-white line-clamp-2 group-hover:text-primary transition-colors">{ticket.eventName}</h3>
-                        <div className="flex items-center gap-1.5 text-white/50">
-                          <span className="material-symbols-outlined text-sm">calendar_today</span>
-                          <p className="text-xs font-medium">{new Date(ticket.date).toLocaleDateString('es-MX', { day: 'numeric', month: 'short' })}</p>
+                    <div className="flex flex-1 flex-col p-5">
+                      <div className="flex items-start justify-between gap-3">
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white leading-tight">
+                            {ticket.eventName}
+                          </h3>
+                          <p className="mt-1 text-xs font-medium text-gray-500 dark:text-gray-400">
+                            Ticket #{ticket.ticketNumber}
+                          </p>
                         </div>
-                        <div className="flex items-center gap-1.5 text-white/50">
-                          <span className="material-symbols-outlined text-sm">location_on</span>
-                          <p className="text-xs font-medium line-clamp-1">{ticket.location}</p>
-                        </div>
+                        {ticket.tierName && (
+                          <span
+                            className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                              isVip
+                                ? "bg-yellow-400 text-yellow-900"
+                                : "bg-primary/15 text-primary"
+                            }`}
+                          >
+                            {ticket.tierName}
+                          </span>
+                        )}
                       </div>
-                      <Link href={`/ticket/${ticket.id}`} className="w-full">
-                        <button className="flex h-9 w-full items-center justify-center rounded-lg bg-primary px-4 text-sm font-semibold text-white transition-all hover:bg-primary/90 shadow-lg shadow-primary/20">
-                          Ver Ticket
-                        </button>
-                      </Link>
+
+                      <div className="mt-4 space-y-3 text-sm text-gray-600 dark:text-gray-300">
+                        <div className="flex items-center">
+                          <span className="material-symbols-outlined mr-2 text-lg text-gray-400 dark:text-gray-500">
+                            calendar_today
+                          </span>
+                          <span>
+                            {new Date(ticket.date).toLocaleString("es-CO", {
+                              weekday: "short",
+                              day: "numeric",
+                              month: "short",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="material-symbols-outlined mr-2 text-lg text-gray-400 dark:text-gray-500">
+                            location_on
+                          </span>
+                          <span>{ticket.location}</span>
+                        </div>
+                        {ticket.price && (
+                          <div className="flex items-center">
+                            <span className="material-symbols-outlined mr-2 text-lg text-gray-400 dark:text-gray-500">
+                              payments
+                            </span>
+                            <span>
+                              {new Intl.NumberFormat("es-CO", {
+                                style: "currency",
+                                currency: ticket.currency || "COP",
+                                maximumFractionDigits: 0,
+                              }).format(ticket.price)}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="mt-auto pt-4">
+                        <Link href={`/ticket/${ticket.id}`}>
+                          <button className="w-full rounded-lg bg-primary py-2.5 text-sm font-semibold text-white transition-colors duration-300 hover:bg-blue-700">
+                            Ver Ticket
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </section>
+                );
+              })}
+            </div>
+          )}
         </div>
       </main>
 
-      {/* Bottom Navigation - Mobile only */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-30 flex h-16 items-center justify-around border-t border-white/5 bg-card-dark/95 backdrop-blur-md shadow-2xl">
+      <nav className="fixed bottom-0 left-0 right-0 z-30 flex h-16 items-center justify-around border-t border-gray-200 bg-white/80 backdrop-blur dark:border-gray-800 dark:bg-gray-900/80 md:hidden">
         <Link
           href="/"
-          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors"
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-gray-500 transition-colors hover:text-primary dark:text-gray-400 dark:hover:text-primary"
         >
           <span className="material-symbols-outlined text-xl">home</span>
           <p className="text-xs font-medium">Inicio</p>
@@ -308,7 +317,7 @@ function MisBoletosContent() {
 
         <Link
           href="/perfil"
-          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-white/50 hover:text-primary transition-colors"
+          className="flex flex-1 flex-col items-center justify-center gap-0.5 py-2 text-gray-500 transition-colors hover:text-primary dark:text-gray-400 dark:hover:text-primary"
         >
           <span className="material-symbols-outlined text-xl">person</span>
           <p className="text-xs font-medium">Perfil</p>

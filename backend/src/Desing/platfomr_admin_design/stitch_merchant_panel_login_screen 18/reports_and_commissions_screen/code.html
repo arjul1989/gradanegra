@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Reporte Financiero - Grada Negra</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#34D399", // Vibrant Green
+                        "secondary": "#3B82F6", // Cool Blue
+                        "background-light": "#f5f6f8",
+                        "background-dark": "#1F2937",
+                        "surface-dark": "#374151"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+          font-variation-settings:
+          'FILL' 0,
+          'wght' 400,
+          'GRAD' 0,
+          'opsz' 24
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-[#E5E7EB]">
+<div class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="flex-shrink-0 w-64 bg-[#111318] p-4 flex flex-col justify-between">
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-3 px-2">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Grada Negra logo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBchVKLV0V3dZyfh5VFMrvCEBQ-Nu-sOJ89RYXCDfBR2-Z06cPTxwynq5gL4Llf4tl_QxFEdLSY2APxkEqJ5gycQCjo1nPKEdx-gryxIvzPW4Bs-skKpRXMwKQaSnkcYlDbHBVCVuQRfl2xKcUmB6OJ-438XlcTAiW7tljsnK8SxBo7_I9GVNvwyhbk87WR25TbZ-T6C3B8rGRzGXVIVYGfE5b9kLvjNTem7Vb8-puwROvTe76Yvj0VkEHg_SiN7ZVpc78A7DyXtFI-");'></div>
+<div class="flex flex-col">
+<h1 class="text-white text-base font-medium leading-normal">Grada Negra</h1>
+<p class="text-[#9CA3AF] text-sm font-normal leading-normal">Admin Panel</p>
+</div>
+</div>
+<nav class="flex flex-col gap-2 mt-4">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">grid_view</span>
+<p class="text-white text-sm font-medium leading-normal">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-dark" href="#">
+<span class="material-symbols-outlined text-primary text-[24px]">monitoring</span>
+<p class="text-primary text-sm font-medium leading-normal">Reportes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">storefront</span>
+<p class="text-white text-sm font-medium leading-normal">Merchants</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">confirmation_number</span>
+<p class="text-white text-sm font-medium leading-normal">Planes</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">settings</span>
+<p class="text-white text-sm font-medium leading-normal">Configuración</p>
+</a>
+</nav>
+</div>
+<div class="flex flex-col gap-1">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">help</span>
+<p class="text-white text-sm font-medium leading-normal">Ayuda</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-surface-dark transition-colors" href="#">
+<span class="material-symbols-outlined text-white text-[24px]">logout</span>
+<p class="text-white text-sm font-medium leading-normal">Cerrar Sesión</p>
+</a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 p-8 overflow-y-auto">
+<div class="max-w-7xl mx-auto">
+<!-- PageHeading -->
+<header class="flex flex-wrap justify-between items-center gap-4 mb-6">
+<h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Reporte Financiero</h1>
+<div class="flex items-center gap-3">
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-surface-dark text-white text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-lg mr-2">download</span>
+<span class="truncate">Exportar CSV</span>
+</button>
+<button class="flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-80 transition-opacity">
+<span class="material-symbols-outlined text-lg mr-2">picture_as_pdf</span>
+<span class="truncate">Exportar PDF</span>
+</button>
+</div>
+</header>
+<!-- Filters Section -->
+<div class="bg-surface-dark rounded-xl p-4 mb-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+<div class="flex flex-col gap-2">
+<label class="text-[#9CA3AF] text-xs font-bold uppercase" for="date-range">Rango de Fechas</label>
+<div class="flex items-center h-10 px-3 bg-[#1F2937] rounded-lg">
+<span class="material-symbols-outlined text-[#9CA3AF] text-xl">calendar_month</span>
+<p class="text-white text-sm ml-2">Jul 5, 2024 - Jul 30, 2024</p>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#9CA3AF] text-xs font-bold uppercase" for="filter-merchant">Filtrar por Merchant</label>
+<button class="flex h-10 items-center justify-between rounded-lg bg-[#1F2937] px-3 w-full text-left" id="filter-merchant">
+<p class="text-white text-sm font-medium leading-normal">Todos los Merchants</p>
+<span class="material-symbols-outlined text-[#9CA3AF]">arrow_drop_down</span>
+</button>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-[#9CA3AF] text-xs font-bold uppercase" for="filter-plan">Filtrar por Plan</label>
+<button class="flex h-10 items-center justify-between rounded-lg bg-[#1F2937] px-3 w-full text-left" id="filter-plan">
+<p class="text-white text-sm font-medium leading-normal">Todos los Planes</p>
+<span class="material-symbols-outlined text-[#9CA3AF]">arrow_drop_down</span>
+</button>
+</div>
+<button class="flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-4 bg-primary text-background-dark text-sm font-bold leading-normal tracking-[0.015em] hover:bg-opacity-80 transition-opacity">
+<span class="truncate">Aplicar Filtros</span>
+</button>
+</div>
+</div>
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<div class="bg-surface-dark rounded-xl p-6 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[#9CA3AF]">
+<p class="text-sm font-medium">Ingresos Brutos</p>
+<span class="material-symbols-outlined text-xl">paid</span>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">$1,250,450.75</p>
+</div>
+<div class="bg-surface-dark rounded-xl p-6 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[#9CA3AF]">
+<p class="text-sm font-medium">Comisiones Totales</p>
+<span class="material-symbols-outlined text-xl">percent</span>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">$62,522.54</p>
+</div>
+<div class="bg-surface-dark rounded-xl p-6 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[#9CA3AF]">
+<p class="text-sm font-medium">Ingresos Netos</p>
+<span class="material-symbols-outlined text-xl">account_balance_wallet</span>
+</div>
+<p class="text-primary text-3xl font-bold leading-tight">$1,187,928.21</p>
+</div>
+<div class="bg-surface-dark rounded-xl p-6 flex flex-col gap-2">
+<div class="flex items-center justify-between text-[#9CA3AF]">
+<p class="text-sm font-medium"># Compras Totales</p>
+<span class="material-symbols-outlined text-xl">shopping_cart</span>
+</div>
+<p class="text-white text-3xl font-bold leading-tight">15,789</p>
+</div>
+</div>
+<!-- Data Table -->
+<div class="bg-surface-dark rounded-xl overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-sm text-left">
+<thead class="text-xs text-[#9CA3AF] uppercase bg-[#1F2937]">
+<tr>
+<th class="px-6 py-3" scope="col">Nombre del Comercio</th>
+<th class="px-6 py-3" scope="col">Plan Contratado</th>
+<th class="px-6 py-3 text-right" scope="col">Tasa de Comisión (%)</th>
+<th class="px-6 py-3 text-right" scope="col">Ingresos Generados</th>
+<th class="px-6 py-3 text-right" scope="col">Comisiones de Grada Negra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="border-b border-background-dark hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Conciertos Live</td>
+<td class="px-6 py-4"><span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Pro</span></td>
+<td class="px-6 py-4 text-right">5.00</td>
+<td class="px-6 py-4 text-right">$350,120.50</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$17,506.03</td>
+</tr>
+<tr class="border-b border-background-dark hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Teatro del Sol</td>
+<td class="px-6 py-4"><span class="bg-secondary/20 text-secondary text-xs font-semibold px-2.5 py-0.5 rounded-full">Enterprise</span></td>
+<td class="px-6 py-4 text-right flex items-center justify-end">3.50 <span class="material-symbols-outlined text-secondary text-base ml-1" title="Tasa personalizada">star</span></td>
+<td class="px-6 py-4 text-right">$275,800.00</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$9,653.00</td>
+</tr>
+<tr class="border-b border-background-dark hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Festival de Verano</td>
+<td class="px-6 py-4"><span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Pro</span></td>
+<td class="px-6 py-4 text-right">5.00</td>
+<td class="px-6 py-4 text-right">$189,450.25</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$9,472.51</td>
+</tr>
+<tr class="border-b border-background-dark hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Cine Estelar</td>
+<td class="px-6 py-4"><span class="bg-gray-500/20 text-gray-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Básico</span></td>
+<td class="px-6 py-4 text-right">7.00</td>
+<td class="px-6 py-4 text-right">$125,600.00</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$8,792.00</td>
+</tr>
+<tr class="border-b border-background-dark hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Eventos Deportivos MX</td>
+<td class="px-6 py-4"><span class="bg-primary/20 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full">Pro</span></td>
+<td class="px-6 py-4 text-right">5.00</td>
+<td class="px-6 py-4 text-right">$98,730.00</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$4,936.50</td>
+</tr>
+<tr class="hover:bg-[#4B5563]">
+<td class="px-6 py-4 font-medium text-white whitespace-nowrap">Foro Cultural</td>
+<td class="px-6 py-4"><span class="bg-gray-500/20 text-gray-300 text-xs font-semibold px-2.5 py-0.5 rounded-full">Básico</span></td>
+<td class="px-6 py-4 text-right">7.00</td>
+<td class="px-6 py-4 text-right">$85,300.00</td>
+<td class="px-6 py-4 text-right text-primary font-semibold">$5,971.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<nav aria-label="Table navigation" class="flex items-center justify-between p-4">
+<span class="text-sm font-normal text-[#9CA3AF]">Mostrando <span class="font-semibold text-white">1-6</span> de <span class="font-semibold text-white">100</span></span>
+<ul class="inline-flex items-center -space-x-px">
+<li>
+<a class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-[#9CA3AF] bg-[#1F2937] border border-surface-dark rounded-s-lg hover:bg-surface-dark hover:text-white" href="#">
+<span class="material-symbols-outlined text-lg">chevron_left</span>
+</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-[#9CA3AF] bg-[#1F2937] border border-surface-dark hover:bg-surface-dark hover:text-white" href="#">1</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-white bg-surface-dark border border-surface-dark" href="#">2</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-[#9CA3AF] bg-[#1F2937] border border-surface-dark hover:bg-surface-dark hover:text-white" href="#">...</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-[#9CA3AF] bg-[#1F2937] border border-surface-dark hover:bg-surface-dark hover:text-white" href="#">17</a>
+</li>
+<li>
+<a class="flex items-center justify-center px-3 h-8 leading-tight text-[#9CA3AF] bg-[#1F2937] border border-surface-dark rounded-e-lg hover:bg-surface-dark hover:text-white" href="#">
+<span class="material-symbols-outlined text-lg">chevron_right</span>
+</a>
+</li>
+</ul>
+</nav>
+</div>
+</div>
+</main>
+</div>
+</body></html>

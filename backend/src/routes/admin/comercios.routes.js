@@ -80,15 +80,19 @@ router.get('/', async (req, res) => {
         const now = new Date();
         const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         
-        const comprasSnapshot = await db.collection('compras')
+        // Para evitar requerir índices compuestos en Firestore en desarrollo,
+        // obtenemos las compras por comercioId y filtramos localmente por status y fecha.
+        const comprasSnapshotAll = await db.collection('compras')
           .where('comercioId', '==', doc.id)
-          .where('status', '==', 'completada')
-          .where('fechaCompra', '>=', firstDayOfMonth)
           .get();
 
         let ventasMesActual = 0;
-        comprasSnapshot.forEach(compraDoc => {
-          ventasMesActual += compraDoc.data().total || 0;
+        comprasSnapshotAll.forEach(compraDoc => {
+          const compra = compraDoc.data();
+          const fecha = compra.fechaCompra ? new Date(compra.fechaCompra) : null;
+          if (compra.status === 'completada' && fecha && fecha >= firstDayOfMonth) {
+            ventasMesActual += compra.total || 0;
+          }
         });
         comercio.ventasMesActual = Math.round(ventasMesActual * 100) / 100;
 
@@ -190,20 +194,21 @@ router.get('/:id/estadisticas', async (req, res) => {
     const eventosActivos = eventosSnapshot.docs.filter(doc => doc.data().status === 'activo').length;
 
     // Obtener compras del período
-    const comprasSnapshot = await db.collection('compras')
+    // Evitar requerir índices compuestos: obtener compras por comercioId y filtrar en memoria
+    const comprasSnapshotAll = await db.collection('compras')
       .where('comercioId', '==', id)
-      .where('status', '==', 'completada')
-      .where('fechaCompra', '>=', start)
-      .where('fechaCompra', '<=', end)
       .get();
 
     let ingresosBrutos = 0;
     let totalBoletos = 0;
 
-    comprasSnapshot.forEach(doc => {
+    comprasSnapshotAll.forEach(doc => {
       const compra = doc.data();
-      ingresosBrutos += compra.total || 0;
-      totalBoletos += compra.cantidadBoletos || 0;
+      const fecha = compra.fechaCompra ? new Date(compra.fechaCompra) : null;
+      if (compra.status === 'completada' && fecha && fecha >= start && fecha <= end) {
+        ingresosBrutos += compra.total || 0;
+        totalBoletos += compra.cantidadBoletos || 0;
+      }
     });
 
     // Calcular comisiones

@@ -28,7 +28,7 @@ class Buyer {
       },
       preferences: {
         language: 'es',
-        currency: 'MXN',
+        currency: 'COP',
         notifications: {
           email: true,
           sms: false,
