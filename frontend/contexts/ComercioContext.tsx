@@ -25,8 +25,15 @@ interface Comercio {
   colorPrimario?: string;
   colorSecundario?: string;
   tipoPlan: 'free' | 'basic' | 'pro' | 'premium' | 'enterprise';
+  plan?: 'free' | 'basic' | 'pro' | 'premium' | 'enterprise'; // Alias for tipoPlan
   limiteEventos: number;
   comision: number;
+  configuracion?: {
+    comision?: number;
+    limiteEventos?: number;
+    destacados?: number;
+    [key: string]: any;
+  };
   status: string;
   createdAt: string;
   updatedAt: string;
@@ -35,6 +42,7 @@ interface Comercio {
   razonSocial?: string;
   direccionFiscal?: string;
   emailFacturacion?: string;
+  ownerId?: string;
 }
 
 interface ComercioContextType {

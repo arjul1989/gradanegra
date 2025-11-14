@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "name": "Optimize Application Performance",
+  "description": "Monitors changes to backend, frontend, and configuration files to automatically suggest optimizations for faster loading times and better infrastructure utilization",
+  "version": "1",
+  "when": {
+    "type": "fileEdited",
+    "patterns": [
+      "backend/src/**/*.js",
+      "frontend/app/**/*.tsx",
+      "frontend/components/**/*.tsx",
+      "frontend/lib/**/*.ts",
+      "backend/package.json",
+      "frontend/package.json",
+      "backend/Dockerfile",
+      "frontend/Dockerfile",
+      "frontend/next.config.js",
+      "backend/src/index.js"
+    ]
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Analyze the modified files and provide specific optimization recommendations to make the application load much faster and use infrastructure more efficiently. Focus on:\n\n1. **Code Optimization**: Identify performance bottlenecks, unnecessary re-renders, heavy computations, and inefficient algorithms\n2. **Bundle Size**: Suggest code splitting, lazy loading, tree shaking, and removing unused dependencies\n3. **Database Queries**: Optimize Firestore queries, add proper indexing, implement caching strategies\n4. **API Performance**: Reduce API calls, implement request batching, add response caching\n5. **Infrastructure**: Optimize Docker images, improve build times, suggest CDN usage, optimize static assets\n6. **Frontend Performance**: Implement React.memo, useMemo, useCallback where needed, optimize images, reduce JavaScript bundle size\n7. **Backend Performance**: Implement connection pooling, optimize middleware, add response compression\n8. **Caching Strategy**: Suggest Redis/memory caching for frequently accessed data\n\nProvide concrete code examples and specific file changes needed to achieve these optimizations."
+  }
+}
