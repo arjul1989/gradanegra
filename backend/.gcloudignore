@@ -18,7 +18,7 @@ logs/
 
 # Archivos de Cloud Build (NECESARIOS para deployment)
 cloudbuild.yaml
-Dockerfile
+# Dockerfile  # COMENTADO - Cloud Run lo necesita
 .gcloudignore
 
 # Archivos de prueba

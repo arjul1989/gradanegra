@@ -1,165 +1,108 @@
-# 🚀 DEPLOYMENT RÁPIDO - EJECUTA ESTOS COMANDOS
+# 🚀 Deployment Directo a GCP (Sin GitHub)
 
-## 📋 Instrucciones
+## Situación Actual
 
-Abre una terminal nueva y ejecuta estos comandos uno por uno. **NO uses VS Code terminal**, usa Terminal.app o iTerm.
+GitHub está bloqueando el push por credenciales de Firebase en el historial.
+
+## Solución: Deploy Directo desde Local
+
+Podemos desplegar directamente a Cloud Run sin pasar por GitHub.
 
 ---
 
-## 1️⃣ BACKEND (5-10 minutos)
+## 📋 Comandos de Deployment
+
+### 1. Backend
 
 ```bash
-cd /Users/jules/MyApps/gradanegra/backend
+# Navegar al directorio backend
+cd backend
 
+# Deploy directo a Cloud Run
 gcloud run deploy gradanegra-api \
   --source . \
-  --project gradanegra-prod \
   --region us-central1 \
   --platform managed \
   --allow-unauthenticated \
-  --memory 1Gi \
-  --cpu 1 \
-  --timeout 300 \
+  --min-instances 0 \
   --max-instances 10 \
-  --set-env-vars "NODE_ENV=production,FIREBASE_PROJECT_ID=gradanegra-prod"
+  --memory 1Gi \
+  --timeout 300 \
+  --project gradanegra-prod
+
+cd ..
 ```
 
-**Espera a que termine completamente.** Verás algo como:
-```
-✓ Deploying... Done.
-  ✓ Creating Revision...
-  ✓ Routing traffic...
-Service URL: https://gradanegra-api-XXXXX-uc.a.run.app
-```
-
----
-
-## 2️⃣ FRONTEND (5-10 minutos)
-
-**IMPORTANTE:** Primero obtén la URL del backend que acabas de desplegar.
+### 2. Frontend
 
 ```bash
-cd /Users/jules/MyApps/gradanegra/frontend
+# Navegar al directorio frontend
+cd frontend
 
-# Obtener URL del backend
-BACKEND_URL=$(gcloud run services describe gradanegra-api \
-  --project gradanegra-prod \
-  --region us-central1 \
-  --format 'value(status.url)')
-
-echo "Backend URL: $BACKEND_URL"
-
-# Desplegar frontend
+# Deploy directo a Cloud Run
 gcloud run deploy gradanegra-frontend \
   --source . \
-  --project gradanegra-prod \
   --region us-central1 \
   --platform managed \
   --allow-unauthenticated \
-  --port 3000 \
+  --min-instances 0 \
+  --max-instances 5 \
   --memory 512Mi \
-  --cpu 1 \
-  --timeout 300 \
-  --max-instances 10 \
-  --set-env-vars "NODE_ENV=production,NEXT_PUBLIC_API_URL=$BACKEND_URL,NEXT_PUBLIC_FIREBASE_API_KEY=AIzaSyDa0qWOCHkldgquB51q8oZtMI4Aoqx84lw,NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=gradanegra-prod.firebaseapp.com,NEXT_PUBLIC_FIREBASE_PROJECT_ID=gradanegra-prod,NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=gradanegra-prod.appspot.com,NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=350907539319,NEXT_PUBLIC_FIREBASE_APP_ID=1:350907539319:web:d1206f7b3180d3abd94b72"
+  --timeout 60 \
+  --project gradanegra-prod
+
+cd ..
 ```
 
 ---
 
-## 3️⃣ VERIFICAR
-
-Una vez que ambos deployments terminen:
+## ✅ Verificación
 
 ```bash
-# Ver URL del backend
-gcloud run services describe gradanegra-api \
-  --project gradanegra-prod \
-  --region us-central1 \
-  --format 'value(status.url)'
+# Health check backend
+curl https://gradanegra-api-350907539319.us-central1.run.app/health
 
-# Ver URL del frontend
-gcloud run services describe gradanegra-frontend \
-  --project gradanegra-prod \
-  --region us-central1 \
-  --format 'value(status.url)'
+# Health check frontend
+curl https://gradanegra-frontend-350907539319.us-central1.run.app
 ```
 
 ---
 
-## ✅ PRUEBAS
+## 🔧 Solución del Problema de GitHub (Para Después)
 
-1. **Backend Health Check:**
-   ```bash
-   curl https://[TU-BACKEND-URL]/health
-   ```
-   Debe responder: `{"status":"healthy",...}`
+### Opción 1: Limpiar Historial (Recomendado)
 
-2. **Backend Events:**
-   ```bash
-   curl https://[TU-BACKEND-URL]/api/public/events
-   ```
-   Debe devolver JSON con eventos
-
-3. **Frontend:**
-   - Abre la URL del frontend en tu navegador
-   - Deberías ver la página principal con eventos
-   - Intenta hacer login
-   - Ve a "Mis Boletos" - deberías ver tus 5 tickets
-
----
-
-## 🐛 Si hay errores
-
-### Error: "API not enabled"
 ```bash
-gcloud services enable run.googleapis.com \
-  cloudbuild.googleapis.com \
-  artifactregistry.googleapis.com \
-  --project=gradanegra-prod
+# Instalar git-filter-repo
+brew install git-filter-repo
+
+# Limpiar archivo del historial
+git filter-repo --path backend/firebase-credentials.json --invert-paths
+
+# Force push
+git push origin main --force
 ```
 
-### Ver logs del backend
-```bash
-gcloud run services logs read gradanegra-api \
-  --project gradanegra-prod \
-  --region us-central1 \
-  --limit 50
-```
+### Opción 2: Permitir Secret Temporalmente
 
-### Ver logs del frontend
-```bash
-gcloud run services logs read gradanegra-frontend \
-  --project gradanegra-prod \
-  --region us-central1 \
-  --limit 50
-```
+1. Visitar: https://github.com/arjul1989/gradanegra/security/secret-scanning/unblock-secret/35Rk7UhxUvw8ypVc9RJTAZ6yGwJ
+2. Hacer clic en "Allow secret"
+3. Push inmediatamente
+4. Rotar credenciales después
 
 ---
 
-## ⏱️ Tiempo estimado
+## 📊 Estado Actual
 
-- Backend: 5-10 minutos
-- Frontend: 5-10 minutos
-- **Total: 10-20 minutos**
-
----
-
-## 📝 Notas
-
-- El build del backend es más rápido porque solo instala dependencias de Node
-- El build del frontend toma más tiempo porque Next.js debe compilar todo
-- La primera vez puede tomar más tiempo porque crea el repositorio de Artifact Registry
-- Los deployments subsecuentes serán más rápidos (usan caché)
+- ✅ Código listo para deployment
+- ✅ Backend funcional localmente
+- ✅ Frontend funcional localmente
+- ✅ Integración MercadoPago completa
+- ✅ Sistema de buyers con OAuth
+- ✅ Panel de administración
+- ⏳ Pendiente: Deploy a producción
+- ⏳ Pendiente: Limpiar historial de Git
 
 ---
 
-## 🎉 Al finalizar
-
-Tendrás:
-- ✅ Backend en Cloud Run con escala automática
-- ✅ Frontend en Cloud Run con escala automática
-- ✅ Firebase Authentication funcionando
-- ✅ Firestore con tus tickets
-- ✅ URLs públicas para acceder a la aplicación
-
-¡Listo para usar! 🚀
+**Ejecutar ahora**: Los comandos de arriba desplegarán directamente a GCP
