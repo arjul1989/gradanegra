@@ -4,27 +4,9 @@ const { Comercio } = require('../models/Comercio');
 const { db } = require('../config/firebase');
 
 /**
- * GET /api/comercios/:id
- * Obtener comercio por ID
- */
-router.get('/:id', async (req, res) => {
-  try {
-    const comercio = await Comercio.findById(req.params.id);
-    
-    if (!comercio) {
-      return res.status(404).json({ error: 'Comercio no encontrado' });
-    }
-
-    res.json(comercio.toJSON());
-  } catch (error) {
-    console.error('Error al obtener comercio:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-/**
  * GET /api/comercios/by-user/:userId
  * Obtener comercio asociado a un usuario de Firebase
+ * IMPORTANTE: Esta ruta debe ir ANTES de /:id para evitar conflictos
  */
 router.get('/by-user/:userId', async (req, res) => {
   try {
@@ -67,6 +49,25 @@ router.get('/by-user/:userId', async (req, res) => {
     });
   } catch (error) {
     console.error('Error al obtener comercio por usuario:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * GET /api/comercios/:id
+ * Obtener comercio por ID
+ */
+router.get('/:id', async (req, res) => {
+  try {
+    const comercio = await Comercio.findById(req.params.id);
+    
+    if (!comercio) {
+      return res.status(404).json({ error: 'Comercio no encontrado' });
+    }
+
+    res.json(comercio.toJSON());
+  } catch (error) {
+    console.error('Error al obtener comercio:', error);
     res.status(500).json({ error: error.message });
   }
 });
