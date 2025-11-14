@@ -180,7 +180,7 @@ export default function DashboardPage() {
           <div className="md:w-1/3 bg-gradient-to-br from-[#0d59f2] via-blue-600 to-blue-700 p-8 flex items-center justify-center">
             <div className="text-center text-white">
               <span className="material-symbols-outlined text-6xl mb-4">workspace_premium</span>
-              <p className="text-2xl font-bold">Plan {comercio?.tipoPlan.toUpperCase()}</p>
+              <p className="text-2xl font-bold">Plan {comercio?.plan?.toUpperCase() || 'FREE'}</p>
             </div>
           </div>
 
@@ -189,8 +189,8 @@ export default function DashboardPage() {
             <div className="flex items-start justify-between mb-4">
               <div>
                 <h3 className="text-xl font-bold text-white">Tu Plan Actual</h3>
-                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mt-2 ${getPlanBadgeColor(comercio?.tipoPlan || 'free')}`}>
-                  {comercio?.tipoPlan.toUpperCase()}
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold mt-2 ${getPlanBadgeColor(comercio?.plan || 'free')}`}>
+                  {comercio?.plan?.toUpperCase() || 'FREE'}
                 </span>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default function DashboardPage() {
 
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-400">
-                Comisión: {comercio?.comision}% por venta
+                Comisión: {comercio?.configuracion?.comision || 10}% por venta
               </p>
               <Link
                 href="/panel/configuracion"
